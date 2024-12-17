@@ -168,7 +168,7 @@ public class svgVisual : MonoBehaviour
 
                 outputMovement.GetData(shaderBasedMovement);
 
-                Debug.Log(shaderBasedMovement[0]);
+                //Debug.Log(shaderBasedMovement[0]);
 
                 for (int k = 0; k < flowFieldPositions.Count; k++)
                 {
