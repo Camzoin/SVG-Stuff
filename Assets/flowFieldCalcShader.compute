@@ -1,0 +1,31 @@
+#pragma kernel FlowField
+
+
+//input
+RWStructuredBuffer<float2> flowFieldPositions;
+RWStructuredBuffer<float2> flowFieldDirections;
+float2 curPosition;
+float maxInfluenceDist;
+uint flowFieldNodeCount;
+
+//output
+RWStructuredBuffer<float2> finalMovement;
+
+[numthreads(8,1,1)]
+void FlowField (uint id : SV_DispatchThreadID)
+{
+    if(id.x >= flowFieldNodeCount) {return;}
+
+    float2 movement = float2(0,0);
+
+    for (uint a = 0; a < flowFieldNodeCount; a++) 
+    {
+        float2 thisNodesMovement = flowFieldDirections[a];
+
+        thisNodesMovement *= clamp((maxInfluenceDist - distance(curPosition, flowFieldPositions[a])), 0, maxInfluenceDist)  / maxInfluenceDist;
+
+        movement += thisNodesMovement;
+    }
+
+    finalMovement[0] = movement;
+}
