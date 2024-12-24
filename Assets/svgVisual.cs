@@ -51,12 +51,14 @@ public class svgVisual : MonoBehaviour
 
     public List<int> posibleShapeVertCount = new List<int>();
 
+    private List<Vector2> shaderBasedMovementList = new List<Vector2>();
+
     [SerializeField] private ComputeShader flowFieldCalcShader = null;
 
     private ComputeBuffer flowFieldNodePostions;
     private ComputeBuffer flowFieldNodeDirections;
-    private ComputeBuffer outputMovement;
-    private Vector2[] shaderBasedMovement = new Vector2[1];
+    private ComputeBuffer curLinePositions;
+    private ComputeBuffer shaderBasedMovement;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -101,12 +103,12 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("GenerateWork")]
     public void GenerateWork()
     {
-        shaderBasedMovement[0] = Vector2.zero;
+        //shaderBasedMovement[0] = Vector2.zero;
 
         //do compute shader shit
         flowFieldNodePostions = CreateComputeBuffer<Vector2>(flowFieldPositions.ToArray(), flowFieldCalcShader, "flowFieldPositions", 0);
         flowFieldNodeDirections = CreateComputeBuffer<Vector2>(flowFieldDirections.ToArray(), flowFieldCalcShader, "flowFieldDirections", 0);
-        outputMovement = CreateComputeBuffer<Vector2>(shaderBasedMovement, flowFieldCalcShader, "finalMovement", 0);
+        shaderBasedMovement = CreateComputeBuffer<Vector2>(shaderBasedMovementList.ToArray(), flowFieldCalcShader, "finalMovement", 0);
 
         flowFieldCalcShader.SetFloat("maxInfluenceDist", maxInfluenceDist);
         flowFieldCalcShader.SetInt("flowFieldNodeCount", flowFieldPositions.Count);
@@ -143,7 +145,7 @@ public class svgVisual : MonoBehaviour
 
         constantMoveValue *= UnityEngine.Random.Range(constantSpeedMinMax.x, constantSpeedMinMax.y);
 
-        for (int i = 0; i < pathCount; i++)
+        for (int i = 0; i < pathLength; i++)
         {
             List<Vector2> pointsThisPath = new List<Vector2>();
 
@@ -164,20 +166,11 @@ public class svgVisual : MonoBehaviour
 
                 int kernel = flowFieldCalcShader.FindKernel("FlowField");
 
-                //ParticleDispatch(flowFieldCalcShader, kernel, flowFieldPositions.Count, 1);
+                shaderBasedMovement.GetData(shaderBasedMovementList.ToArray());
 
-                outputMovement.GetData(shaderBasedMovement);
 
-                //Debug.Log(shaderBasedMovement[0]);
 
-                for (int k = 0; k < flowFieldPositions.Count; k++)
-                {
-                    Vector2 thisNodesMovement = flowFieldDirections[k];
 
-                    thisNodesMovement *= Mathf.Clamp((maxInfluenceDist - Vector2.Distance(curPos, flowFieldPositions[k])), 0, maxInfluenceDist)  / maxInfluenceDist;
-
-                    moveDir += thisNodesMovement;
-                }
 
                 curPos += (moveDir * minMovemnet) + constantMoveValue;
 
@@ -211,15 +204,18 @@ public class svgVisual : MonoBehaviour
             }
 
 
+
+        }
+
+        for (int i = 0; i < listOfPaths.Count; i++)
+        {
             if (dipInPaint)
             {
-                curLineCount++;
-
+                i++;
                 PlacePath(0.5f, paintSpot, i);
             }
 
-            curLineCount++;
-            PlacePath(0.5f, pointsThisPath, i);
+            PlacePath(0.5f, listOfPaths[i], i);
         }
 
         if (drawBounds)
