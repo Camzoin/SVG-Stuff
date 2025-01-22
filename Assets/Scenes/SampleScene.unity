@@ -48611,6 +48611,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alphabetAsset: {fileID: 4900000, guid: 27eab32e4689fa04aa0b9a6804642339, type: 3}
   textHolder: {fileID: 1620678284}
+  firstLetterStartsOnAdditonMode: 1
+  additonalLetterOffet: 0
+  curWritingXPos: 582.62494
+  offsets:
+  - 10.15
+  - 11.900001
+  - 10.325
+  - 11.025001
+  - 10.875
+  - 7.25
+  - 11.650001
+  - 11.025001
+  - 3.7
+  - 3.8500001
+  - 10.875
+  - 4.5750003
+  - 17.875
+  - 10.95
+  - 11.725
+  - 11.900001
+  - 10.95
+  - 8.025001
+  - 9.05
+  - 7.475
+  - 10.625
+  - 10.325
+  - 16.075
+  - 9.675
+  - 10.150001
+  - 9.525001
+  - 12.525001
+  - 12.925
+  - 13
+  - 13.3
+  - 11.650001
+  - 11.35
+  - 13
+  - 13.3
+  - 3.3
+  - 8.900001
+  - 13.225
+  - 11.175
+  - 14.8
+  - 13.075
+  - 14.575
+  - 12.525001
+  - 14.95
+  - 12.375
+  - 11.725
+  - 12.375
+  - 13.225
+  - 11.650001
+  - 18.1
+  - 11.175
+  - 10.625
+  - 12.275001
+  displayString: Test TestyzaAZ
+  spaceOffset: 500
+  textScale: 0.025
+  lineWidth: 2
 --- !u!1 &1484220612
 GameObject:
   m_ObjectHideFlags: 0
