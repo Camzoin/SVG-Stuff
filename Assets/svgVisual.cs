@@ -82,6 +82,8 @@ public class svgVisual : MonoBehaviour
 
     public Color lineColor;
 
+    public Color lineColor2;
+
     public Material unlitMat;
 
     public Material textMat;
@@ -120,8 +122,12 @@ public class svgVisual : MonoBehaviour
 
     public string piecename = "";
 
+    public int colorCount = 1;
+
+    public bool redoFlowFieldForNewColors = true;
+
     [ContextMenu("SetRenderValues")]
-    public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, bool resetLinePositions = false)
+    public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, Color colorToSet, bool resetLinePositions = false)
     {
         svgParent.position = new Vector3(-(svgSize.x / 2f), -(svgSize.y / 2f), 0);
 
@@ -134,7 +140,7 @@ public class svgVisual : MonoBehaviour
 
         Material lineMat = new Material(matToCopy);
 
-        lineMat.SetColor("_BaseColor", lineColor);
+        lineMat.SetColor("_BaseColor", colorToSet);
 
         foreach (LineRenderer lr in lineRenderersToSet)
         {
@@ -165,10 +171,34 @@ public class svgVisual : MonoBehaviour
 
         yourFileName = piecename.Replace(" ", "");
 
-        GenerateFlowField();
-        ChangeConsistentFlow();
-        GenerateWork();
-        SetRenderValues(lineObjects, unlitMat, true);
+        for (int i = 0; i < colorCount; i++)
+        {
+            if (i > 0 && redoFlowFieldForNewColors)
+            {
+                GenerateFlowField();
+            }
+
+            ChangeConsistentFlow();
+            
+            if (i == 1)
+            {
+                GameObject.Instantiate(svgParent.gameObject);
+            }
+
+            GenerateWork(i);
+
+            if (i == 0)
+            {
+                SetRenderValues(lineObjects, unlitMat, lineColor, true);
+            }
+            else
+            {
+                SetRenderValues(lineObjects, unlitMat, lineColor2, true);
+            }
+
+        }
+
+
 
         textImporter.CompileInfoPage();
 
@@ -219,7 +249,7 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("GenerateWork")]
-    public void GenerateWork()
+    public void GenerateWork(int printColorIndex)
     {
         shaderBasedMovement[0] = Vector2.zero;
 
@@ -475,8 +505,8 @@ public class svgVisual : MonoBehaviour
 
         }
 
-        GenerateSVG(listOfPaths, false, false);
-        GenerateSVG(listOfPaths, true, false);
+        GenerateSVG(listOfPaths, false, false, printColorIndex);
+        GenerateSVG(listOfPaths, true, false, printColorIndex);
     }
 
     [ContextMenu("ResetLineObjects")]
@@ -525,7 +555,7 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("SaveSVG")]
-    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage)
+    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex)
     {
         StringBuilder svgContent = new StringBuilder();
 
@@ -591,7 +621,7 @@ public class svgVisual : MonoBehaviour
 
         if (!saveDisplayCopy)
         {
-            filePath = Path.Combine(desktopPath, yourFileName + ".svg");
+            filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".svg");
         }
         else
         {

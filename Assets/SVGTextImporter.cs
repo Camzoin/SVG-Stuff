@@ -195,11 +195,11 @@ public class SVGTextImporter : MonoBehaviour
             WriteText(svgVis.artistName, new Vector3(0, curInfoSegmentY, 0), true);
         }
 
-        svgVis.SetRenderValues(pastWrittenLineRendererList, svgVis.textMat);
+        svgVis.SetRenderValues(pastWrittenLineRendererList, svgVis.textMat, Color.black);
 
         lastTextHolder.transform.position = Vector3.up * svgVis.svgSize.y * 4;
 
-        svgVis.GenerateSVG(pastWrittenLinePositionLists, false, true);
+        svgVis.GenerateSVG(pastWrittenLinePositionLists, false, true, 0);
 
         StartCoroutine(waiter());
     }
