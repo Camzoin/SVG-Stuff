@@ -159,6 +159,9 @@ public class SVGTextImporter : MonoBehaviour
         WriteText("Line Count = " + svgVis.pathCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
+        WriteText("Max Line Segments = " + svgVis.pathLength.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+
+        curInfoSegmentY += 25;
         WriteText("Draw Spawn Shape = " + svgVis.drawSpawnShapes.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;

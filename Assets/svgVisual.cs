@@ -154,7 +154,10 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("DoBoth")]
     public void DoBoth()
     {
-        seedValue = UnityEngine.Random.Range(-(int.MaxValue / 2), int.MaxValue / 2);
+        if (generateArtWithNewSeed)
+        {
+            seedValue = UnityEngine.Random.Range(-(int.MaxValue / 2), int.MaxValue / 2);
+        }
 
         UnityEngine.Random.InitState(seedValue);
 
@@ -598,7 +601,7 @@ public class svgVisual : MonoBehaviour
 
         if (isInfoPage)
         {
-            filePath = Path.Combine(desktopPath, yourFileName + " Info.svg");
+            filePath = Path.Combine(desktopPath, yourFileName + "Info.svg");
         }
 
 
