@@ -87,10 +87,10 @@ public class SVGTextImporter : MonoBehaviour
         WriteText(svgVis.generatorName, new Vector3(0, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
-        WriteText("Seed: " + svgVis.seedValue.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        WriteText("Seed: " + svgVis.seedValue.ToString() + "      Version: " + svgVis.versionNumber + "      Date: " + GetDate(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Version: " + svgVis.versionNumber, new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        //WriteText("      Version: " + svgVis.versionNumber, new Vector3(0, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Shortened URL: " + svgVis.shortURL, new Vector3(0, curInfoSegmentY, 0), false);
@@ -98,8 +98,8 @@ public class SVGTextImporter : MonoBehaviour
         curInfoSegmentY += 25;
         WriteText("File Host URL: " + svgVis.fileURL, new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Date: " + GetDate(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        //WriteText("      Date: " + GetDate(), new Vector3(0, curInfoSegmentY, 0), false);
 
         //Write Param Block
         curInfoSegmentY += 65;
@@ -119,7 +119,7 @@ public class SVGTextImporter : MonoBehaviour
 
 
 
-        curInfoSegmentY += 25 + 12.5f;
+        curInfoSegmentY += 25f;
         WriteText("Flow Field Node Count = " + svgVis.flowFieldNodeCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
@@ -127,6 +127,9 @@ public class SVGTextImporter : MonoBehaviour
 
         curInfoSegmentY += 25;
         WriteText("Flow Field Movement Multiplier = " + svgVis.flowFieldMovementMulti.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+
+        curInfoSegmentY += 25;
+        WriteText("New Flow Field Per Shape = " + svgVis.redoFlowFieldForNewColors.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Use Random Constant Flow Direction = " + svgVis.useRandomContantFlowDir.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
@@ -146,8 +149,18 @@ public class SVGTextImporter : MonoBehaviour
 
 
 
-        curInfoSegmentY += 25 + 12.5f;
+        curInfoSegmentY += 25f;
         WriteText("Shape Point Count = " + svgVis.posibleShapeVertCount[0].ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+
+        int shapeCount = 1;
+
+        if (svgVis.redoFlowFieldForNewColors)
+        {
+            shapeCount++;
+        }
+
+        curInfoSegmentY += 25;
+        WriteText("Shape Count = " + shapeCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Shape Position = " + svgVis.additionalSpawnOffset.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
