@@ -152,15 +152,8 @@ public class SVGTextImporter : MonoBehaviour
         curInfoSegmentY += 25f;
         WriteText("Shape Point Count = " + svgVis.posibleShapeVertCount[0].ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        int shapeCount = 1;
-
-        if (svgVis.redoFlowFieldForNewColors)
-        {
-            shapeCount++;
-        }
-
         curInfoSegmentY += 25;
-        WriteText("Shape Count = " + shapeCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        WriteText("Shape Count = " + svgVis.colorCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Shape Position = " + svgVis.additionalSpawnOffset.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
