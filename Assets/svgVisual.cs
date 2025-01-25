@@ -118,6 +118,8 @@ public class svgVisual : MonoBehaviour
 
     public string shortURL = "";
 
+    public string piecename = "";
+
     [ContextMenu("SetRenderValues")]
     public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, bool resetLinePositions = false)
     {
@@ -155,6 +157,10 @@ public class svgVisual : MonoBehaviour
         seedValue = UnityEngine.Random.Range(-(int.MaxValue / 2), int.MaxValue / 2);
 
         UnityEngine.Random.InitState(seedValue);
+
+        piecename = textImporter.GenerateRandomName();
+
+        yourFileName = piecename.Replace(" ", "");
 
         GenerateFlowField();
         ChangeConsistentFlow();

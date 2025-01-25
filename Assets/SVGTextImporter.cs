@@ -75,10 +75,12 @@ public class SVGTextImporter : MonoBehaviour
 
         float curInfoSegmentY = 0;
 
+
+
         //Write Title Block
         curInfoSegmentY = -(svgVis.svgSize.y / 2) + svgVis.clippingSize.y + 120;
         TurnTextToLines(true, textScale * 2.7f);
-        WriteText(GenerateRandomName(), new Vector3(0, curInfoSegmentY, 0), true);
+        WriteText(svgVis.piecename, new Vector3(0, curInfoSegmentY, 0), true);
 
         curInfoSegmentY += 37.5f;
         TurnTextToLines(true, textScale * 0.75f);
