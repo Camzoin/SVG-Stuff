@@ -19,7 +19,7 @@ public class svgVisual : MonoBehaviour
 
     public float brightnessScaler = 1;
 
-    public float minMovemnet = 0.1f;
+    public float flowFieldMovementMulti = 2;
 
     public List<Vector2> flowFieldPositions = new List<Vector2>();
 
@@ -84,6 +84,8 @@ public class svgVisual : MonoBehaviour
 
     public Material unlitMat;
 
+    public Material textMat;
+
     public Material bgMat;
 
     public List<Texture2D> paperTextures;
@@ -98,8 +100,26 @@ public class svgVisual : MonoBehaviour
 
     public float lineWidth = 0.5f;
 
+    public string versionNumber;
+
+    public int seedValue;
+
+    public string generatorName;
+
+    public string artistName;
+
+    public string recipientName;
+
+    public SVGTextImporter textImporter;
+
+    public bool generateArtWithNewSeed = false;
+
+    public string fileURL = "";
+
+    public string shortURL = "";
+
     [ContextMenu("SetRenderValues")]
-    public void SetRenderValues()
+    public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, bool resetLinePositions = false)
     {
         svgParent.position = new Vector3(-(svgSize.x / 2f), -(svgSize.y / 2f), 0);
 
@@ -110,39 +130,38 @@ public class svgVisual : MonoBehaviour
         bgRenderer.material.SetTexture("_MainTex", paperTextures[paperIndex]);
         bgRenderer.material.SetColor("_BaseColor", bgColor);
 
-        Material lineMat = new Material(unlitMat);
+        Material lineMat = new Material(matToCopy);
 
         lineMat.SetColor("_BaseColor", lineColor);
 
-        foreach (LineRenderer lr in lineObjects)
+        foreach (LineRenderer lr in lineRenderersToSet)
         {
             lr.material = lineMat;
 
-            lr.widthMultiplier = lineWidth;
+            if (resetLinePositions)
+            {
+                lr.widthMultiplier = lineWidth;
 
-            lr.transform.localPosition = Vector3.zero;
+                lr.transform.localPosition = Vector3.zero;
+            }
+
             //lr.material
         }
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     [ContextMenu("DoBoth")]
     public void DoBoth()
     {
+        seedValue = UnityEngine.Random.Range(-(int.MaxValue / 2), int.MaxValue / 2);
+
+        UnityEngine.Random.InitState(seedValue);
+
         GenerateFlowField();
+        ChangeConsistentFlow();
         GenerateWork();
-        SetRenderValues();
+        SetRenderValues(lineObjects, unlitMat, true);
+
+        textImporter.CompileInfoPage();
 
         if (incrementFileName)
         {
@@ -177,8 +196,6 @@ public class svgVisual : MonoBehaviour
         if (useRandomContantFlowDir)
         {
             constantMoveValue = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
-
-            
         }
 
         else
@@ -223,7 +240,11 @@ public class svgVisual : MonoBehaviour
 
         if (useRandomRoation)
         {
-            fakeRot = UnityEngine.Random.Range(0, 360f);
+            float randomRot = UnityEngine.Random.Range(0, 360f);
+
+            fakeRot = randomRot * Mathf.Deg2Rad;
+
+            shapeRotation = randomRot;
         }
 
         //List<Vector2> circleSpawnPoints = CalculateCirclePoints(spawnCircleVertCount, svgSize / 2f, circleRadius);
@@ -305,7 +326,7 @@ public class svgVisual : MonoBehaviour
                 }
 
 
-                curPos += (moveDir * minMovemnet) + constantMoveValue;
+                curPos += (moveDir * flowFieldMovementMulti) + constantMoveValue;
 
 
 
@@ -445,8 +466,8 @@ public class svgVisual : MonoBehaviour
 
         }
 
-        GenerateSVG(listOfPaths, false);
-        GenerateSVG(listOfPaths, true);
+        GenerateSVG(listOfPaths, false, false);
+        GenerateSVG(listOfPaths, true, false);
     }
 
     [ContextMenu("ResetLineObjects")]
@@ -495,7 +516,7 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("SaveSVG")]
-    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy)
+    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage)
     {
         StringBuilder svgContent = new StringBuilder();
 
@@ -554,7 +575,7 @@ public class svgVisual : MonoBehaviour
         svgContent.AppendLine("</svg>");
 
 
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\Artwork";
         desktopPath += "\\";
 
         string filePath = "";
@@ -565,10 +586,14 @@ public class svgVisual : MonoBehaviour
         }
         else
         {
-            filePath = Path.Combine(desktopPath, yourFileName + "Display.svg");
-            ScreenCapture.CaptureScreenshot(desktopPath + yourFileName + "Screenshot.png");
+            filePath = Path.Combine(desktopPath, yourFileName + " Display.svg");
+            ScreenCapture.CaptureScreenshot(desktopPath + yourFileName + " Screenshot.png");
         }
 
+        if (isInfoPage)
+        {
+            filePath = Path.Combine(desktopPath, yourFileName + " Info.svg");
+        }
 
 
         // Write the SVG content to a file
