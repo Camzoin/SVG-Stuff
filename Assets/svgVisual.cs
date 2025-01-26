@@ -505,8 +505,19 @@ public class svgVisual : MonoBehaviour
 
         }
 
-        GenerateSVG(listOfPaths, false, false, printColorIndex);
-        GenerateSVG(listOfPaths, true, false, printColorIndex);
+        Color colorOfLines = Color.black;
+
+        if (printColorIndex == 0)
+        {
+            colorOfLines = lineColor;
+        }
+        else
+        {
+            colorOfLines = lineColor2;
+        }
+
+        GenerateSVG(listOfPaths, false, false, printColorIndex, colorOfLines);
+        GenerateSVG(listOfPaths, true, false, printColorIndex, colorOfLines);
     }
 
     [ContextMenu("ResetLineObjects")]
@@ -555,7 +566,7 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("SaveSVG")]
-    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex)
+    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex, Color lineColor)
     {
         StringBuilder svgContent = new StringBuilder();
 
@@ -593,7 +604,7 @@ public class svgVisual : MonoBehaviour
         for (int i = 0; i < allPaths.Count; i++)
         {
             svgContent.AppendLine("  <path");
-            svgContent.AppendLine($"     style=\"fill:none;stroke:#{ColorUtility.ToHtmlStringRGB(drawLineColor)};stroke-width:{lineWidth / 4};stroke-opacity:1\"");
+            svgContent.AppendLine($"     style=\"fill:none;stroke:#{ColorUtility.ToHtmlStringRGB(lineColor)};stroke-width:{lineWidth / 4};stroke-opacity:1\"");
 
             string thisPath = "     d = \"M " + allPaths[i][0].x + "," + allPaths[i][0].y + " ";
 
@@ -625,7 +636,7 @@ public class svgVisual : MonoBehaviour
         }
         else
         {
-            filePath = Path.Combine(desktopPath, yourFileName + " Display.svg");
+            filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + " Display.svg");
             ScreenCapture.CaptureScreenshot(desktopPath + yourFileName + " Screenshot.png");
         }
 
