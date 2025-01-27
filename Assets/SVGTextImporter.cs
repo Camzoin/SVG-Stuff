@@ -75,7 +75,7 @@ public class SVGTextImporter : MonoBehaviour
 
         float curInfoSegmentY = 0;
 
-
+        float secondParamCollumX = -350;
 
         //Write Title Block
         curInfoSegmentY = -(svgVis.svgSize.y / 2) + svgVis.clippingSize.y + 120;
@@ -87,7 +87,7 @@ public class SVGTextImporter : MonoBehaviour
         WriteText(svgVis.generatorName, new Vector3(0, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
-        WriteText("Seed: " + svgVis.seedValue.ToString() + "      Version: " + svgVis.versionNumber + "      Date: " + GetDate(), new Vector3(0, curInfoSegmentY, 0), false);
+        WriteText("Seed: " + svgVis.seedValue.ToString() + "  Version: " + svgVis.versionNumber + "  Date: " + GetDate(), new Vector3(0, curInfoSegmentY, 0), false);
 
         //curInfoSegmentY += 25;
         //WriteText("      Version: " + svgVis.versionNumber, new Vector3(0, curInfoSegmentY, 0), false);
@@ -110,8 +110,8 @@ public class SVGTextImporter : MonoBehaviour
         TurnTextToLines(true, textScale * 0.75f);
         WriteText("Size = " + svgVis.svgSize.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Bounding Box Indent = " + svgVis.clippingSize.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        WriteText("Bounding Box Indent = " + svgVis.clippingSize.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Draw Bounds = " + svgVis.drawBounds.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
@@ -119,29 +119,29 @@ public class SVGTextImporter : MonoBehaviour
 
 
 
-        curInfoSegmentY += 25f;
+        curInfoSegmentY += 35f;
         WriteText("Flow Field Node Count = " + svgVis.flowFieldNodeCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Flow Field Node Influence Distance = " + svgVis.maxInfluenceDist.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        WriteText("Flow Field Node Influence Distance = " + svgVis.maxInfluenceDist.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Flow Field Movement Multiplier = " + svgVis.flowFieldMovementMulti.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("New Flow Field Per Shape = " + svgVis.redoFlowFieldForNewColors.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        WriteText("New Flow Field Per Shape = " + svgVis.redoFlowFieldForNewColors.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Use Random Constant Flow Direction = " + svgVis.useRandomContantFlowDir.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Planned Constant Flow Direction = " + svgVis.constantFlowDir.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        WriteText("Constant Flow Direction = " + svgVis.constantFlowDir.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Constant Flow Speed Min Max = " + svgVis.constantSpeedMinMax.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Flow From Shape = " + svgVis.useFlowFromSpawn.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        WriteText("Flow From Shape = " + svgVis.useFlowFromSpawn.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Flow From Shape Speed = " + svgVis.flowFromCenterMulti.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
@@ -149,29 +149,29 @@ public class SVGTextImporter : MonoBehaviour
 
 
 
-        curInfoSegmentY += 25f;
+        curInfoSegmentY += 35f;
         WriteText("Shape Point Count = " + svgVis.posibleShapeVertCount[0].ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Shape Count = " + svgVis.colorCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        WriteText("Shape Count = " + svgVis.plotColors.Count.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Shape Position = " + svgVis.additionalSpawnOffset.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Shape Radius Min Max = " + svgVis.circleRadius.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        WriteText("Shape Radius Min Max = " + svgVis.circleRadius.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Line Count = " + svgVis.pathCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Max Line Segments = " + svgVis.pathLength.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        WriteText("Max Line Segments = " + svgVis.pathLength.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Draw Spawn Shape = " + svgVis.drawSpawnShapes.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
 
-        curInfoSegmentY += 25;
-        WriteText("Use Random Shape Rotation = " + svgVis.useRandomRoation.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
+        //curInfoSegmentY += 25;
+        WriteText("Use Random Shape Rotation = " + svgVis.useRandomRoation.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false);
 
         curInfoSegmentY += 25;
         WriteText("Shape Rotation = " + svgVis.shapeRotation.ToString(), new Vector3(0, curInfoSegmentY, 0), false);
@@ -212,7 +212,7 @@ public class SVGTextImporter : MonoBehaviour
 
     IEnumerator waiter()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         Camera.main.transform.position += Vector3.up * svgVis.svgSize.y * 4;
 
@@ -672,7 +672,7 @@ public class SVGTextImporter : MonoBehaviour
 
                     foreach(Vector3 v in letterList[letterIndexesToWrite[i]][j])
                     {
-                        vec2Positions.Add(new Vector2(v.x + curWritingXPos + textOffset.x + (svgVis.clippingSize.x * 1.5f), -v.y + lineRenderer.transform.position.y + textOffset.y + (svgVis.svgSize.y / 2)));
+                        vec2Positions.Add(new Vector2(v.x + curWritingXPos - textOffset.x + (svgVis.clippingSize.x), -v.y + lineRenderer.transform.position.y + textOffset.y + (svgVis.svgSize.y / 2)));
                     }
 
                     pastWrittenLinePositionLists.Add(vec2Positions);
@@ -682,7 +682,7 @@ public class SVGTextImporter : MonoBehaviour
                     pastWrittenLineRendererList.Add(lineRenderer);
 
 
-                    newLine.transform.localPosition += new Vector3(curWritingXPos - (svgVis.svgSize.x / 4), 0, 0);
+                    newLine.transform.localPosition += new Vector3(curWritingXPos - textOffset.x, 0, 0);
                 }
 
                 if (lowestLetterY > letterSizes[letterIndexesToWrite[i]].y)
@@ -726,7 +726,7 @@ public class SVGTextImporter : MonoBehaviour
 
             foreach (Vector3 v in underlinePoints)
             {
-                vec2Positions.Add(new Vector2(v.x + textOffset.x + (svgVis.clippingSize.x * 1.5f), -v.y + lineRenderer.transform.position.y + textOffset.y + (svgVis.svgSize.y / 2) - lowestLetterY + 2.5f));
+                vec2Positions.Add(new Vector2(v.x + textOffset.x + (svgVis.clippingSize.x), -v.y + lineRenderer.transform.position.y + textOffset.y + (svgVis.svgSize.y / 2) - lowestLetterY + 2.5f));
             }
 
             pastWrittenLinePositionLists.Add(vec2Positions);
@@ -736,10 +736,10 @@ public class SVGTextImporter : MonoBehaviour
             pastWrittenLineRendererList.Add(lineRenderer);
 
 
-            newLine.transform.localPosition += new Vector3(-(svgVis.svgSize.x / 4), lowestLetterY - 2.5f, 0);
+            newLine.transform.localPosition += new Vector3(0, lowestLetterY - 2.5f, 0);
         }
 
-        newTextHolder.transform.position -= textOffset;
+        newTextHolder.transform.position -= new Vector3(+svgVis.svgSize.x / 3, textOffset.y, 0);
     }
 
 
