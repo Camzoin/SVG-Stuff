@@ -191,7 +191,15 @@ public class SVGTextImporter : MonoBehaviour
         curInfoSegmentY += 25;
         WriteText("Shape Rotation = " + svgVis.shapeRotation.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
+        WriteText("Randomly Flip Flow Directions = " + svgVis.randomlyFlipFlowDirectionsPerColor.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
+        curInfoSegmentY += 25;
+        WriteText("Randomly Mirror Shape Position = " + svgVis.randomlyFlipFlowDirectionsPerColor.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
+
+        WriteText("Shrink Each Color Shape = " + svgVis.fitEachShapeInLast.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
+
+        curInfoSegmentY += 25;
+        WriteText("Rotate Each Shape 45 Degrees = " + svgVis.rotateEachShape45.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         if (svgVis.recipientName != "")
         {

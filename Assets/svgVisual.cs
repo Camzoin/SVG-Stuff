@@ -124,6 +124,14 @@ public class svgVisual : MonoBehaviour
 
     public List<GameObject> oldPlots = new List<GameObject>();
 
+    public bool randomlyFlipFlowDirectionsPerColor = false;
+
+    public bool randomlyFlipShapePositionPerColor = false;
+
+    public bool rotateEachShape45 = false;
+
+    public bool fitEachShapeInLast = false;
+
     [ContextMenu("SetRenderValues")]
     public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, Color colorToSet, bool resetLinePositions = false)
     {
@@ -188,15 +196,51 @@ public class svgVisual : MonoBehaviour
 
         GenerateFlowField();
 
+        float ogRotation = shapeRotation;
+
+        Vector2 ogSizeMinMax = circleRadius;
+
         for (int i = 0; i < plotColors.Count; i++)
         {
+            if (randomlyFlipFlowDirectionsPerColor)
+            {
+                constantFlowDir.x -= (constantFlowDir.x * 2) * UnityEngine.Random.Range(0,2);
+
+                constantFlowDir.y -= (constantFlowDir.y * 2) * UnityEngine.Random.Range(0, 2);
+
+                flowFromCenterMulti -= (flowFromCenterMulti * 2) * UnityEngine.Random.Range(0, 2);
+            }
+
+            if (randomlyFlipShapePositionPerColor)
+            {
+                additionalSpawnOffset.x -= (additionalSpawnOffset.x * 2) * UnityEngine.Random.Range(0, 2);
+
+                additionalSpawnOffset.y -= (additionalSpawnOffset.y * 2) * UnityEngine.Random.Range(0, 2);
+            }
+
+
+
+
+
             ChangeConsistentFlow();
 
             GenerateWork(i);
 
+            if (fitEachShapeInLast)
+            {
+                float f = Mathf.Sqrt(circleRadius.x) / 2f;
+
+                circleRadius *= 1f / Mathf.Sqrt(2);
+            }
+
             if (redoFlowFieldForNewColors)
             {
                 GenerateFlowField();
+            }
+
+            if(rotateEachShape45)
+            {
+                shapeRotation += 45;
             }
 
             SetRenderValues(lineObjects, unlitMat, plotColors[i], true);
@@ -206,7 +250,9 @@ public class svgVisual : MonoBehaviour
             oldPlots[i].SetActive(true);
         }
 
+        shapeRotation = ogRotation;
 
+        circleRadius = ogSizeMinMax;
 
         textImporter.CompileInfoPage();
 
