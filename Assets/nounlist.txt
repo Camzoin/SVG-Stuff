@@ -2278,7 +2278,6 @@ farmland
 farrow
 fascia
 fashion
-fat
 fate
 father
 father-in-law
@@ -4273,7 +4272,6 @@ pannier
 panpipe
 pansy
 panther
-panties
 pantologist
 pantology
 pantry
@@ -6059,7 +6057,6 @@ technology
 tectonics
 teen
 teenager
-teepee
 telephone
 telescreen
 teletype
@@ -6132,8 +6129,6 @@ thing
 thinking
 thirst
 thistle
-thong
-thongs
 thorn
 thought
 thousand
@@ -6387,7 +6382,6 @@ underclothes
 underestimate
 underground
 underneath
-underpants
 underpass
 undershirt
 understanding

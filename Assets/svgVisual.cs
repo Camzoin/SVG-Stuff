@@ -186,16 +186,18 @@ public class svgVisual : MonoBehaviour
 
         yourFileName = piecename.Replace(" ", "");
 
+        GenerateFlowField();
+
         for (int i = 0; i < plotColors.Count; i++)
         {
-            if (i > 0 && redoFlowFieldForNewColors)
-            {
-                GenerateFlowField();
-            }
-
             ChangeConsistentFlow();
 
             GenerateWork(i);
+
+            if (redoFlowFieldForNewColors)
+            {
+                GenerateFlowField();
+            }
 
             SetRenderValues(lineObjects, unlitMat, plotColors[i], true);
 
