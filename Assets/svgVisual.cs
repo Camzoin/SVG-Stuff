@@ -15,9 +15,11 @@ public class svgVisual : MonoBehaviour
 
     public Vector2 svgSize = new Vector2(816, 1056);
 
-    public Texture2D inputTexture;
+    public Vector2 clippingSize = new Vector2(0, 0);
 
-    public float brightnessScaler = 1;
+    public int paperIndex;
+
+    public bool dipInPaint = false;
 
     public float flowFieldMovementMulti = 2;
 
@@ -29,7 +31,7 @@ public class svgVisual : MonoBehaviour
 
     public Vector2 circleRadius;
 
-    public int spawnCircleVertCount = 36000;
+    private int spawnCircleVertCount = 36000;
 
     public Vector2 constantSpeedMinMax = new Vector2(0.1f, 5f);
 
@@ -39,24 +41,11 @@ public class svgVisual : MonoBehaviour
 
     public float maxInfluenceDist = 400;
 
-    public string yourFileName = "yourFileName";
-
-    public Vector2 clippingSize = new Vector2(0,0);
-
     public bool drawBounds = true;
 
     public bool drawSpawnShapes = true;
 
-    public bool dipInPaint = false;
-
     public List<int> posibleShapeVertCount = new List<int>();
-
-    [SerializeField] private ComputeShader flowFieldCalcShader = null;
-
-    private ComputeBuffer flowFieldNodePostions;
-    private ComputeBuffer flowFieldNodeDirections;
-    private ComputeBuffer outputMovement;
-    private Vector2[] shaderBasedMovement = new Vector2[1];
 
     public Vector2 shapeCountMinMax;
 
@@ -82,6 +71,53 @@ public class svgVisual : MonoBehaviour
 
     public List<Color> plotColors = new List<Color>();
 
+
+
+
+
+
+
+    public bool keepPreviousWorkVisible = false;
+
+    public float lineWidth = 0.5f;
+
+    public bool generateArtWithNewSeed = false;
+
+    public bool redoFlowFieldForNewColors = true;
+
+    public bool randomlyFlipFlowDirectionsPerColor = false;
+
+    public bool randomlyFlipShapePositionPerColor = false;
+
+    public bool flipFlowsAndPositions = false;
+
+    public bool rotateEachShape45 = false;
+
+    public bool fitEachShapeInLast = false;
+
+
+    public string generatorName;
+
+    public string artistName;
+
+    public string recipientName;
+
+    public string versionNumber;
+
+    public int seedValue;
+
+    public string fileURL = "";
+
+    public string shortURL = "";
+
+    public string piecename = "";
+
+    public string yourFileName = "yourFileName";
+
+    public List<GameObject> oldPlots = new List<GameObject>();
+
+    public SVGTextImporter textImporter;
+
     public Material unlitMat;
 
     public Material textMat;
@@ -90,47 +126,7 @@ public class svgVisual : MonoBehaviour
 
     public List<Texture2D> paperTextures;
 
-    public int paperIndex;
-
     public Renderer bgRenderer;
-
-    public bool incrementFileName = true;
-
-    public bool keepPreviousWorkVisible = false;
-
-    public float lineWidth = 0.5f;
-
-    public string versionNumber;
-
-    public int seedValue;
-
-    public string generatorName;
-
-    public string artistName;
-
-    public string recipientName;
-
-    public SVGTextImporter textImporter;
-
-    public bool generateArtWithNewSeed = false;
-
-    public string fileURL = "";
-
-    public string shortURL = "";
-
-    public string piecename = "";
-
-    public bool redoFlowFieldForNewColors = true;
-
-    public List<GameObject> oldPlots = new List<GameObject>();
-
-    public bool randomlyFlipFlowDirectionsPerColor = false;
-
-    public bool randomlyFlipShapePositionPerColor = false;
-
-    public bool rotateEachShape45 = false;
-
-    public bool fitEachShapeInLast = false;
 
     [ContextMenu("SetRenderValues")]
     public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, Color colorToSet, bool resetLinePositions = false)
@@ -166,6 +162,8 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("DoBoth")]
     public void DoBoth()
     {
+        List<Color> colorsUsed = new List<Color>();
+
         for (int i = 0; i < lineObjects.Count; i++)
         {
             DestroyImmediate(lineObjects[i].gameObject);
@@ -219,7 +217,16 @@ public class svgVisual : MonoBehaviour
             }
 
 
+            if (flipFlowsAndPositions)
+            {
+                constantFlowDir.x -= (constantFlowDir.x * 2);
 
+                constantFlowDir.y -= (constantFlowDir.y * 2);
+
+                additionalSpawnOffset.x -= (additionalSpawnOffset.x * 2);
+
+                additionalSpawnOffset.y -= (additionalSpawnOffset.y * 2);
+            }
 
 
             ChangeConsistentFlow();
@@ -243,6 +250,8 @@ public class svgVisual : MonoBehaviour
                 shapeRotation += 45;
             }
 
+            colorsUsed.Add(plotColors[i]);
+
             SetRenderValues(lineObjects, unlitMat, plotColors[i], true);
 
             oldPlots.Add(Instantiate(svgParent.gameObject));
@@ -255,11 +264,6 @@ public class svgVisual : MonoBehaviour
         circleRadius = ogSizeMinMax;
 
         textImporter.CompileInfoPage();
-
-        if (incrementFileName)
-        {
-            yourFileName += "x";
-        }
     }
 
     [ContextMenu("GenerateFlowField")]
@@ -305,26 +309,11 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("GenerateWork")]
     public void GenerateWork(int printColorIndex)
     {
-        shaderBasedMovement[0] = Vector2.zero;
-
-        //do compute shader shit
-        flowFieldNodePostions = CreateComputeBuffer<Vector2>(flowFieldPositions.ToArray(), flowFieldCalcShader, "flowFieldPositions", 0);
-        flowFieldNodeDirections = CreateComputeBuffer<Vector2>(flowFieldDirections.ToArray(), flowFieldCalcShader, "flowFieldDirections", 0);
-        outputMovement = CreateComputeBuffer<Vector2>(shaderBasedMovement, flowFieldCalcShader, "finalMovement", 0);
-
-        flowFieldCalcShader.SetFloat("maxInfluenceDist", maxInfluenceDist);
-        flowFieldCalcShader.SetInt("flowFieldNodeCount", flowFieldPositions.Count);
-
-        
-
         float spawnOffsetX = ((svgSize.x / 2f) * UnityEngine.Random.Range(-randomOffsetFromCenter, randomOffsetFromCenter)) + additionalSpawnOffset.x;
         float spawnOffsetY = ((svgSize.y / 2f) * UnityEngine.Random.Range(-randomOffsetFromCenter, randomOffsetFromCenter)) + additionalSpawnOffset.y;
 
 
         float spawnRad = UnityEngine.Random.Range(circleRadius.x, circleRadius.y);
-
-        //pathCount = (int)spawnRad / 2;
-
 
 
         Vector2 spawnOffset = new Vector2(spawnOffsetX, spawnOffsetY);
@@ -340,7 +329,6 @@ public class svgVisual : MonoBehaviour
             shapeRotation = randomRot;
         }
 
-        //List<Vector2> circleSpawnPoints = CalculateCirclePoints(spawnCircleVertCount, svgSize / 2f, circleRadius);
         List<Vector2> circleSpawnPoints = FindPointsOnSimpleShape(spawnCircleVertCount, posibleShapeVertCount[UnityEngine.Random.Range(0, posibleShapeVertCount.Count)], (svgSize / 2f) + spawnOffset, spawnRad, fakeRot);
 
         //get paint
@@ -375,6 +363,8 @@ public class svgVisual : MonoBehaviour
 
         for (int i = 0; i < pathCount; i++)
         {
+            bool addCurPosition = true;
+
             List<Vector2> pointsThisPath = new List<Vector2>();
 
             Vector3 startingPos = circleSpawnPoints[(int)((i / (float)pathCount) * circleSpawnPoints.Count)];
@@ -393,21 +383,24 @@ public class svgVisual : MonoBehaviour
 
             pointsThisPath.Add(startingPos);
 
+
+
             //generate segments
             //for (int j = 0; j < UnityEngine.Random.Range(100, 250); j++)
             for (int j = 0; j < pathLength; j++)
             {
                 Vector2 moveDir = Vector2.zero;
 
-                flowFieldCalcShader.SetVector("curPosition", curPos);
 
-                int kernel = flowFieldCalcShader.FindKernel("FlowField");
+                if (curPos.x <= 0 + clippingSize.x || curPos.x >= svgSize.x - clippingSize.x || curPos.y <= 0 + clippingSize.y || curPos.y >= svgSize.y - clippingSize.y)
+                {
+                    addCurPosition = false;
+                }
+                else
+                {
+                    addCurPosition = true;
+                }
 
-                //ParticleDispatch(flowFieldCalcShader, kernel, flowFieldPositions.Count, 1);
-
-                outputMovement.GetData(shaderBasedMovement);
-
-                //Debug.Log(shaderBasedMovement[0]);
 
                 for (int k = 0; k < flowFieldPositions.Count; k++)
                 {
@@ -419,13 +412,13 @@ public class svgVisual : MonoBehaviour
                 }
 
 
-                curPos += (moveDir * flowFieldMovementMulti) + constantMoveValue;
+                curPos += ((moveDir * flowFieldMovementMulti) + constantMoveValue);
 
 
 
                 if (useFlowFromSpawn)
                 {
-                    curPos += new Vector2(dirFromCenter.x, dirFromCenter.y) * flowFromCenterMulti;
+                    curPos += (new Vector2(dirFromCenter.x, dirFromCenter.y) * flowFromCenterMulti);
                 }
 
                 Vector2 finalDir = curPos - lastPos;
@@ -434,7 +427,7 @@ public class svgVisual : MonoBehaviour
 
                 int asdasdasd = j;
 
-                if (curPos.x < 0 + clippingSize.x)
+                if (curPos.x <= 0 + clippingSize.x && lastPos.x > 0 + clippingSize.x)
                 {
                     j = pathLength - 1;
 
@@ -446,7 +439,7 @@ public class svgVisual : MonoBehaviour
                     curPos = realFinalPos;
                 }
 
-                if (curPos.x > svgSize.x - clippingSize.x)
+                if (curPos.x >= svgSize.x - clippingSize.x && lastPos.x < svgSize.x - clippingSize.x)
                 {
                     j = pathLength - 1;
 
@@ -461,7 +454,7 @@ public class svgVisual : MonoBehaviour
 
 
 
-                if (curPos.y < 0 + clippingSize.y)
+                if (curPos.y <= 0 + clippingSize.y)
                 {
                     j = pathLength - 1;
 
@@ -473,7 +466,7 @@ public class svgVisual : MonoBehaviour
                     curPos = realFinalPos;
                 }
 
-                if (curPos.y > svgSize.y - clippingSize.y)
+                if (curPos.y >= svgSize.y - clippingSize.y)
                 {
                     j = pathLength - 1;
 
@@ -494,7 +487,12 @@ public class svgVisual : MonoBehaviour
 
                 lastPos = curPos;
 
-                pointsThisPath.Add(curPos);
+                if (addCurPosition)
+                {
+                    pointsThisPath.Add(curPos);
+                }
+
+
             }
 
 
@@ -640,23 +638,27 @@ public class svgVisual : MonoBehaviour
 
         for (int i = 0; i < allPaths.Count; i++)
         {
-            if (new Vector2(allPaths[i][0].x, allPaths[i][0].y) != new Vector2(allPaths[i][1].x, allPaths[i][1].y))
+            if (allPaths[i].Count >=2)
             {
-                svgContent.AppendLine("  <path");
-                svgContent.AppendLine($"     style=\"fill:none;stroke:#{ColorUtility.ToHtmlStringRGB(lineColor)};stroke-width:{lineWidth / 4};stroke-opacity:{lineColor.a}\"");
-
-                string thisPath = "     d = \"M " + allPaths[i][0].x + "," + allPaths[i][0].y + " ";
-
-                for (int j = 1; j < allPaths[i].Count; j++)
+                if (new Vector2(allPaths[i][0].x, allPaths[i][0].y) != new Vector2(allPaths[i][1].x, allPaths[i][1].y))
                 {
-                    thisPath += allPaths[i][j].x + "," + allPaths[i][j].y + " ";
+                    svgContent.AppendLine("  <path");
+                    svgContent.AppendLine($"     style=\"fill:none;stroke:#{ColorUtility.ToHtmlStringRGB(lineColor)};stroke-width:{lineWidth / 4};stroke-opacity:{lineColor.a}\"");
+
+                    string thisPath = "     d = \"M " + allPaths[i][0].x + "," + allPaths[i][0].y + " ";
+
+                    for (int j = 1; j < allPaths[i].Count; j++)
+                    {
+                        thisPath += allPaths[i][j].x + "," + allPaths[i][j].y + " ";
+                    }
+
+                    thisPath += "\"";
+
+                    svgContent.AppendLine(thisPath);
+                    svgContent.AppendLine($"id = \"{i}\" />");
                 }
-
-                thisPath += "\"";
-
-                svgContent.AppendLine(thisPath);
-                svgContent.AppendLine($"id = \"{i}\" />");
             }
+
         }
 
 

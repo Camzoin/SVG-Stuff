@@ -905,4 +905,17 @@ public class SVGTextImporter : MonoBehaviour
         te.SelectAll();
         te.Copy();
     }
+
+    public List<List<Vector2>> ScaleListOfPaths(List<List<Vector2>> inputPaths, float setOfPathsScale)
+    {
+        foreach (List<Vector2> path in inputPaths)
+        {
+            for (int i = 0; i < path.Count; i++)
+            {
+                path[i] *= setOfPathsScale;
+            }
+        }
+
+        return inputPaths;
+    }
 }
