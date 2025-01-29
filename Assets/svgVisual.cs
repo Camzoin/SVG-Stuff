@@ -4,28 +4,38 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
+using UnityEditor;
 public class svgVisual : MonoBehaviour
 {
-    public Transform svgParent;
+
 
     public List<List<Vector2>> listOfPaths = new List<List<Vector2>>();
 
+    public List<List<List<Vector2>>> listOfAllPathsThisRun = new List<List<List<Vector2>>>();
+
+    public List<List<List<Vector2>>> listsOfAllPathsByColor = new List<List<List<Vector2>>>();
+
+
+
+
+
     private List<LineRenderer> lineObjects = new List<LineRenderer>();
 
-    public Vector2 svgSize = new Vector2(816, 1056);
+    public List<Color> potentialColors = new List<Color>();
 
-    public Vector2 clippingSize = new Vector2(0, 0);
+    public int shapeCount = 1;
 
-    public int paperIndex;
+
 
     public bool dipInPaint = false;
 
+    public bool isFinalRender = false;
+
     public float flowFieldMovementMulti = 2;
 
-    public List<Vector2> flowFieldPositions = new List<Vector2>();
+    private List<Vector2> flowFieldPositions = new List<Vector2>();
 
-    public List<Vector2> flowFieldDirections = new List<Vector2>();
+    private List<Vector2> flowFieldDirections = new List<Vector2>();
 
     public int pathCount = 5000;
 
@@ -41,9 +51,6 @@ public class svgVisual : MonoBehaviour
 
     public float maxInfluenceDist = 400;
 
-    public bool drawBounds = true;
-
-    public bool drawSpawnShapes = true;
 
     public List<int> posibleShapeVertCount = new List<int>();
 
@@ -67,17 +74,14 @@ public class svgVisual : MonoBehaviour
 
     public bool useRandomRoation = false;
 
-    public Color bgColor;
 
-    public List<Color> plotColors = new List<Color>();
-
+    private List<Color> plotColors = new List<Color>();
 
 
 
 
 
 
-    public bool keepPreviousWorkVisible = false;
 
     public float lineWidth = 0.5f;
 
@@ -94,6 +98,21 @@ public class svgVisual : MonoBehaviour
     public bool rotateEachShape45 = false;
 
     public bool fitEachShapeInLast = false;
+
+    public bool drawBounds = true;
+
+    public bool drawSpawnShapes = true;
+
+    public bool removeColorOptionAfterUse = true;
+
+    public Color bgColor;
+
+    public int paperIndex;
+
+    public Vector2 svgSize = new Vector2(816, 1056);
+
+    public Vector2 clippingSize = new Vector2(0, 0);
+
 
 
     public string generatorName;
@@ -127,6 +146,10 @@ public class svgVisual : MonoBehaviour
     public List<Texture2D> paperTextures;
 
     public Renderer bgRenderer;
+
+    public URLSaver urlsaver;
+
+    public Transform svgParent;
 
     [ContextMenu("SetRenderValues")]
     public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, Color colorToSet, bool resetLinePositions = false)
@@ -162,14 +185,40 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("DoBoth")]
     public void DoBoth()
     {
-        List<Color> colorsUsed = new List<Color>();
+        List<Color> OGPotColors = potentialColors;
 
-        for (int i = 0; i < lineObjects.Count; i++)
+        listOfAllPathsThisRun = new List<List<List<Vector2>>>();
+
+        Vector2 OGadditionalSpawnOffset = additionalSpawnOffset;
+
+        float OGrandomOffsetFromCenter = randomOffsetFromCenter;
+
+        int ogPathCount = pathCount;
+
+        listsOfAllPathsByColor = new List<List<List<Vector2>>>();
+
+        plotColors = new List<Color>();
+
+        for (int i = 0; i < shapeCount; i++)
         {
-            DestroyImmediate(lineObjects[i].gameObject);
+            listsOfAllPathsByColor.Add(new List<List<Vector2>>());
+
+            int randomColorIndex = 0;
+
+            if (removeColorOptionAfterUse)
+            {
+               randomColorIndex = (i) % (potentialColors.Count);
+            }
+            else
+            {
+                randomColorIndex = UnityEngine.Random.Range(0, potentialColors.Count);
+            }
+
+
+            plotColors.Add(potentialColors[randomColorIndex]);
         }
 
-        lineObjects = new List<LineRenderer>();
+
 
 
         for (int i = 0; i < oldPlots.Count; i++)
@@ -200,6 +249,15 @@ public class svgVisual : MonoBehaviour
 
         for (int i = 0; i < plotColors.Count; i++)
         {
+            for (int j = 0; j < lineObjects.Count; j++)
+            {
+                DestroyImmediate(lineObjects[j].gameObject);
+            }
+
+            lineObjects = new List<LineRenderer>();
+
+
+
             if (randomlyFlipFlowDirectionsPerColor)
             {
                 constantFlowDir.x -= (constantFlowDir.x * 2) * UnityEngine.Random.Range(0,2);
@@ -228,6 +286,10 @@ public class svgVisual : MonoBehaviour
                 additionalSpawnOffset.y -= (additionalSpawnOffset.y * 2);
             }
 
+            if (fitEachShapeInLast)
+            {
+
+            }
 
             ChangeConsistentFlow();
 
@@ -235,9 +297,14 @@ public class svgVisual : MonoBehaviour
 
             if (fitEachShapeInLast)
             {
-                float f = Mathf.Sqrt(circleRadius.x) / 2f;
+                if (randomOffsetFromCenter != 0)
+                {
+                    randomOffsetFromCenter = circleRadius.x - ((circleRadius.x * (1f / Mathf.Sqrt(2))));
+                }
 
                 circleRadius *= 1f / Mathf.Sqrt(2);
+
+                pathCount = (int)(pathCount * (1f / Mathf.Sqrt(2)));
             }
 
             if (redoFlowFieldForNewColors)
@@ -250,8 +317,6 @@ public class svgVisual : MonoBehaviour
                 shapeRotation += 45;
             }
 
-            colorsUsed.Add(plotColors[i]);
-
             SetRenderValues(lineObjects, unlitMat, plotColors[i], true);
 
             oldPlots.Add(Instantiate(svgParent.gameObject));
@@ -259,11 +324,33 @@ public class svgVisual : MonoBehaviour
             oldPlots[i].SetActive(true);
         }
 
+        GenerateDispalySVG(listOfAllPathsThisRun);
+
+
         shapeRotation = ogRotation;
 
         circleRadius = ogSizeMinMax;
 
+        pathCount = ogPathCount;
+
+        additionalSpawnOffset = OGadditionalSpawnOffset;
+
+        randomOffsetFromCenter = OGrandomOffsetFromCenter;
+
+        potentialColors = OGPotColors;
+
         textImporter.CompileInfoPage();
+
+        if (isFinalRender)
+        {
+  
+
+            urlsaver.artName = piecename;
+            urlsaver.shortURL = shortURL;
+
+            urlsaver.SubmitFeedback();
+        }
+
     }
 
     [ContextMenu("GenerateFlowField")]
@@ -307,16 +394,22 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("GenerateWork")]
-    public void GenerateWork(int printColorIndex)
+    public void GenerateWork(int printIndex)
     {
-        float spawnOffsetX = ((svgSize.x / 2f) * UnityEngine.Random.Range(-randomOffsetFromCenter, randomOffsetFromCenter)) + additionalSpawnOffset.x;
-        float spawnOffsetY = ((svgSize.y / 2f) * UnityEngine.Random.Range(-randomOffsetFromCenter, randomOffsetFromCenter)) + additionalSpawnOffset.y;
+        lineObjects = new List<LineRenderer>();
+
+        List<Color> plottedColors = new List<Color>(0);
+
+        float spawnOffsetX =  UnityEngine.Random.Range(-randomOffsetFromCenter, randomOffsetFromCenter);
+        float spawnOffsetY =  UnityEngine.Random.Range(-randomOffsetFromCenter, randomOffsetFromCenter);
 
 
         float spawnRad = UnityEngine.Random.Range(circleRadius.x, circleRadius.y);
 
 
         Vector2 spawnOffset = new Vector2(spawnOffsetX, spawnOffsetY);
+
+
 
         float fakeRot = shapeRotation * Mathf.Deg2Rad;
 
@@ -329,7 +422,17 @@ public class svgVisual : MonoBehaviour
             shapeRotation = randomRot;
         }
 
-        List<Vector2> circleSpawnPoints = FindPointsOnSimpleShape(spawnCircleVertCount, posibleShapeVertCount[UnityEngine.Random.Range(0, posibleShapeVertCount.Count)], (svgSize / 2f) + spawnOffset, spawnRad, fakeRot);
+        int vertCount = posibleShapeVertCount[UnityEngine.Random.Range(0, posibleShapeVertCount.Count)];
+
+        List<Vector2> circleSpawnPoints = FindPointsOnSimpleShape(spawnCircleVertCount, vertCount, (svgSize / 2f) + spawnOffset + additionalSpawnOffset, spawnRad, fakeRot);
+        List<Vector2> drawShapeSpawnPoints = FindPointsOnSimpleShape(spawnCircleVertCount / 10, vertCount, (svgSize / 2f) + spawnOffset + additionalSpawnOffset, spawnRad, fakeRot);
+
+        drawShapeSpawnPoints.Add(drawShapeSpawnPoints[0]);
+
+        if (fitEachShapeInLast)
+        {
+            additionalSpawnOffset += spawnOffset;
+        }
 
         //get paint
         List<Vector2> paintSpot = new List<Vector2>();
@@ -340,13 +443,9 @@ public class svgVisual : MonoBehaviour
         paintSpot.Add(new Vector3(svgSize.x - 1, 1, 0));
         paintSpot.Add(new Vector3(svgSize.x - 1, 3, 0));
 
-        if (keepPreviousWorkVisible)
-        {
-            GameObject.Instantiate(svgParent.gameObject);
-        }
 
 
-        listOfPaths = new List<List<Vector2>>();
+
 
         foreach (LineRenderer line in lineObjects)
         {
@@ -375,7 +474,7 @@ public class svgVisual : MonoBehaviour
 
             Vector2 curPos = startingPos;
 
-            Vector3 realFakePos =  new Vector3(((svgSize / 2f) + spawnOffset).x, ((svgSize / 2f) + spawnOffset).y,0);
+            Vector3 realFakePos =  new Vector3(((svgSize / 2f) + additionalSpawnOffset).x, ((svgSize / 2f) + additionalSpawnOffset).y,0);
 
             Vector3 dirFromCenter = startingPos - realFakePos;
 
@@ -500,11 +599,11 @@ public class svgVisual : MonoBehaviour
             {
                 curLineCount++;
 
-                PlacePath(lineWidth, paintSpot, i);
+                PlacePath(lineWidth, paintSpot, i, svgParent);
             }
 
             curLineCount++;
-            PlacePath(lineWidth, pointsThisPath, i);
+            PlacePath(lineWidth, pointsThisPath, i, svgParent);
         }
 
         if (drawBounds)
@@ -521,13 +620,13 @@ public class svgVisual : MonoBehaviour
 
             if (dipInPaint)
             {
-                PlacePath(lineWidth, paintSpot, pathCount);
+                PlacePath(lineWidth, paintSpot, pathCount, svgParent);
 
-                PlacePath(lineWidth, boarderPoints, pathCount + 1);
+                PlacePath(lineWidth, boarderPoints, pathCount + 1, svgParent);
             }
             else
             {
-                PlacePath(lineWidth, boarderPoints, pathCount);
+                PlacePath(lineWidth, boarderPoints, pathCount, svgParent);
             }
         }
 
@@ -536,21 +635,83 @@ public class svgVisual : MonoBehaviour
         {
             if (dipInPaint)
             {
-                PlacePath(lineWidth, paintSpot, pathCount + 4);
+                PlacePath(lineWidth, paintSpot, pathCount + 4, svgParent);
 
-                PlacePath(lineWidth, circleSpawnPoints, pathCount + 5);
+                PlacePath(lineWidth, drawShapeSpawnPoints, pathCount + 5, svgParent);
             }
             else
             {
-                PlacePath(lineWidth, circleSpawnPoints, pathCount + 1);
+                PlacePath(lineWidth, drawShapeSpawnPoints, pathCount + 1, svgParent);
             }
 
 
         }
 
+        listOfAllPathsThisRun.Add(listOfPaths);
 
-        GenerateSVG(listOfPaths, false, false, printColorIndex, plotColors[printColorIndex]);
-        GenerateSVG(listOfPaths, true, false, printColorIndex, plotColors[printColorIndex]);
+        if (!plottedColors.Contains(plotColors[printIndex]))
+        {
+            //Debug.Log(listsOfAllPathsByColor.Count + "  / " + plottedColors.Count);
+
+            foreach (List<Vector2> plotList in listOfPaths)
+            {
+                listsOfAllPathsByColor[plotColors.IndexOf(plotColors[printIndex])].Add(plotList);
+            }
+
+            plottedColors.Add(plotColors[printIndex]);
+        }
+        else
+        {
+            foreach (List<Vector2> plotList in listOfPaths)
+            {
+                listsOfAllPathsByColor[plotColors.IndexOf(plotColors[printIndex])].Add(plotList);
+            }
+
+            //[plotColors.IndexOf(plotColors[printIndex])].Add(listOfPaths);
+        }
+
+
+        if (printIndex >= shapeCount - potentialColors.Count)
+        {
+            Debug.Log(printIndex + " Fuck " + listsOfAllPathsByColor[plottedColors.Count].Count);
+
+
+            GenerateSVG(listsOfAllPathsByColor[plotColors.IndexOf(plotColors[printIndex])], false, false, plotColors.IndexOf(plotColors[printIndex]), plotColors[printIndex]);
+
+        }
+
+
+        //if (printIndex < plotColors.Count -1)
+        //{
+        //    if (plotColors[printIndex] != plotColors[printIndex + 1])
+        //    {
+        //        List<List<Vector2>> pathListThisColor = new List<List<Vector2>>();
+
+        //        foreach (List<List<Vector2>> pathList in listOfAllPathsThisColorChange)
+        //        {
+        //            foreach(List<Vector2> pointList in pathList)
+        //            {
+        //                pathListThisColor.Add(pointList);
+        //            }
+        //        }
+
+        //        GenerateSVG(pathListThisColor, false, false, printIndex, plotColors[printIndex]);
+
+        //        listOfAllPathsThisColorChange = new List<List<List<Vector2>>>();
+        //    }
+        //    else
+        //    {
+        //        resetLineListThisShape = false;
+        //    }
+        //}
+        //else
+        //{
+        //    GenerateSVG(listOfPaths, false, false, printIndex, plotColors[printIndex]);
+        //}
+
+
+
+
     }
 
     [ContextMenu("ResetLineObjects")]
@@ -565,7 +726,7 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("PlacePath")]
-    public void PlacePath(float width, List<Vector2> points, int IDnum)
+    public void PlacePath(float width, List<Vector2> points, int IDnum, Transform placeToPlace)
     {
         listOfPaths.Add(points);
 
@@ -583,7 +744,7 @@ public class svgVisual : MonoBehaviour
 
         GameObject newLine = new GameObject("line " + IDnum);
 
-        newLine.transform.SetParent(svgParent);
+        newLine.transform.SetParent(placeToPlace);
 
         LineRenderer lineRenderer = newLine.AddComponent<LineRenderer>();
         //lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
@@ -601,7 +762,7 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("SaveSVG")]
-    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex, Color lineColor)
+    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex, Color drawColor)
     {
         StringBuilder svgContent = new StringBuilder();
 
@@ -617,7 +778,7 @@ public class svgVisual : MonoBehaviour
         svgContent.AppendLine("     id=\"defs6\" />");
         svgContent.AppendLine("");
 
-        Color drawLineColor = lineColor;
+        Color drawLineColor = drawColor;
 
         if (saveDisplayCopy)
         {        
@@ -642,10 +803,10 @@ public class svgVisual : MonoBehaviour
             {
                 if (new Vector2(allPaths[i][0].x, allPaths[i][0].y) != new Vector2(allPaths[i][1].x, allPaths[i][1].y))
                 {
-                    svgContent.AppendLine("  <path");
-                    svgContent.AppendLine($"     style=\"fill:none;stroke:#{ColorUtility.ToHtmlStringRGB(lineColor)};stroke-width:{lineWidth / 4};stroke-opacity:{lineColor.a}\"");
+                    //svgContent.AppendLine("  <path");
+                    svgContent.AppendLine($"<path  style=\"fill:none;stroke:#{ColorUtility.ToHtmlStringRGB(drawLineColor)};stroke-width:{lineWidth / 4};stroke-opacity:{drawLineColor.a}\"");
 
-                    string thisPath = "     d = \"M " + allPaths[i][0].x + "," + allPaths[i][0].y + " ";
+                    string thisPath = "       d=\"M " + allPaths[i][0].x + "," + allPaths[i][0].y + " ";
 
                     for (int j = 1; j < allPaths[i].Count; j++)
                     {
@@ -655,7 +816,7 @@ public class svgVisual : MonoBehaviour
                     thisPath += "\"";
 
                     svgContent.AppendLine(thisPath);
-                    svgContent.AppendLine($"id = \"{i}\" />");
+                    svgContent.AppendLine($"      id = \"{i}\" />");
                 }
             }
 
@@ -666,15 +827,20 @@ public class svgVisual : MonoBehaviour
         // Close the SVG
         svgContent.AppendLine("</svg>");
 
+        if (!Directory.Exists($"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{yourFileName}"))
+        {
+            AssetDatabase.CreateFolder("Assets/Resources", yourFileName);
+        }
 
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\Artwork";
+
+        string desktopPath = $"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{yourFileName}";
         desktopPath += "\\";
 
         string filePath = "";
 
         if (!saveDisplayCopy)
         {
-            filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".svg");
+            filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".txt");
         }
         else
         {
@@ -693,6 +859,106 @@ public class svgVisual : MonoBehaviour
 
         Debug.Log("Done");
     }
+
+    public void GenerateDispalySVG(List<List<List<Vector2>>> allPathsToDisplay)
+    {
+        StringBuilder svgContent = new StringBuilder();
+
+        // SVG header and basic structure
+        svgContent.AppendLine("<svg");
+        svgContent.AppendLine($"   width=\"{svgSize.x}\"");
+        svgContent.AppendLine($"   height = \"{svgSize.y}\"");
+        svgContent.AppendLine("   version=\"1.1\"");
+        svgContent.AppendLine("   id=\"svg2\"");
+        svgContent.AppendLine("   xmlns=\"http://www.w3.org/2000/svg\"");
+        svgContent.AppendLine("   xmlns:svg=\"http://www.w3.org/2000/svg\">");
+        svgContent.AppendLine("  <defs");
+        svgContent.AppendLine("     id=\"defs6\" />");
+        svgContent.AppendLine("");
+
+
+
+
+        svgContent.AppendLine("<rect");
+        svgContent.AppendLine($"   style=\"fill:#{ColorUtility.ToHtmlStringRGB(bgColor)};stroke-width:0;stroke-opacity:0\"");
+        svgContent.AppendLine($"   id=\"Background\"");
+        svgContent.AppendLine($"   width=\"{svgSize.x}\"");
+        svgContent.AppendLine($"   height=\"{svgSize.y}\"");
+        svgContent.AppendLine($"   x=\"0\"");
+        svgContent.AppendLine($"   y=\"0\"");
+        svgContent.AppendLine("   rx=\"0\" />");
+
+        for (int k = 0; k < allPathsToDisplay.Count; k++)
+        {
+            Color drawLineColor = plotColors[k];
+
+
+            for (int i = 0; i < allPathsToDisplay[k].Count; i++)
+            {
+                if (allPathsToDisplay[k][i].Count >= 2)
+                {
+                    if (new Vector2(allPathsToDisplay[k][i][0].x, allPathsToDisplay[k][i][0].y) != new Vector2(allPathsToDisplay[k][i][1].x, allPathsToDisplay[k][i][1].y))
+                    {
+                        svgContent.AppendLine("  <path");
+                        svgContent.AppendLine($"     style=\"fill:none;stroke:#{ColorUtility.ToHtmlStringRGB(drawLineColor)};stroke-width:{lineWidth / 4};stroke-opacity:{drawLineColor.a}\"");
+
+                        string thisPath = "     d = \"M " + allPathsToDisplay[k][i][0].x + "," + allPathsToDisplay[k][i][0].y + " ";
+
+                        for (int j = 1; j < allPathsToDisplay[k][i].Count; j++)
+                        {
+                            thisPath += allPathsToDisplay[k][i][j].x + "," + allPathsToDisplay[k][i][j].y + " ";
+                        }
+
+                        thisPath += "\"";
+
+                        svgContent.AppendLine(thisPath);
+                        svgContent.AppendLine($"id = \"{i}\" />");
+                    }
+                }
+
+            }
+        }
+
+        
+
+
+        
+
+
+
+        // Close the SVG
+        svgContent.AppendLine("</svg>");
+
+        if (!Directory.Exists($"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{yourFileName}"))
+        {
+            AssetDatabase.CreateFolder("Assets/Resources", yourFileName);
+        }
+
+        string desktopPath = $"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{yourFileName}";
+        desktopPath += "\\";
+
+        string filePath = "";
+
+        filePath = Path.Combine(desktopPath, yourFileName + " Display.svg");
+        ScreenCapture.CaptureScreenshot(desktopPath + yourFileName + " Screenshot.png");
+
+        // Write the SVG content to a file
+        File.WriteAllText(filePath, svgContent.ToString());
+
+        Debug.Log("Done");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static List<Vector2> CalculateCirclePoints(int vertexCount, Vector2 center, float radius, float rotation)
     {
@@ -762,30 +1028,5 @@ public class svgVisual : MonoBehaviour
         }
 
         return pointsOnShape;
-    }
-
-    internal static ComputeBuffer CreateComputeBuffer<T>(T[] data, ComputeShader cs, string computeBufferName, int kernelIndex)
-    {
-        ComputeBuffer cB;
-
-        int stride = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
-
-        cB = new ComputeBuffer(data.Length, stride);
-        cB.SetData(data);
-
-        cs.SetBuffer(kernelIndex, computeBufferName, cB);
-
-        return cB;
-    }
-
-    internal static void ParticleDispatch(ComputeShader cs, int kern, int width, int height = 0, int depth = 0)
-    {
-        cs.GetKernelThreadGroupSizes(kern, out uint x, out uint y, out uint z);
-
-        int nx = Mathf.Max(1, (int)(width / x));
-        int ny = Mathf.Max(1, (int)(height / x));
-        int nz = Mathf.Max(1, (int)(depth / x));
-
-        cs.Dispatch(kern, nx, ny, nz);
     }
 }

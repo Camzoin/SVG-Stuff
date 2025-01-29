@@ -16,7 +16,7 @@ public class SVGTextImporter : MonoBehaviour
 
     public float curWritingXPos = 0;
 
-    public List<List<List<Vector3>>> letterList = new List<List<List<Vector3>>>();
+    public List<List<List<Vector3>>> cachedAlphabet = new List<List<List<Vector3>>>();
 
     public List<Vector2> letterSizes = new List<Vector2>();
 
@@ -45,7 +45,7 @@ public class SVGTextImporter : MonoBehaviour
     [ContextMenu("DisplayAlphabetFromList")]
     public void DisplayAlphabetFromList()
     {
-        TurnTextToLines(true, textScale);
+        TurnTextToLines(alphabetAsset.text, textScale, true);
 
         pastWrittenLineRendererList = new List<LineRenderer>();
 
@@ -56,7 +56,7 @@ public class SVGTextImporter : MonoBehaviour
     [ContextMenu("DisplayAlphabet")]
     public void DisplayAlphabet()
     {
-        TurnTextToLines(false, textScale);
+        TurnTextToLines(alphabetAsset.text, textScale, true);
     }
 
     [ContextMenu("CompileInfoPage")]
@@ -79,11 +79,11 @@ public class SVGTextImporter : MonoBehaviour
 
         //Write Title Block
         curInfoSegmentY = -(1152 / 2) + 72 + 120;
-        TurnTextToLines(true, textScale * 2.7f);
+        TurnTextToLines(alphabetAsset.text, textScale * 2.7f, true);
         WriteText(svgVis.piecename, new Vector3(0, curInfoSegmentY, 0), true);
 
         curInfoSegmentY += 37.5f;
-        TurnTextToLines(true, textScale * 0.75f);
+        TurnTextToLines(alphabetAsset.text, textScale * 0.75f, true);
         WriteText(svgVis.generatorName, new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         curInfoSegmentY += 25;
@@ -118,11 +118,11 @@ public class SVGTextImporter : MonoBehaviour
 
         //Write Param Block
         curInfoSegmentY += 65;
-        TurnTextToLines(true, textScale * 2f);
+        TurnTextToLines(alphabetAsset.text, textScale * 2f, true);
         WriteText("Parameters", new Vector3(0, curInfoSegmentY, 0), true);
 
         curInfoSegmentY += 25 + 12.5f;
-        TurnTextToLines(true, textScale * 0.75f);
+        TurnTextToLines(alphabetAsset.text, textScale * 0.75f, true);
         WriteText("Size = " + svgVis.svgSize.ToString("F0"), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
@@ -168,7 +168,7 @@ public class SVGTextImporter : MonoBehaviour
         WriteText("Shape Point Count = " + svgVis.posibleShapeVertCount[0].ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
-        WriteText("Shape Count = " + svgVis.plotColors.Count.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
+        WriteText("Shape Count = " + svgVis.shapeCount.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
         curInfoSegmentY += 25;
         WriteText("Shape Position = " + svgVis.additionalSpawnOffset.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
@@ -205,22 +205,22 @@ public class SVGTextImporter : MonoBehaviour
         {
             //Write Signature Block
             curInfoSegmentY = (1152 / 2) - 72 - 125;
-            TurnTextToLines(true, textScale * 2.25f);
+            TurnTextToLines(alphabetAsset.text, textScale * 2.25f, true);
             WriteText(svgVis.artistName, new Vector3(0, curInfoSegmentY, 0), true);
 
             curInfoSegmentY += 35;
-            TurnTextToLines(true, textScale * 0.75f);
+            TurnTextToLines(alphabetAsset.text, textScale * 0.75f, true);
             WriteText("for", new Vector3(0, curInfoSegmentY, 0), false);
 
             curInfoSegmentY += 40;
-            TurnTextToLines(true, textScale * 1.85f);
+            TurnTextToLines(alphabetAsset.text, textScale * 1.85f, true);
             WriteText(svgVis.recipientName, new Vector3(0, curInfoSegmentY, 0), true);
         }
         else
         {
             //Write Signature Block
             curInfoSegmentY = (1152 / 2) - 72 - 60;
-            TurnTextToLines(true, textScale * 3f);
+            TurnTextToLines(alphabetAsset.text, textScale * 3f, true);
             WriteText(svgVis.artistName, new Vector3(0, curInfoSegmentY, 0), true);
         }
 
@@ -239,7 +239,7 @@ public class SVGTextImporter : MonoBehaviour
 
         Camera.main.transform.position += Vector3.up * svgVis.svgSize.y * 4;
 
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\Artwork";
+        string desktopPath = $"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{svgVis.yourFileName}";
         desktopPath += "\\";
 
         ScreenCapture.CaptureScreenshot(desktopPath + svgVis.yourFileName + " Info Screenshot.png");
@@ -252,26 +252,28 @@ public class SVGTextImporter : MonoBehaviour
 
 
 
-    public void TurnTextToLines(bool clearAlphabetAfterSetup, float thisAlphabetsScale)
+    public List<List<List<Vector3>>> TurnTextToLines(string textToLine, float thisAlphabetsScale, bool isAlphabet)
     {
         spaceOffset = thisAlphabetsScale * 300;
-
-        GameObject alphabetHolder = new GameObject("AlphabetHolder");
 
         curWritingXPos = 0;
 
         letterSizes = new List<Vector2>();
 
-        letterList = new List<List<List<Vector3>>>();
+        if (isAlphabet)
+        {
+            cachedAlphabet = new List<List<List<Vector3>>>();
+        }
 
-        string wholeFile = alphabetAsset.ToString();
+        List<List<List<Vector3>>> letterList = new List<List<List<Vector3>>>();
+
 
         char[] escapeChars = new char[2];
 
         escapeChars[0] = ' ';
         escapeChars[0] = ',';
 
-        string[] brokenString = wholeFile.Split("d=");
+        string[] brokenString = textToLine.Split("d=");
 
         int curSVGCharCount = 0;
 
@@ -279,6 +281,8 @@ public class SVGTextImporter : MonoBehaviour
         for (int i = 0; i < brokenString.Length; i++)
         {
             string cleanedString = brokenString[i];
+
+            //Debug.Log(cleanedString);
 
             List<List<Vector3>> listOfPathsThisLetter = new List<List<Vector3>>();
 
@@ -324,14 +328,18 @@ public class SVGTextImporter : MonoBehaviour
 
                 for (int j = 0; j < finalSingleCoordPositions.Count; j++)
                 {
-                    if (char.IsDigit(finalSingleCoordPositions[j][0]) || finalSingleCoordPositions[j][0] == '-')
+                    if (finalSingleCoordPositions[j].Length > 0)
                     {
-                        finalSinglePosFloats.Add(float.Parse(finalSingleCoordPositions[j]) * thisAlphabetsScale);
+                        if (char.IsDigit(finalSingleCoordPositions[j][0]) || finalSingleCoordPositions[j][0] == '-')
+                        {
+                            finalSinglePosFloats.Add(float.Parse(finalSingleCoordPositions[j]) * thisAlphabetsScale);
+                        }
+                        else
+                        {
+                            finalSinglePosFloats.Add(0);
+                        }
                     }
-                    else
-                    {
-                        finalSinglePosFloats.Add(0);
-                    }
+
 
                 }
 
@@ -348,130 +356,135 @@ public class SVGTextImporter : MonoBehaviour
 
                 for (int j = 0; j < finalSingleCoordPositions.Count; j++)
                 {
-                    //If I am a position, place me
-                    if (char.IsDigit(finalSingleCoordPositions[j][0]) || finalSingleCoordPositions[j][0] == '-')
+                    if (finalSingleCoordPositions[j].Length > 0)
                     {
-                        //Debug.Log(finalSingleCoordPositions[j]);
-
-                        Vector2 coordinateFloatPair = Vector2.zero;
-
-                        //Move to
-                        if (currentDrawCommandIndex == 0 || currentDrawCommandIndex == 1 || currentDrawCommandIndex == 4 || currentDrawCommandIndex == 7)
+                        //If I am a position, place me
+                        if (char.IsDigit(finalSingleCoordPositions[j][0]) || finalSingleCoordPositions[j][0] == '-')
                         {
-                            if (currentDrawCommandIndex == 0)
+                            //Debug.Log(finalSingleCoordPositions[j]);
+
+                            Vector2 coordinateFloatPair = Vector2.zero;
+
+                            //Move to
+                            if (currentDrawCommandIndex == 0 || currentDrawCommandIndex == 1 || currentDrawCommandIndex == 4 || currentDrawCommandIndex == 7)
                             {
-                                currentStrokeThisPath++;
+                                if (currentDrawCommandIndex == 0)
+                                {
+                                    currentStrokeThisPath++;
 
-                                listOfPathsThisLetter.Add(new List<Vector3>());
+                                    listOfPathsThisLetter.Add(new List<Vector3>());
 
+                                    currentDrawCommandIndex = 1;
+                                }
+
+                                if (currentDrawCommandIndex == 7)
+                                {
+                                    currentStrokeThisPath++;
+
+                                    listOfPathsThisLetter.Add(new List<Vector3>());
+
+                                    currentDrawCommandIndex = 4;
+                                }
+
+                                if (currentDrawCommandIndex == 4)
+                                {
+                                    coordinateFloatPair = new Vector3(finalSinglePosFloats[j] + lastPosition.x, finalSinglePosFloats[j + 1] + lastPosition.y, 0);
+                                }
+                                else
+                                {
+                                    coordinateFloatPair = new Vector3(finalSinglePosFloats[j], finalSinglePosFloats[j + 1], 0);
+                                }
+
+
+
+                                listOfPathsThisLetter[currentStrokeThisPath].Add(coordinateFloatPair);
+                                j++;
+                            }
+
+                            //Horizontal
+                            if (currentDrawCommandIndex == 2 || currentDrawCommandIndex == 5)
+                            {
+                                if (currentDrawCommandIndex == 5)
+                                {
+                                    coordinateFloatPair = new Vector3(finalSinglePosFloats[j] + lastPosition.x, lastPosition.y, 0);
+                                }
+                                else
+                                {
+                                    coordinateFloatPair = new Vector3(finalSinglePosFloats[j], lastPosition.y, 0);
+                                }
+
+                                listOfPathsThisLetter[currentStrokeThisPath].Add(coordinateFloatPair);
+                            }
+
+                            //Vertical
+                            if (currentDrawCommandIndex == 3 || currentDrawCommandIndex == 6)
+                            {
+                                if (currentDrawCommandIndex == 6)
+                                {
+                                    coordinateFloatPair = new Vector3(lastPosition.x, finalSinglePosFloats[j] + lastPosition.y, 0);
+                                }
+                                else
+                                {
+                                    coordinateFloatPair = new Vector3(lastPosition.x, finalSinglePosFloats[j], 0);
+                                }
+
+                                listOfPathsThisLetter[currentStrokeThisPath].Add(coordinateFloatPair);
+                            }
+
+                            //Debug.Log(coordinateFloatPair);
+
+                            lastPosition = coordinateFloatPair;
+                        }
+                        //If I am a letter, find out which draw command to use
+                        //https://www.w3schools.com/graphics/svg_path.asp
+                        else
+                        {
+                            //Debug.Log(finalSingleCoordPositions[j]);
+
+                            if (finalSingleCoordPositions[j][0] == 'M')
+                            {
+                                currentDrawCommandIndex = 0;
+                            }
+
+                            if (finalSingleCoordPositions[j][0] == 'L')
+                            {
                                 currentDrawCommandIndex = 1;
                             }
 
-                            if (currentDrawCommandIndex == 7)
+                            if (finalSingleCoordPositions[j][0] == 'H')
                             {
-                                currentStrokeThisPath++;
+                                currentDrawCommandIndex = 2;
+                            }
 
-                                listOfPathsThisLetter.Add(new List<Vector3>());
+                            if (finalSingleCoordPositions[j][0] == 'V')
+                            {
+                                currentDrawCommandIndex = 3;
+                            }
 
+
+
+                            if (finalSingleCoordPositions[j][0] == 'l')
+                            {
                                 currentDrawCommandIndex = 4;
                             }
 
-                            if (currentDrawCommandIndex == 4)
+                            if (finalSingleCoordPositions[j][0] == 'h')
                             {
-                                coordinateFloatPair = new Vector3(finalSinglePosFloats[j] + lastPosition.x, finalSinglePosFloats[j + 1] + lastPosition.y, 0);
-                            }
-                            else
-                            {
-                                coordinateFloatPair = new Vector3(finalSinglePosFloats[j], finalSinglePosFloats[j + 1], 0);
+                                currentDrawCommandIndex = 5;
                             }
 
-
-
-                            listOfPathsThisLetter[currentStrokeThisPath].Add(coordinateFloatPair);
-                            j++;
-                        }
-
-                        //Horizontal
-                        if (currentDrawCommandIndex == 2 || currentDrawCommandIndex == 5)
-                        {
-                            if (currentDrawCommandIndex == 5)
+                            if (finalSingleCoordPositions[j][0] == 'v')
                             {
-                                coordinateFloatPair = new Vector3(finalSinglePosFloats[j] + lastPosition.x, lastPosition.y, 0);
+                                currentDrawCommandIndex = 6;
                             }
-                            else
+                            if (finalSingleCoordPositions[j][0] == 'm')
                             {
-                                coordinateFloatPair = new Vector3(finalSinglePosFloats[j], lastPosition.y, 0);
+                                currentDrawCommandIndex = 7;
                             }
-
-                            listOfPathsThisLetter[currentStrokeThisPath].Add(coordinateFloatPair);
-                        }
-
-                        //Vertical
-                        if (currentDrawCommandIndex == 3 || currentDrawCommandIndex == 6)
-                        {
-                            if (currentDrawCommandIndex == 6)
-                            {
-                                coordinateFloatPair = new Vector3(lastPosition.x, finalSinglePosFloats[j] + lastPosition.y, 0);
-                            }
-                            else
-                            {
-                                coordinateFloatPair = new Vector3(lastPosition.x, finalSinglePosFloats[j], 0);
-                            }
-
-                            listOfPathsThisLetter[currentStrokeThisPath].Add(coordinateFloatPair);
-                        }
-
-                        //Debug.Log(coordinateFloatPair);
-
-                        lastPosition = coordinateFloatPair;
-                    }
-                    //If I am a letter, find out which draw command to use
-                    //https://www.w3schools.com/graphics/svg_path.asp
-                    else
-                    {
-                        //Debug.Log(finalSingleCoordPositions[j]);
-
-                        if (finalSingleCoordPositions[j][0] == 'M')
-                        {
-                            currentDrawCommandIndex = 0;
-                        }
-
-                        if (finalSingleCoordPositions[j][0] == 'L')
-                        {
-                            currentDrawCommandIndex = 1;
-                        }
-
-                        if (finalSingleCoordPositions[j][0] == 'H')
-                        {
-                            currentDrawCommandIndex = 2;
-                        }
-
-                        if (finalSingleCoordPositions[j][0] == 'V')
-                        {
-                            currentDrawCommandIndex = 3;
-                        }
-
-
-
-                        if (finalSingleCoordPositions[j][0] == 'l')
-                        {
-                            currentDrawCommandIndex = 4;
-                        }
-
-                        if (finalSingleCoordPositions[j][0] == 'h')
-                        {
-                            currentDrawCommandIndex = 5;
-                        }
-
-                        if (finalSingleCoordPositions[j][0] == 'v')
-                        {
-                            currentDrawCommandIndex = 6;
-                        }
-                        if (finalSingleCoordPositions[j][0] == 'm')
-                        {
-                            currentDrawCommandIndex = 7;
                         }
                     }
+
+                    
 
 
 
@@ -495,28 +508,6 @@ public class SVGTextImporter : MonoBehaviour
                     }
                 }
 
-                foreach (List<Vector3> linesToRenderThisLetter in listOfPathsThisLetter)
-                {
-
-                    //Debug.Log(linesToRenderThisLetter.ToArray().Length + " " + offset);
-
-                    GameObject newLine = new GameObject(curSVGCharCount.ToString());
-
-                    newLine.transform.SetParent(alphabetHolder.transform);
-
-                    LineRenderer lineRenderer = newLine.AddComponent<LineRenderer>();
-
-                    lineRenderer.useWorldSpace = false;
-
-                    lineRenderer.widthMultiplier = lineWidth;
-
-                    lineRenderer.positionCount = linesToRenderThisLetter.ToArray().Length;
-
-                    lineRenderer.SetPositions(linesToRenderThisLetter.ToArray());
-
-                    newLine.transform.position += new Vector3(curWritingXPos, 0, 0);
-                }
-
                 letterSizes.Add(offset);
 
                 curWritingXPos += offset.x + additonalLetterOffet;
@@ -526,7 +517,7 @@ public class SVGTextImporter : MonoBehaviour
                 //    Debug.Log(pathPoints);
                 //}
 
-                Debug.Log("END CHAR " + curSVGCharCount + " TOOK " + currentStrokeThisPath + " LINES " + listOfPathsThisLetter.Count);
+                //Debug.Log("END CHAR " + curSVGCharCount + " TOOK " + currentStrokeThisPath + " LINES " + listOfPathsThisLetter.Count);
 
                 curSVGCharCount++;
 
@@ -537,7 +528,7 @@ public class SVGTextImporter : MonoBehaviour
 
             letterList.Add(listOfPathsThisLetter);
 
-            Debug.Log(letterList.Count + " " + letterList[letterList.Count - 1].Count);
+            //Debug.Log(letterList.Count + " " + letterList[letterList.Count - 1].Count);
 
             if (letterList[letterList.Count - 1].Count == 0)
             {
@@ -545,15 +536,17 @@ public class SVGTextImporter : MonoBehaviour
             }
         }
 
-        foreach(List<List<Vector3>> letters in letterList)
+        if (isAlphabet)
         {
-            Debug.Log("Letter" + letters.Count);
+            cachedAlphabet = letterList;
         }
 
-        if (clearAlphabetAfterSetup)
-        {
-            DestroyImmediate(alphabetHolder);
-        }
+        return letterList;
+
+        //foreach(List<List<Vector3>> letters in letterList)
+        //{
+        //    Debug.Log("Letter" + letters.Count);
+        //}
     }
 
 
@@ -673,7 +666,7 @@ public class SVGTextImporter : MonoBehaviour
             //If I am a letter
             if (letterIndexesToWrite[i] < 75)
             {
-                for (int j = 0; j < letterList[letterIndexesToWrite[i]].Count; j++)
+                for (int j = 0; j < cachedAlphabet[letterIndexesToWrite[i]].Count; j++)
                 {
                     //Debug.Log(penDown.ToArray().Length + " " + offset);
 
@@ -689,18 +682,18 @@ public class SVGTextImporter : MonoBehaviour
 
                     lineRenderer.alignment = LineAlignment.TransformZ;
 
-                    lineRenderer.positionCount = letterList[letterIndexesToWrite[i]][j].ToArray().Length;
+                    lineRenderer.positionCount = cachedAlphabet[letterIndexesToWrite[i]][j].ToArray().Length;
 
                     List<Vector2> vec2Positions = new List<Vector2>();
 
-                    foreach(Vector3 v in letterList[letterIndexesToWrite[i]][j])
+                    foreach(Vector3 v in cachedAlphabet[letterIndexesToWrite[i]][j])
                     {
                         vec2Positions.Add(new Vector2(v.x + curWritingXPos - textOffset.x + (svgVis.clippingSize.x), -v.y + lineRenderer.transform.position.y + textOffset.y + (svgVis.svgSize.y / 2)));
                     }
 
                     pastWrittenLinePositionLists.Add(vec2Positions);
 
-                    lineRenderer.SetPositions(letterList[letterIndexesToWrite[i]][j].ToArray());
+                    lineRenderer.SetPositions(cachedAlphabet[letterIndexesToWrite[i]][j].ToArray());
 
                     pastWrittenLineRendererList.Add(lineRenderer);
 
@@ -861,7 +854,7 @@ public class SVGTextImporter : MonoBehaviour
 
         finalName += finalNoun;
 
-        Debug.Log(finalName + " " + nounListText.Length + " " + adjListText.Length);
+        //Debug.Log(finalName + " " + nounListText.Length + " " + adjListText.Length);
 
         return finalName;
     }
