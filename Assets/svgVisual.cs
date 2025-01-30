@@ -673,7 +673,9 @@ public class svgVisual : MonoBehaviour
 
         if (printIndex >= shapeCount - potentialColors.Count)
         {
-            Debug.Log(printIndex + " Fuck " + listsOfAllPathsByColor[plottedColors.Count].Count);
+            int goodDex = printIndex - shapeCount + potentialColors.Count;
+
+            Debug.Log(printIndex + " Fuck " + listsOfAllPathsByColor[goodDex].Count);
 
 
             GenerateSVG(listsOfAllPathsByColor[plotColors.IndexOf(plotColors[printIndex])], false, false, plotColors.IndexOf(plotColors[printIndex]), plotColors[printIndex]);
