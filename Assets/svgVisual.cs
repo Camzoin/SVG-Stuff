@@ -221,6 +221,7 @@ public class svgVisual : MonoBehaviour
 
 
 
+
         for (int i = 0; i < oldPlots.Count; i++)
         {
             DestroyImmediate(oldPlots[i]);
@@ -299,10 +300,7 @@ public class svgVisual : MonoBehaviour
             {
                 if (randomOffsetFromCenter != 0)
                 {
-                    randomOffsetFromCenter = circleRadius.x - ((circleRadius.x * (1f / Mathf.Sqrt(2))));
                 }
-
-                circleRadius *= 1f / Mathf.Sqrt(2);
 
                 pathCount = (int)(pathCount * (1f / Mathf.Sqrt(2)));
             }
@@ -323,6 +321,50 @@ public class svgVisual : MonoBehaviour
 
             oldPlots[i].SetActive(true);
         }
+
+
+        int designsPerColor = shapeCount / potentialColors.Count;
+
+        for (int i = 0; i < designsPerColor; i++)
+        {
+
+            List<List<Vector2>> allLinesOfThisColor = new List<List<Vector2>>();
+
+            //Add each design to the color
+            for (int q = 0; q < shapeCount; q++)
+            {
+                if (q % designsPerColor == 0)
+                {
+                    foreach(List<Vector2> v2 in listOfAllPathsThisRun[q])
+                    {
+                        allLinesOfThisColor.Add(v2);
+                    }
+
+
+                }
+            }
+
+
+
+
+            GenerateSVG(allLinesOfThisColor, false, false, i, potentialColors[i % (potentialColors.Count - 1)]);
+        }
+
+        
+
+
+        for (int i = 0; i < shapeCount; i++)
+        {
+
+
+
+            //GenerateSVG(listOfAllPathsThisRun[i], false, false, i, plotColors[i]);
+
+
+        }
+
+
+
 
         GenerateDispalySVG(listOfAllPathsThisRun);
 
@@ -350,6 +392,7 @@ public class svgVisual : MonoBehaviour
 
             urlsaver.SubmitFeedback();
         }
+
 
     }
 
@@ -396,15 +439,16 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("GenerateWork")]
     public void GenerateWork(int printIndex)
     {
+        listOfPaths = new List<List<Vector2>>();
+
         lineObjects = new List<LineRenderer>();
 
-        List<Color> plottedColors = new List<Color>(0);
+
 
         float spawnOffsetX =  UnityEngine.Random.Range(-randomOffsetFromCenter, randomOffsetFromCenter);
         float spawnOffsetY =  UnityEngine.Random.Range(-randomOffsetFromCenter, randomOffsetFromCenter);
 
 
-        float spawnRad = UnityEngine.Random.Range(circleRadius.x, circleRadius.y);
 
 
         Vector2 spawnOffset = new Vector2(spawnOffsetX, spawnOffsetY);
@@ -606,7 +650,6 @@ public class svgVisual : MonoBehaviour
             PlacePath(lineWidth, pointsThisPath, i, svgParent);
         }
 
-        if (drawBounds)
         {
             //place boarder
             List<Vector2> boarderPoints = new List<Vector2>();
