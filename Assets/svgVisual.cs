@@ -314,12 +314,14 @@ public class svgVisual : MonoBehaviour
 
             if (fitEachShapeInLast)
             {
+
+
+                chosenSize *= 1f / Mathf.Sqrt(2);
+
                 if (randomOffsetFromCenter != 0)
                 {
                     randomOffsetFromCenter = chosenSize - ((chosenSize * (1f / Mathf.Sqrt(2))));
                 }
-
-                chosenSize *= 1f / Mathf.Sqrt(2);
 
                 pathCount = (int)(pathCount * (1f / Mathf.Sqrt(2)));
             }
@@ -623,7 +625,14 @@ public class svgVisual : MonoBehaviour
             PlacePath(lineWidth, pointsThisPath, i, svgParent);
         }
 
-        if (drawBounds)
+
+        if (drawSpawnShapes)
+        {
+            PlacePath(lineWidth, drawShapeSpawnPoints, pathCount, svgParent);
+        }
+
+
+        if (drawBounds && printIndex >= shapeCount - potentialColors.Count)
         {
             //place boarder
             List<Vector2> boarderPoints = new List<Vector2>();
@@ -635,34 +644,11 @@ public class svgVisual : MonoBehaviour
             boarderPoints.Add(new Vector3(0 + clippingSize.x, svgSize.y - clippingSize.y, 0));
             boarderPoints.Add(new Vector3(0 + clippingSize.x, 0 + clippingSize.y, 0));
 
-            if (dipInPaint)
-            {
-                PlacePath(lineWidth, paintSpot, pathCount, svgParent);
-
-                PlacePath(lineWidth, boarderPoints, pathCount + 1, svgParent);
-            }
-            else
-            {
-                PlacePath(lineWidth, boarderPoints, pathCount, svgParent);
-            }
+            PlacePath(lineWidth, boarderPoints, pathCount + 1, svgParent);
         }
 
 
-        if (drawSpawnShapes)
-        {
-            if (dipInPaint)
-            {
-                PlacePath(lineWidth, paintSpot, pathCount + 4, svgParent);
 
-                PlacePath(lineWidth, drawShapeSpawnPoints, pathCount + 5, svgParent);
-            }
-            else
-            {
-                PlacePath(lineWidth, drawShapeSpawnPoints, pathCount + 1, svgParent);
-            }
-
-
-        }
 
         listOfAllPathsThisRun.Add(listOfPaths);
 
