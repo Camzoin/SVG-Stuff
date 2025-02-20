@@ -62,6 +62,8 @@ public class SVGTextImporter : MonoBehaviour
     [ContextMenu("CompileInfoPage")]
     public void CompileInfoPage()
     {
+        //Make this bad more 4x3in
+
         if (lastTextHolder)
         {
             DestroyImmediate(lastTextHolder);
@@ -75,18 +77,18 @@ public class SVGTextImporter : MonoBehaviour
 
         float curInfoSegmentY = 0;
 
-        float secondParamCollumX = -350;
+        float secondParamCollumX = -190;
 
         //Write Title Block
-        curInfoSegmentY = -(1152 / 2) + 72 + 120;
-        TurnTextToLines(alphabetAsset.text, textScale * 2.7f, true);
+        curInfoSegmentY = 27.5f;// -((3 * 96)) + 10;
+        TurnTextToLines(alphabetAsset.text, textScale * 1f, true);
         WriteText(svgVis.piecename, new Vector3(0, curInfoSegmentY, 0), true);
 
-        curInfoSegmentY += 37.5f;
-        TurnTextToLines(alphabetAsset.text, textScale * 0.75f, true);
-        WriteText(svgVis.generatorName, new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
+        curInfoSegmentY += 17.5f;
+        TurnTextToLines(alphabetAsset.text, textScale * 0.35f, true);
+        WriteText("Project: " + svgVis.generatorName, new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Seed: " + svgVis.seedValue.ToString() + "  Version: " + svgVis.versionNumber + "  Date: " + GetDate(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
@@ -105,10 +107,16 @@ public class SVGTextImporter : MonoBehaviour
             charCountFromSeed = svgVis.seedValue.ToString().Length;
         }
 
-        svgVis.shortURL = "https://tinyurl.com/" + shortURL + UnityEngine.Random.Range(0, 999).ToString() + svgVis.seedValue.ToString().Substring(0, charCountFromSeed);
+        //svgVis.shortURL = "https://tinyurl.com/" + shortURL + UnityEngine.Random.Range(0, 999).ToString() + svgVis.seedValue.ToString().Substring(0, charCountFromSeed);
 
-        curInfoSegmentY += 25;
-        WriteText("Download URL: " + svgVis.shortURL, new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
+        curInfoSegmentY += 10;
+        WriteText("Download: github.com/ArgyleSmith/ArtData/", new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
+
+
+
+        curInfoSegmentY += 10;
+        WriteText("Encryption Password: " + GenerateKey(7), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
+        //WriteText("tree/main/LinesEmittingFromSimpleShapes/" + svgVis.yourFileName, new Vector3(0, curInfoSegmentY + 10, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
         //WriteText("File Host URL: " + svgVis.fileURL, new Vector3(0, curInfoSegmentY, 0), false);
@@ -117,94 +125,94 @@ public class SVGTextImporter : MonoBehaviour
         //WriteText("      Date: " + GetDate(), new Vector3(0, curInfoSegmentY, 0), false);
 
         //Write Param Block
-        curInfoSegmentY += 65;
-        TurnTextToLines(alphabetAsset.text, textScale * 2f, true);
+        curInfoSegmentY += 20;
+        TurnTextToLines(alphabetAsset.text, textScale * 0.6f, true);
         WriteText("Parameters", new Vector3(0, curInfoSegmentY, 0), true);
 
-        curInfoSegmentY += 25 + 12.5f;
-        TurnTextToLines(alphabetAsset.text, textScale * 0.75f, true);
+        curInfoSegmentY += 15;
+        TurnTextToLines(alphabetAsset.text, textScale * 0.3f, true);
         WriteText("Size = " + svgVis.svgSize.ToString("F0"), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
-        WriteText("Bounding Box Indent = " + svgVis.clippingSize.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
+        WriteText("Bounding Box Indent = " + svgVis.clippingSize.ToString("F0"), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Draw Bounds = " + svgVis.drawBounds.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
 
 
 
-        curInfoSegmentY += 35f;
+        curInfoSegmentY += 15;
         WriteText("Flow Field Node Count = " + svgVis.flowFieldNodeCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
         WriteText("Flow Field Node Influence Distance = " + svgVis.maxInfluenceDist.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Flow Field Movement Multiplier = " + svgVis.flowFieldMovementMulti.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
         WriteText("New Flow Field Per Shape = " + svgVis.redoFlowFieldForNewColors.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Random Main Flow Direction = " + svgVis.useRandomContantFlowDir.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
         WriteText("Main Flow Direction = " + svgVis.constantFlowDir.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Main Flow Speed Min Max = " + svgVis.constantSpeedMinMax.ToString("F0"), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
         WriteText("Flow From Shape = " + svgVis.useFlowFromSpawn.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Flow From Shape Speed = " + svgVis.flowFromCenterMulti.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
 
 
 
-        curInfoSegmentY += 35f;
+        curInfoSegmentY += 15;
         WriteText("Shape Point Count = " + svgVis.posibleShapeVertCount[0].ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
         WriteText("Shape Count = " + svgVis.shapeCount.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
-        WriteText("Shape Position = " + svgVis.additionalSpawnOffset.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
+        curInfoSegmentY += 10;
+        WriteText("Shape Position = " + svgVis.additionalSpawnOffset.ToString("F0"), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
         WriteText("Shape Radius Min Max = " + svgVis.circleRadius.ToString("F0"), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Line Count = " + svgVis.pathCount.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
         WriteText("Max Line Segments = " + svgVis.pathLength.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Draw Spawn Shape = " + svgVis.drawSpawnShapes.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
         WriteText("Use Random Shape Rotation = " + svgVis.useRandomRoation.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Shape Rotation = " + svgVis.shapeRotation.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         WriteText("Randomly Flip Flow Directions = " + svgVis.randomlyFlipFlowDirectionsPerColor.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Randomly Mirror Shape Position = " + svgVis.randomlyFlipFlowDirectionsPerColor.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         WriteText("Shrink Each Color Shape = " + svgVis.fitEachShapeInLast.ToString(), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
-        curInfoSegmentY += 25;
+        curInfoSegmentY += 10;
         WriteText("Rotate Each Shape 45 Degrees = " + svgVis.rotateEachShape45.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         if (svgVis.recipientName != "")
         {
             //Write Signature Block
-            curInfoSegmentY = (1152 / 2) - 72 - 125;
+            curInfoSegmentY = ((3 * 96)) - 10;
             TurnTextToLines(alphabetAsset.text, textScale * 2.25f, true);
             WriteText(svgVis.artistName, new Vector3(0, curInfoSegmentY, 0), true);
 
@@ -219,16 +227,17 @@ public class SVGTextImporter : MonoBehaviour
         else
         {
             //Write Signature Block
-            curInfoSegmentY = (1152 / 2) - 72 - 60;
-            TurnTextToLines(alphabetAsset.text, textScale * 3f, true);
-            WriteText(svgVis.artistName, new Vector3(0, curInfoSegmentY, 0), true);
+            curInfoSegmentY = ((3 * 96)) - 17;
+            TurnTextToLines(alphabetAsset.text, textScale * 1f, true);
+            WriteText(svgVis.artistName, new Vector3(-4*96 + 155, curInfoSegmentY, 0), true);
         }
+
 
         svgVis.SetRenderValues(pastWrittenLineRendererList, svgVis.textMat, Color.black);
 
-        lastTextHolder.transform.position = Vector3.up * 1152 * 4;
+        lastTextHolder.transform.position = Vector3.up * svgVis.svgSize.y * 4.25f + (Vector3.left * svgVis.svgSize.x / 2.5f);
 
-        svgVis.GenerateSVG(pastWrittenLinePositionLists, false, true, 0, Color.black);
+        svgVis.GenerateSVG(pastWrittenLinePositionLists, false, true, 0, Color.black, new Vector2(4 * 96, 3 * 96));
 
         StartCoroutine(waiter());
     }
@@ -242,10 +251,14 @@ public class SVGTextImporter : MonoBehaviour
         string desktopPath = $"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{svgVis.yourFileName}";
         desktopPath += "\\";
 
+        svgVis.bgRenderer.material.SetColor("_BaseColor", Color.white);
+
         ScreenCapture.CaptureScreenshot(desktopPath + svgVis.yourFileName + " Info Screenshot.png");
 
         //Wait for 2 seconds
         yield return new WaitForSeconds(1f);
+
+        svgVis.bgRenderer.material.SetColor("_BaseColor", svgVis.bgColor);
 
         Camera.main.transform.position -= Vector3.up * svgVis.svgSize.y * 4;
     }
@@ -288,7 +301,7 @@ public class SVGTextImporter : MonoBehaviour
 
             Vector2 lastPosition = Vector2.zero;
 
-            if (cleanedString[0] == '"' && (cleanedString[1] == 'm'  || cleanedString[1] == 'M'))
+            if (cleanedString[0] == '"' && (cleanedString[1] == 'm' || cleanedString[1] == 'M'))
             {
                 int currentStrokeThisPath = 0;
 
@@ -321,7 +334,7 @@ public class SVGTextImporter : MonoBehaviour
                     else
                     {
                         finalSingleCoordPositions.Add(thisPos);
-                    }                 
+                    }
                 }
 
                 List<float> finalSinglePosFloats = new List<float>();
@@ -484,7 +497,7 @@ public class SVGTextImporter : MonoBehaviour
                         }
                     }
 
-                    
+
 
 
 
@@ -686,9 +699,9 @@ public class SVGTextImporter : MonoBehaviour
 
                     List<Vector2> vec2Positions = new List<Vector2>();
 
-                    foreach(Vector3 v in cachedAlphabet[letterIndexesToWrite[i]][j])
+                    foreach (Vector3 v in cachedAlphabet[letterIndexesToWrite[i]][j])
                     {
-                        vec2Positions.Add(new Vector2(v.x + curWritingXPos - textOffset.x + (svgVis.clippingSize.x), -v.y + lineRenderer.transform.position.y + textOffset.y + (svgVis.svgSize.y / 2)));
+                        vec2Positions.Add(new Vector2(v.x + curWritingXPos - textOffset.x + 15, -v.y + textOffset.y));
                     }
 
                     pastWrittenLinePositionLists.Add(vec2Positions);
@@ -713,7 +726,7 @@ public class SVGTextImporter : MonoBehaviour
             {
                 curWritingXPos += spaceOffset;
             }
-            
+
         }
 
         if (underlineThisText)
@@ -742,7 +755,7 @@ public class SVGTextImporter : MonoBehaviour
 
             foreach (Vector3 v in underlinePoints)
             {
-                vec2Positions.Add(new Vector2(v.x + textOffset.x + (svgVis.clippingSize.x), -v.y + lineRenderer.transform.position.y + textOffset.y + (svgVis.svgSize.y / 2) - lowestLetterY + 2.5f));
+                vec2Positions.Add(new Vector2(v.x - textOffset.x + 15, -v.y + textOffset.y - lowestLetterY + 2.5f));
             }
 
             pastWrittenLinePositionLists.Add(vec2Positions);
@@ -752,10 +765,10 @@ public class SVGTextImporter : MonoBehaviour
             pastWrittenLineRendererList.Add(lineRenderer);
 
 
-            newLine.transform.localPosition += new Vector3(0, lowestLetterY - 2.5f, 0);
+            newLine.transform.localPosition += new Vector3(-textOffset.x, lowestLetterY - 2.5f, 0);
         }
 
-        newTextHolder.transform.position -= new Vector3(+svgVis.svgSize.x / 3, textOffset.y, 0);
+        newTextHolder.transform.position -= new Vector3(0, textOffset.y, 0);
     }
 
 
@@ -854,7 +867,7 @@ public class SVGTextImporter : MonoBehaviour
 
         finalName += finalNoun;
 
-        //Debug.Log(finalName + " " + nounListText.Length + " " + adjListText.Length);
+        Debug.Log(finalName);
 
         return finalName;
     }
@@ -884,7 +897,7 @@ public class SVGTextImporter : MonoBehaviour
         string newAdjFile = "";
         for (int i = 0; i < allAdjs.Count - 1; i++)
         {
-            Debug.Log(i + " / " + allAdjs.Count +  " " + allAdjs[i]);
+            Debug.Log(i + " / " + allAdjs.Count + " " + allAdjs[i]);
 
             newAdjFile += allAdjs[i] + $"{Environment.NewLine}";
 
@@ -910,5 +923,13 @@ public class SVGTextImporter : MonoBehaviour
         }
 
         return inputPaths;
+    }
+
+    public static string GenerateKey(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var random = new System.Random();
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 }
