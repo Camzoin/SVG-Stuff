@@ -287,7 +287,7 @@ public class PlotCombiner : MonoBehaviour
 
             Debug.Log("Line points" + linePoints.Count);
 
-            gameObject.GetComponent<svgVisual>().PlacePath(1, linePoints, path.IndexOf(sg), copierHolder);
+            gameObject.GetComponent<svgVisual>().PlacePath(1, linePoints, path.IndexOf(sg), copierHolder, new Color(10,10,10));
         }
     }
 

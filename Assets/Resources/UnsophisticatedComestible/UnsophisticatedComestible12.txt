@@ -1,0 +1,14 @@
+<svg
+   width="864"
+   height = "1152"
+   version="1.1"
+   id="svg2"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
+
+<path  style="fill:none;stroke:#000000;stroke-width:2;stroke-opacity:1"
+       d="M 476.6,924.4 476.8,924.4 477,924.4 477.2,924.4 476.4,924.4 476.2,924.4 476.6,924.4 "
+      id = "0" />
+</svg>

@@ -12,7 +12,6 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ALPHAMODULATE_ON
   - _ALPHATEST_ON
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
@@ -46,20 +45,20 @@ Material:
     m_Floats:
     - _AlphaClip: 1
     - _AlphaToMask: 0
-    - _Blend: 3
+    - _Blend: 0
     - _CastShadows: 0
-    - _Cull: 2
-    - _DstBlend: 0
+    - _Cull: 0
+    - _DstBlend: 10
     - _Float: 0.2
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SrcBlend: 2
+    - _SrcBlend: 5
     - _Surface: 1
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _BaseColor: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &2881525067694075331

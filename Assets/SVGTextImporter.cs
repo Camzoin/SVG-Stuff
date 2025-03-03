@@ -874,7 +874,7 @@ public class SVGTextImporter : MonoBehaviour
 
 
     public void FixAdjList()
-    {
+    { 
         List<string> allAdjs = new List<string>();
 
         string[] firstSplit = adjList.text.Split(", ");
