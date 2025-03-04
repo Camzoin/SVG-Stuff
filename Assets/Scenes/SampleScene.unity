@@ -47187,7 +47187,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 894137964}
+  - {fileID: 1762764080}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -59532,55 +59532,6 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!21 &894137964
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Paper BG (Instance)
-  m_Shader: {fileID: -6465566751694194690, guid: b34effd6689551d43aac76086c87a2a2, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses:
-  - MOTIONVECTORS
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _QueueControl: 0
-    - _QueueOffset: 0
-    m_Colors:
-    - _BaseColor: {r: 0.47297937, g: 0.9433962, b: 0.27144888, a: 0.99607843}
-    - _Tiling: {r: 2, g: 2, b: 0, a: 0}
-  m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!1 &895039302
 GameObject:
   m_ObjectHideFlags: 0
@@ -67327,6 +67278,37 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!1 &1031579393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1031579394}
+  m_Layer: 0
+  m_Name: New Game Object
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1031579394
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031579393}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1037478160
 GameObject:
   m_ObjectHideFlags: 0
@@ -77445,7 +77427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1174166137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96340,11 +96322,11 @@ MonoBehaviour:
   artistName: Argyle Smith
   recipientName: 
   versionNumber: 0.1.0
-  seedValue: -635726869
+  seedValue: -63460017
   fileURL: drive.google.com/drive/folders/1UjAucIYJGUQrkDYDMq1ykxP66R5_Vk5d
   shortURL: https://tinyurl.com/OI960369
-  piecename: Cooked Council
-  yourFileName: CookedCouncil
+  piecename: Juvenile Peacoat
+  yourFileName: JuvenilePeacoat
   oldPlots: []
   textImporter: {fileID: 1472000433}
   unlitMat: {fileID: 2100000, guid: 1aa1c3fb05161304a800c69e696566b3, type: 2}
@@ -96359,9 +96341,9 @@ MonoBehaviour:
   renderFilterCamTexture: {fileID: 8400000, guid: 3770984e5ecf4c042974834dd4ece32b, type: 2}
   renderNormalCamTexture: {fileID: 8400000, guid: a03ed002651044342875c9f38e664ccd, type: 2}
   renderCam: {fileID: 1803802085}
-  renderScale: 1
+  renderScale: 4
   burster: {fileID: 1472000435}
-  simpleVerticleFillMod: 5
+  simpleVerticleFillMod: 3
 --- !u!114 &1472000433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115172,6 +115154,55 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!21 &1762764080
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Paper BG (Instance)
+  m_Shader: {fileID: -6465566751694194690, guid: b34effd6689551d43aac76086c87a2a2, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    m_Colors:
+    - _BaseColor: {r: 0.47297937, g: 0.9433962, b: 0.27144888, a: 0.99607843}
+    - _Tiling: {r: 2, g: 2, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!1 &1763668963
 GameObject:
   m_ObjectHideFlags: 0
@@ -146128,3 +146159,4 @@ SceneRoots:
   - {fileID: 418388907}
   - {fileID: 2026485865}
   - {fileID: 1153066743}
+  - {fileID: 1031579394}

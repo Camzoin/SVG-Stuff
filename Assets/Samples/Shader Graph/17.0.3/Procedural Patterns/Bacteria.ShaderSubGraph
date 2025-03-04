@@ -8,6 +8,9 @@
         },
         {
             "m_Id": "bfc86eda8d2e7f87a21d3d2e9870d5e0"
+        },
+        {
+            "m_Id": "77bd9d84196b482fae32d2afe21eb6fe"
         }
     ],
     "m_Keywords": [],
@@ -134,6 +137,9 @@
         },
         {
             "m_Id": "2b6e35f658447e898c7069e9e48335ec"
+        },
+        {
+            "m_Id": "35eb739e91534e32b07d8cb9cdccd120"
         }
     ],
     "m_GroupDatas": [
@@ -288,6 +294,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "48d7ce5944312881a2c447a89e57f45e"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "35eb739e91534e32b07d8cb9cdccd120"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "18cf456206c20f85ab692a51794df244"
                 },
                 "m_SlotId": 0
             }
@@ -905,7 +925,7 @@
     "m_Title": "Creating Rotated truchet UV tiles",
     "m_Position": {
         "x": -3962.0,
-        "y": 284.0000305175781
+        "y": 287.0000305175781
     }
 }
 
@@ -1516,6 +1536,27 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "203c45d94c3248f9b4ea28619bcd630c",
+    "m_Id": 0,
+    "m_DisplayName": "Vector2",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "22084bcde359d78e9468ac4a930d74b2",
     "m_Id": 0,
@@ -1985,6 +2026,42 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "35eb739e91534e32b07d8cb9cdccd120",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -5219.0048828125,
+            "y": 444.8216247558594,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "203c45d94c3248f9b4ea28619bcd630c"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "77bd9d84196b482fae32d2afe21eb6fe"
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "384bbe1a057a8d878067f9578af80059",
     "m_Id": 1,
@@ -2058,8 +2135,8 @@
     "m_ObjectId": "3d1eae706e474c9884ea4a067c50858d",
     "m_Title": "Randomized Value Mask for uv tiles",
     "m_Position": {
-        "x": -4768.99951171875,
-        "y": 283.99993896484377
+        "x": -4769.0,
+        "y": 287.0000305175781
     }
 }
 
@@ -2497,8 +2574,8 @@
     "m_ObjectId": "54066720529a4a02afaf88161a2172d3",
     "m_Title": "Draw soft-edge truchet lines",
     "m_Position": {
-        "x": -2360.000244140625,
-        "y": 304.0000305175781
+        "x": -2359.999755859375,
+        "y": 308.9999694824219
     }
 }
 
@@ -2994,6 +3071,9 @@
         },
         {
             "m_Id": "bfc86eda8d2e7f87a21d3d2e9870d5e0"
+        },
+        {
+            "m_Id": "77bd9d84196b482fae32d2afe21eb6fe"
         }
     ]
 }
@@ -3267,6 +3347,34 @@
     "m_PreviewMode": 0,
     "m_CustomColors": {
         "m_SerializableColors": []
+    }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector2ShaderProperty",
+    "m_ObjectId": "77bd9d84196b482fae32d2afe21eb6fe",
+    "m_Guid": {
+        "m_GuidSerialized": "cc82f3e5-aae9-4806-a045-e126dfd609e9"
+    },
+    "m_Name": "Vector2",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Vector2",
+    "m_DefaultReferenceName": "_Vector2",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
     }
 }
 
@@ -5133,8 +5241,8 @@
     "m_ObjectId": "d43d166ee2f8463e80b6129f79f2c23e",
     "m_Title": "Draw soft-edge corners",
     "m_Position": {
-        "x": -2487.0,
-        "y": 708.0
+        "x": -2486.999755859375,
+        "y": 713.0000610351563
     }
 }
 

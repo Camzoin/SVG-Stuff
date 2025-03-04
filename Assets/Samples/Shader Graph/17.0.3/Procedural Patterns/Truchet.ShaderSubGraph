@@ -11,6 +11,9 @@
         },
         {
             "m_Id": "c1a1890a7e1e1d8bb89086e2d88753df"
+        },
+        {
+            "m_Id": "f42f373a42d34eb9a7d3d3d0f514c40e"
         }
     ],
     "m_Keywords": [],
@@ -128,6 +131,9 @@
         },
         {
             "m_Id": "77370330742c4b90b4cc207b4481be81"
+        },
+        {
+            "m_Id": "f6e0ce6576ea45f6afd8b66a015da247"
         }
     ],
     "m_GroupDatas": [
@@ -726,6 +732,20 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
+                    "m_Id": "f6e0ce6576ea45f6afd8b66a015da247"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "33ebf501a454a486871fd6d7d91b5888"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
                     "m_Id": "fd03a565ec964bc5871d43809dd3c844"
                 },
                 "m_SlotId": 1
@@ -900,8 +920,8 @@
     "m_ObjectId": "0ed3561e7a8b49dd9b40e77fcc20330a",
     "m_Title": "Apply rotation to UV tiles",
     "m_Position": {
-        "x": -1457.0,
-        "y": 677.9999389648438
+        "x": -1457.000244140625,
+        "y": 678.0
     }
 }
 
@@ -911,8 +931,8 @@
     "m_ObjectId": "106b36300af245b9bb760317c53d4826",
     "m_Title": "Randomized rotation mask",
     "m_Position": {
-        "x": -2250.0,
-        "y": 630.9999389648438
+        "x": -2250.000244140625,
+        "y": 631.0000610351563
     }
 }
 
@@ -1312,7 +1332,7 @@
     "m_ObjectId": "2594db0620234b0c8b2a67c09385c174",
     "m_Title": "Apply rotation to UV tiles",
     "m_Position": {
-        "x": -2053.000244140625,
+        "x": -2053.0,
         "y": -64.0
     }
 }
@@ -1590,7 +1610,7 @@
     "m_ObjectId": "2f9434be0e4546c2b81956b34a055b58",
     "m_Title": "Calculate radial lines and draw smooth edge",
     "m_Position": {
-        "x": -1343.0,
+        "x": -1343.000244140625,
         "y": -57.0
     }
 }
@@ -2897,8 +2917,8 @@
     "m_ObjectId": "8564c25223894e5ca628a5779c170a80",
     "m_Title": "Randomized rotation mask",
     "m_Position": {
-        "x": -2846.0,
-        "y": -111.00003051757813
+        "x": -2846.000244140625,
+        "y": -110.99995422363281
     }
 }
 
@@ -3462,6 +3482,9 @@
         },
         {
             "m_Id": "c1a1890a7e1e1d8bb89086e2d88753df"
+        },
+        {
+            "m_Id": "f42f373a42d34eb9a7d3d3d0f514c40e"
         }
     ]
 }
@@ -4487,6 +4510,27 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "d99c8c2800614f98a54e89f36e0803e2",
+    "m_Id": 0,
+    "m_DisplayName": "Vector2",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "dacd10857edb4a29b6a36541ecaa4d4b",
     "m_Id": 1,
@@ -4661,6 +4705,34 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector2ShaderProperty",
+    "m_ObjectId": "f42f373a42d34eb9a7d3d3d0f514c40e",
+    "m_Guid": {
+        "m_GuidSerialized": "02c50a81-2f05-4a9e-95ca-61d4e18644c5"
+    },
+    "m_Name": "Vector2",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Vector2",
+    "m_DefaultReferenceName": "_Vector2",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    }
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "f43654f72e6ef688aa5daa40982d83b0",
@@ -4721,6 +4793,42 @@
     "m_PreviewMode": 0,
     "m_CustomColors": {
         "m_SerializableColors": []
+    }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "f6e0ce6576ea45f6afd8b66a015da247",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -3352.609375,
+            "y": 59.54654312133789,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "d99c8c2800614f98a54e89f36e0803e2"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "f42f373a42d34eb9a7d3d3d0f514c40e"
     }
 }
 

@@ -842,31 +842,21 @@ public class svgVisual : MonoBehaviour
         for (int q = 1; q < claimedPixels.Count; q++)
         {
             //List<List<Vector2>> FUICK = GroupVerticalNeighbors(claimedPixels[q]);
-            List<List<Vector2>> FUICK = ConnectRegions(claimedPixels[q]);
-
-            foreach (List<Vector2> v2 in FUICK)
-            {
-                List<List<Vector2>> shit = SplitPointLists(v2, 100f * renderScale);
 
 
 
+            //List<List<Vector2>> FUICK = ConnectRegions(claimedPixels[q]);
 
-                foreach (List<Vector2> v22 in shit)
-                {
-                    //List<List<Vector2>> fart = ConnectRegions(v2, 2f);
-
-                    //simpleVertFillLinesByColor.Add(v22);
-                }
+            //foreach (List<Vector2> v2 in FUICK)
+            //{
+            //    List<List<Vector2>> shit = SplitPointLists(v2, 100f * renderScale);
 
 
-
-                simpleVertFillLinesByColor.AddRange(shit);
-            }
+            //    simpleVertFillLinesByColor.AddRange(shit);
+            //}
 
 
             //simpleVertFillLinesByColor.AddRange(FUICK);
-
-
         }
 
 
@@ -888,9 +878,10 @@ public class svgVisual : MonoBehaviour
 
 
 
-
-
-
+        for (int q = 0; q < outlinesToAddSplitUpColorAndOutlineFix.Count; q++)
+        {
+            outlinesToAddSplitUpColorAndOutlineFix[q] = SimplifyPath(outlinesToAddSplitUpColorAndOutlineFix[q]);
+        }
 
 
 
@@ -955,7 +946,7 @@ public class svgVisual : MonoBehaviour
         {
             for (int k = 0; k < finalLineListByColor[q].Count; k++)
             {
-                PlacePath(10, finalLineListByColor[q][k], lineCountCount, transform, diffColors[q]);
+                PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, diffColors[q]);
 
                 lineCountCount++;
             }
@@ -1191,9 +1182,11 @@ public class svgVisual : MonoBehaviour
 
         int directionIndexOffset = 0;
 
+        int lastDirectionIndexOffset = 0;
+
         while (remaining.Count > 0)
         {
-            Vector2 next = current + currentDirection;
+            Vector2 next = current + directions[lastDirectionIndexOffset % 4];
             if (remaining.Contains(next))
             {
                 current = next;
@@ -1203,6 +1196,8 @@ public class svgVisual : MonoBehaviour
             }
 
             bool foundNext = false;
+
+            directionIndexOffset = lastDirectionIndexOffset;
 
             foreach (Vector2 dir in directions)
             {
@@ -1216,19 +1211,12 @@ public class svgVisual : MonoBehaviour
                     orderedPath.Add(current);
                     remaining.Remove(current);
                     foundNext = true;
+
+                    lastDirectionIndexOffset = directionIndexOffset;
                     break;
                 }
 
                 directionIndexOffset++;
-            }
-
-            if (directionIndexOffset % 2 == 0)
-            {
-                directionIndexOffset++;
-            }
-            else
-            {
-                directionIndexOffset--;
             }
 
 
@@ -1538,7 +1526,7 @@ public class svgVisual : MonoBehaviour
                     foreach (SegmentData neighbor in neighbors)
                     {
                         // Check X overlap
-                        if (current.MaxX >= neighbor.MinX && current.MinX <= neighbor.MaxX && Mathf.Abs(current.MinX - neighbor.MinX) < 3 * renderScale && Mathf.Abs(current.MaxX - neighbor.MaxX) < 3 * renderScale)
+                        if (current.MaxX >= neighbor.MinX && current.MinX <= neighbor.MaxX && Mathf.Abs(current.MinX - neighbor.MinX) < 1.9f * renderScale && Mathf.Abs(current.MaxX - neighbor.MaxX) < 1.9f * renderScale)
                         {
                             uf.Union(current.Index, neighbor.Index);
                         }
