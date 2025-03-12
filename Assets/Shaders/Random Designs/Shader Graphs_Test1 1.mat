@@ -25,7 +25,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _SampleTexture2D_28cc8d347667469d84e2603d643acf68_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: ab96e511d7a44ec47828be32af27025e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 33920ca7a52963941be2380262ccf66c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_aef8d7c43df94bb6a9b6fba4f89858ee_Texture_1_Texture2D:
@@ -49,6 +49,7 @@ Material:
     - _Float: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _X_Noise_offset: 0
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

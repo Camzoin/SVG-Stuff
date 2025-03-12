@@ -168,7 +168,20 @@ public class svgVisual : MonoBehaviour
 
     public int simpleVerticleFillMod = 4;
 
+    public bool useAnimationSVGOffset = false;
+
+    public bool useSimpleFillForRender = false;
+
+    public bool fillBGColor = false;
+
     List<Color> plottedColors = new List<Color>();
+
+
+    public List<Color> pensToUse = new List<Color>();
+
+    public PlotCombiner pc;
+
+    public bool printRunTimes = false;
 
     [ContextMenu("SetRenderValues")]
     public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, Color colorToSet, bool resetLinePositions = false, bool resetMyAss = true)
@@ -223,22 +236,46 @@ public class svgVisual : MonoBehaviour
         yourFileName = piecename.Replace(" ", "");
 
 
-        renderCamTexture.Release();
-        renderCamTexture.width = (int)((svgSize.x - (clippingSize.x * 2f)) * renderScale);
-        renderCamTexture.height = (int)((svgSize.y - (clippingSize.y * 2f)) * renderScale);
-        renderCamTexture.Create();
+        if (useAnimationSVGOffset)
+        {
+            renderCamTexture.Release();
+            renderCamTexture.width = (int)((svgSize.x - (96 / 1.5f)) * renderScale);
+            renderCamTexture.height = (int)((svgSize.y - (96 / 1.75f)) * renderScale);
+            renderCamTexture.Create();
 
 
-        renderFilterCamTexture.Release();
-        renderFilterCamTexture.width = (int)((svgSize.x - (clippingSize.x * 2f)) * renderScale);
-        renderFilterCamTexture.height = (int)((svgSize.y - (clippingSize.y * 2f)) * renderScale);
-        renderFilterCamTexture.Create();
+            renderFilterCamTexture.Release();
+            renderFilterCamTexture.width = (int)((svgSize.x - (96 / 1.5f)) * renderScale);
+            renderFilterCamTexture.height = (int)((svgSize.y - (96 / 1.75f)) * renderScale);
+            renderFilterCamTexture.Create();
 
 
-        renderNormalCamTexture.Release();
-        renderNormalCamTexture.width = (int)((svgSize.x - (clippingSize.x * 2f)) * (renderScale));
-        renderNormalCamTexture.height = (int)((svgSize.y - (clippingSize.y * 2f)) * (renderScale));
-        renderNormalCamTexture.Create();
+            renderNormalCamTexture.Release();
+            renderNormalCamTexture.width = (int)((svgSize.x - (96 / 1.5f)) * (renderScale));
+            renderNormalCamTexture.height = (int)((svgSize.y - (96 / 1.75f)) * (renderScale));
+            renderNormalCamTexture.Create();
+        }
+        else
+        {
+            renderCamTexture.Release();
+            renderCamTexture.width = (int)((svgSize.x - (clippingSize.x * 2f)) * renderScale);
+            renderCamTexture.height = (int)((svgSize.y - (clippingSize.y * 2f)) * renderScale);
+            renderCamTexture.Create();
+
+
+            renderFilterCamTexture.Release();
+            renderFilterCamTexture.width = (int)((svgSize.x - (clippingSize.x * 2f)) * renderScale);
+            renderFilterCamTexture.height = (int)((svgSize.y - (clippingSize.y * 2f)) * renderScale);
+            renderFilterCamTexture.Create();
+
+
+            renderNormalCamTexture.Release();
+            renderNormalCamTexture.width = (int)((svgSize.x - (clippingSize.x * 2f)) * (renderScale));
+            renderNormalCamTexture.height = (int)((svgSize.y - (clippingSize.y * 2f)) * (renderScale));
+            renderNormalCamTexture.Create();
+        }
+
+
 
         //renderCamTexture.width = (int)(svgSize.x - (clippingSize.x * 2f));
         //renderCamTexture.height = (int)(svgSize.y - (clippingSize.y * 2f));
@@ -517,10 +554,44 @@ public class svgVisual : MonoBehaviour
 
         }
 
+        if (printRunTimes)
+        {
+            stopwatch.Stop();
+            Debug.Log("Cleaned Image Starting To Calculate Lines! TIME = " + stopwatch.Elapsed);
+            stopwatch.Start();
+        }
 
-        stopwatch.Stop();
-        Debug.Log("Cleaned Image Starting To Calculate Lines! TIME = " + stopwatch.Elapsed);
-        stopwatch.Start();
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //Draw bounds around Colors based on claimed pixels
@@ -598,12 +669,19 @@ public class svgVisual : MonoBehaviour
 
 
 
+        if (printRunTimes)
+        {
+            stopwatch.Stop();
+            Debug.Log("Found Edges! TIME = " + stopwatch.Elapsed);
+            stopwatch.Start();
+        }
 
 
 
-        stopwatch.Stop();
-        Debug.Log("Found Edges! TIME = " + stopwatch.Elapsed);
-        stopwatch.Start();
+
+
+
+
 
 
 
@@ -617,9 +695,15 @@ public class svgVisual : MonoBehaviour
 
         }
 
-        stopwatch.Stop();
-        Debug.Log("Found Regions! TIME = " + stopwatch.Elapsed);
-        stopwatch.Start();
+
+
+        if (printRunTimes)
+        {
+            stopwatch.Stop();
+            Debug.Log("Found Regions! TIME = " + stopwatch.Elapsed);
+            stopwatch.Start();
+        }
+
 
 
 
@@ -663,9 +747,9 @@ public class svgVisual : MonoBehaviour
                 tempPointList.Add(sortedList[v]);
 
                 //If this one and the next one are far apart split that boy
-                if (Vector2.Distance(sortedList[v], sortedList[v + 1]) > 5)
+                if (Vector2.Distance(sortedList[v], sortedList[v + 1]) > 2)
                 {
-                    if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 5)
+                    if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
                     {
                         tempPointList.Add(tempPointList[0]);
                     }
@@ -680,7 +764,7 @@ public class svgVisual : MonoBehaviour
 
             if (tempPointList.Count > 1)
             {
-                if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 5)
+                if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
                 {
                     tempPointList.Add(tempPointList[0]);
                 }
@@ -722,9 +806,16 @@ public class svgVisual : MonoBehaviour
         }
 
 
-        stopwatch.Stop();
-        Debug.Log("Edge Lines Calculated! TIME = " + stopwatch.Elapsed);
-        stopwatch.Start();
+
+
+        if (printRunTimes)
+        {
+            stopwatch.Stop();
+            Debug.Log("Edge Lines Calculated! TIME = " + stopwatch.Elapsed);
+            stopwatch.Start();
+        }
+
+
 
 
 
@@ -832,35 +923,70 @@ public class svgVisual : MonoBehaviour
 
 
 
+        bool hasBGFilled = false;
 
 
-
-
-
-
-        //Starts at 1 to avoid filling in "empty area", make 0 if you want to fill all colors
-        for (int q = 1; q < claimedPixels.Count; q++)
+        if (useSimpleFillForRender)
         {
-            //List<List<Vector2>> FUICK = GroupVerticalNeighbors(claimedPixels[q]);
+
+            //Starts at 1 to avoid filling in "empty area", make 0 if you want to fill all colors
+            for (int q = 1; q < claimedPixels.Count; q++)
+            {
+                if (fillBGColor && hasBGFilled == false)
+                {
+                    q = 0;
+
+                    hasBGFilled = true;
+                }
 
 
+                List<List<Vector2>> FUICK = GroupVerticalNeighbors(claimedPixels[q]);
 
-            //List<List<Vector2>> FUICK = ConnectRegions(claimedPixels[q]);
-
-            //foreach (List<Vector2> v2 in FUICK)
-            //{
-            //    List<List<Vector2>> shit = SplitPointLists(v2, 100f * renderScale);
+                simpleVertFillLinesByColor.AddRange(FUICK);
+            }
 
 
-            //    simpleVertFillLinesByColor.AddRange(shit);
-            //}
-
-
-            //simpleVertFillLinesByColor.AddRange(FUICK);
+            outlinesToAddSplitUpColorAndOutlineFix.AddRange(simpleVertFillLinesByColor);
         }
 
 
-        outlinesToAddSplitUpColorAndOutlineFix.AddRange(simpleVertFillLinesByColor);
+        //if (useSimpleFillForRender)
+        //{
+
+        //    //Starts at 1 to avoid filling in "empty area", make 0 if you want to fill all colors
+        //    for (int q = 1; q < claimedPixels.Count; q++)
+        //    {
+        //        if (fillBGColor && hasBGFilled == false)
+        //        {
+        //            q = 0;
+
+        //            hasBGFilled = true;
+        //        }
+
+
+        //        List<Vector2> pointsModded = new List<Vector2>();
+
+        //        for (int i = 0; i < claimedPixels[q].Count; i++)
+        //        {
+        //            if (claimedPixels[q][i].y % renderScale == 0 && claimedPixels[q][i].x % renderScale == 0)
+        //            {
+        //                pointsModded.Add(claimedPixels[q][i]);
+        //            }
+
+        //            //if (points[i].y % simpleVerticleFillMod == 0 && points[i].x % renderScale == 0)
+        //            //{
+        //            //    pointsModded.Add(points[i]);
+        //            //}
+        //        }
+
+        //        List<List<Vector2>> FUICK = FindPaths(pointsModded, renderScale);
+
+        //        simpleVertFillLinesByColor.AddRange(FUICK);
+        //    }
+
+
+        //    outlinesToAddSplitUpColorAndOutlineFix.AddRange(simpleVertFillLinesByColor);
+        //}
 
 
 
@@ -931,14 +1057,78 @@ public class svgVisual : MonoBehaviour
 
 
 
+
+
+
+
+
+        //asign pen based on render color
+        if (pensToUse.Count > 0)
+        {
+            //use pen colors
+            List<List<List<Vector2>>> claimedPixelsByPen = new List<List<List<Vector2>>>();
+
+
+            for (int u = 0; u < pensToUse.Count; u++)
+            {
+                claimedPixelsByPen.Add(new List<List<Vector2>>());
+            }
+
+
+
+            for (int q = 0; q < diffColors.Count - colorCountToRemove; q++)
+            {
+                //go thru all colors in the image, find the pen color that is closest and use that one
+                int penIndex = 0;
+                float colorDistance = 1000000000000000;
+
+                for (int u = 0; u < pensToUse.Count; u++)
+                {
+                    float thisColorDist = Vector3.Distance(new Vector3(pensToUse[u].r, pensToUse[u].g, pensToUse[u].b), new Vector3(diffColors[q].r, diffColors[q].g, diffColors[q].b));
+
+                    if (thisColorDist < colorDistance)
+                    {
+                        penIndex = u;
+                        colorDistance = thisColorDist;
+                    }
+                }
+
+
+                claimedPixelsByPen[penIndex].AddRange(finalLineListByColor[q]);
+
+            }
+
+            finalLineListByColor = claimedPixelsByPen;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        if (printRunTimes)
+        {
+            stopwatch.Stop();
+            Debug.Log("Start Drawing Lines! TIME = " + stopwatch.Elapsed);
+            stopwatch.Start();
+        }
+
+
+
+
         //for (int q = 0; q < finalLineListByColor.Count; q++)
         //{
         //    //finalLineListByColor[q] = PathCombiner.CombineNearbyLines(finalLineListByColor[q], 2f);
         //}
 
-        stopwatch.Stop();
-        Debug.Log("Start Drawing Lines! TIME = " + stopwatch.Elapsed);
-        stopwatch.Start();
+
 
         int lineCountCount = 0;
 
@@ -946,7 +1136,15 @@ public class svgVisual : MonoBehaviour
         {
             for (int k = 0; k < finalLineListByColor[q].Count; k++)
             {
-                PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, diffColors[q]);
+                if (pensToUse.Count == 0)
+                {
+                    PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, diffColors[q]);
+                }
+                else
+                {
+                    PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, pensToUse[q]);
+                }
+
 
                 lineCountCount++;
             }
@@ -1009,23 +1207,52 @@ public class svgVisual : MonoBehaviour
                 {
                     finalLineListByColor[i][u][g] = new Vector2(finalLineListByColor[i][u][g].x, (wholeRenderTexHolder.height / renderScale) - finalLineListByColor[i][u][g].y);
 
-                    finalLineListByColor[i][u][g] += new Vector2(clippingSize.x, clippingSize.y);
+                    if (useAnimationSVGOffset)
+                    {
+                        finalLineListByColor[i][u][g] -= new Vector2(-(96 / 1.5f) + 5,-5);
+                    }
+                    else
+                    {
+                        finalLineListByColor[i][u][g] += new Vector2(clippingSize.x, clippingSize.y);
+                    }
+
+
                 }
             }
         }
 
 
-        stopwatch.Stop();
-        Debug.Log("Start SVG Saving! TIME = " + stopwatch.Elapsed);
-        stopwatch.Start();
-
-        //Claimed pixels = [Color][Position], we remove the cleaned colors from the claimedPixels but not anywhere else like diff colors 
-        for (int q = 0; q < diffColors.Count - colorCountToRemove; q++)
+        if (printRunTimes)
         {
-            GenerateSVG(finalLineListByColor[q], false, false, q, diffColors[q], svgSize);
+            stopwatch.Stop();
+            Debug.Log("Start SVG Saving! TIME = " + stopwatch.Elapsed);
+            stopwatch.Start();
         }
 
-        
+
+
+
+
+        if (pensToUse.Count > 0)
+        {
+            for (int q = 0; q < pensToUse.Count; q++)
+            {
+                GenerateSVG(finalLineListByColor[q], false, false, q, pensToUse[q], svgSize);
+            }
+        }
+        else
+        {
+            //Claimed pixels = [Color][Position], we remove the cleaned colors from the claimedPixels but not anywhere else like diff colors 
+            for (int q = 0; q < diffColors.Count - colorCountToRemove; q++)
+            {
+                GenerateSVG(finalLineListByColor[q], false, false, q, diffColors[q], svgSize);
+            }
+        }
+
+        pc.SlamTogether(finalLineListByColor, yourFileName);
+
+
+
 
         stopwatch.Stop();
         Debug.Log("DONE! TIME = " + stopwatch.Elapsed);
@@ -1034,6 +1261,215 @@ public class svgVisual : MonoBehaviour
 
         stopwatch.Reset();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //New AI SHIT
+
+
+
+
+
+
+
+    public List<List<Vector2>> FindPaths(List<Vector2> points, float fixedDistance)
+    {
+        List<List<Vector2>> allPaths = new List<List<Vector2>>();
+        if (points == null || points.Count == 0) return allPaths;
+
+        // Create adjacency list
+        List<List<int>> adjacencyList = CreateAdjacencyList(points, fixedDistance);
+
+        // Find connected components
+        List<List<int>> connectedComponents = FindConnectedComponents(points, adjacencyList);
+
+        // Generate paths for each component
+        foreach (List<int> component in connectedComponents)
+        {
+            HashSet<int> remainingNodes = new HashSet<int>(component);
+
+            while (remainingNodes.Count > 0)
+            {
+                List<int> pathIndices = BuildGreedyPath(remainingNodes, adjacencyList);
+                allPaths.Add(ConvertIndicesToPoints(pathIndices, points));
+            }
+        }
+
+        return allPaths;
+    }
+
+    private List<List<int>> CreateAdjacencyList(List<Vector2> points, float fixedDistance)
+    {
+        List<List<int>> adjacencyList = new List<List<int>>();
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            List<int> neighbors = new List<int>();
+            for (int j = 0; j < points.Count; j++)
+            {
+                if (i != j && Vector2.Distance(points[i], points[j]) == fixedDistance)
+                {
+                    neighbors.Add(j);
+                }
+            }
+            adjacencyList.Add(neighbors);
+        }
+        return adjacencyList;
+    }
+
+    private List<List<int>> FindConnectedComponents(List<Vector2> points, List<List<int>> adjacencyList)
+    {
+        List<List<int>> components = new List<List<int>>();
+        bool[] visited = new bool[points.Count];
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            if (!visited[i])
+            {
+                components.Add(BFS(i, visited, adjacencyList));
+            }
+        }
+        return components;
+    }
+
+    private List<int> BFS(int start, bool[] visited, List<List<int>> adjacencyList)
+    {
+        List<int> component = new List<int>();
+        Queue<int> queue = new Queue<int>();
+        queue.Enqueue(start);
+        visited[start] = true;
+
+        while (queue.Count > 0)
+        {
+            int current = queue.Dequeue();
+            component.Add(current);
+
+            foreach (int neighbor in adjacencyList[current])
+            {
+                if (!visited[neighbor])
+                {
+                    visited[neighbor] = true;
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+        return component;
+    }
+
+    private List<int> BuildGreedyPath(HashSet<int> remainingNodes, List<List<int>> adjacencyList)
+    {
+        // Find starting node with least connections
+        int startNode = -1;
+        int minCount = int.MaxValue;
+
+        foreach (int node in remainingNodes)
+        {
+            int validNeighbors = CountValidNeighbors(node, remainingNodes, adjacencyList);
+            if (validNeighbors < minCount)
+            {
+                minCount = validNeighbors;
+                startNode = node;
+            }
+        }
+
+        // Build path
+        List<int> path = new List<int>();
+        int currentNode = startNode;
+
+        while (true)
+        {
+            path.Add(currentNode);
+            remainingNodes.Remove(currentNode);
+
+            // Get valid next nodes
+            List<int> nextNodes = new List<int>();
+            foreach (int neighbor in adjacencyList[currentNode])
+            {
+                if (remainingNodes.Contains(neighbor))
+                {
+                    nextNodes.Add(neighbor);
+                }
+            }
+
+            if (nextNodes.Count == 0) break;
+
+            // Select next node with least connections
+            currentNode = SelectNextNode(nextNodes, remainingNodes, adjacencyList);
+        }
+
+        return path;
+    }
+
+    private int CountValidNeighbors(int node, HashSet<int> remainingNodes, List<List<int>> adjacencyList)
+    {
+        int count = 0;
+        foreach (int neighbor in adjacencyList[node])
+        {
+            if (remainingNodes.Contains(neighbor)) count++;
+        }
+        return count;
+    }
+
+    private int SelectNextNode(List<int> candidates, HashSet<int> remainingNodes, List<List<int>> adjacencyList)
+    {
+        int selected = candidates[0];
+        int minNeighbors = int.MaxValue;
+
+        foreach (int node in candidates)
+        {
+            int count = CountValidNeighbors(node, remainingNodes, adjacencyList);
+            if (count < minNeighbors)
+            {
+                minNeighbors = count;
+                selected = node;
+            }
+        }
+        return selected;
+    }
+
+    private List<Vector2> ConvertIndicesToPoints(List<int> indices, List<Vector2> points)
+    {
+        List<Vector2> path = new List<Vector2>();
+        foreach (int index in indices)
+        {
+            path.Add(points[index]);
+        }
+        return path;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1350,7 +1786,7 @@ public class svgVisual : MonoBehaviour
                 {
                     // Check if this point is adjacent to the previous point
                     float prevX = currentSubLine[currentSubLine.Count - 1].x;
-                    if (line[i].x == prevX + xRenderScale)
+                    if (line[i].x == prevX + 2)
                     {
                         currentSubLine.Add(line[i]);
                     }
@@ -1478,7 +1914,7 @@ public class svgVisual : MonoBehaviour
 
         for (int i = 0; i < points.Count; i++)
         {
-            if (points[i].y % simpleVerticleFillMod == 0 && points[i].x % xRenderScale == 0)
+            if (points[i].y % simpleVerticleFillMod == 0 && points[i].x % 2 == 0)
             {
                 pointsModded.Add(points[i]);
             }
@@ -1526,7 +1962,7 @@ public class svgVisual : MonoBehaviour
                     foreach (SegmentData neighbor in neighbors)
                     {
                         // Check X overlap
-                        if (current.MaxX >= neighbor.MinX && current.MinX <= neighbor.MaxX && Mathf.Abs(current.MinX - neighbor.MinX) < 1.9f * renderScale && Mathf.Abs(current.MaxX - neighbor.MaxX) < 1.9f * renderScale)
+                        if (current.MaxX >= neighbor.MinX && current.MinX <= neighbor.MaxX && Mathf.Abs(current.MinX - neighbor.MinX) < 2.1f * renderScale && Mathf.Abs(current.MaxX - neighbor.MaxX) < 2.1f * renderScale)
                         {
                             uf.Union(current.Index, neighbor.Index);
                         }
@@ -1838,7 +2274,7 @@ public class svgVisual : MonoBehaviour
     {
         if (pointsToSort == null || pointsToSort.Count < 3)
         {
-            Debug.LogWarning("Cannot sort less than 3 points.");
+            //Debug.LogWarning("Cannot sort less than 3 points.");
             return pointsToSort; // Return original if less than 3 points or null
         }
 
@@ -1902,8 +2338,6 @@ public class svgVisual : MonoBehaviour
 
         Vector2 lastPoint = currentPoint;
 
-        int curFailCount = 1;
-
         // Loop through the remaining points
         while (remainingPoints.Count > pointsToRemove)
         {
@@ -1917,11 +2351,6 @@ public class svgVisual : MonoBehaviour
             }
             else
             {
-                float multi = 0.01f;
-
-                //searchOffset = (lastPoint - currentPoint) * (curFailCount * multi);
-
-
                 searchOffset = Vector2.zero;
             }
 
@@ -2610,6 +3039,7 @@ public class svgVisual : MonoBehaviour
         if (!saveDisplayCopy)
         {
             filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".txt");
+            filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".svg");
         }
         else
         {
@@ -2626,7 +3056,7 @@ public class svgVisual : MonoBehaviour
         // Write the SVG content to a file
         File.WriteAllText(filePath, svgContent.ToString());
 
-        Debug.Log("Done");
+        //Debug.Log("Done");
     }
 
     public void GenerateDispalySVG(List<List<List<Vector2>>> allPathsToDisplay)
