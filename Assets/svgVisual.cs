@@ -183,6 +183,11 @@ public class svgVisual : MonoBehaviour
 
     public bool printRunTimes = false;
 
+    public AnimCellManager animManager;
+
+    public int squiggleLineFillCount = 500;
+
+
     [ContextMenu("SetRenderValues")]
     public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, Color colorToSet, bool resetLinePositions = false, bool resetMyAss = true)
     {
@@ -276,33 +281,7 @@ public class svgVisual : MonoBehaviour
         }
 
 
-
-        //renderCamTexture.width = (int)(svgSize.x - (clippingSize.x * 2f));
-        //renderCamTexture.height = (int)(svgSize.y - (clippingSize.y * 2f));
-
-
-        //Replace 'Generate Work'
-
-
-
         SetRenderValues(lineObjects, unlitMat, Color.black, true);
-
-        //oldPlots.Add(Instantiate(svgParent.gameObject));
-
-        //oldPlots[0].SetActive(true);
-
-
-        //GenerateDispalySVG(listOfAllPathsThisRun);
-
-        //textImporter.CompileInfoPage();
-
-        if (isFinalRender)
-        {
-            urlsaver.artName = piecename;
-            urlsaver.shortURL = shortURL;
-
-            urlsaver.SubmitFeedback();
-        }
     }
 
 
@@ -313,20 +292,8 @@ public class svgVisual : MonoBehaviour
 
         DateTime before = DateTime.Now;
 
-
         System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
         stopwatch.Start();
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -360,873 +327,868 @@ public class svgVisual : MonoBehaviour
 
 
 
-
         foreach (LineRenderer line in lineObjects)
         {
             if (line)
             {
                 line.SetPositions(new Vector3[0]);
             }
-
         }
 
 
-        Texture2D wholeRenderTexHolder = new Texture2D(renderCamTexture.width, renderCamTexture.height, TextureFormat.RGBA32, false, true);
-
-        //wholeRenderTexHolder.
-
-        RenderTexture.active = renderCamTexture;
-
-        wholeRenderTexHolder.ReadPixels(new Rect(0, 0, renderCamTexture.width, renderCamTexture.height), 0, 0);
-        wholeRenderTexHolder.Apply(); // Apply the changes to the Texture2D
 
 
-        RenderTexture.active = null;
+        List<List<List<Vector2>>> finalCompleteLineListByColor = new List<List<List<Vector2>>>();
 
 
+        List<List<Vector2>> outlineList = new List<List<Vector2>>();
 
-
-
-
-        Texture2D wholeNormalRenderTexHolder = new Texture2D(renderNormalCamTexture.width, renderNormalCamTexture.height, TextureFormat.RGBA32, false, true);
-
-        //wholeRenderTexHolder.
-
-        RenderTexture.active = renderNormalCamTexture;
-
-        wholeNormalRenderTexHolder.ReadPixels(new Rect(0, 0, renderNormalCamTexture.width, renderNormalCamTexture.height), 0, 0);
-        wholeNormalRenderTexHolder.Apply(); // Apply the changes to the Texture2D
-
-
-        RenderTexture.active = null;
-
-
-
-
-
-
-        //List<Color> diffColors = new List<Color>();
-
-
-        //foreach(Color color in wholeRenderTexHolder.GetPixels())
-        //{
-
-
-        //    if (!diffColors.Contains(color))
-        //    {
-        //        diffColors.Add(color);
-        //        //Debug.Log(color);
-        //    }
-        //}
-
-
-
-        Color[] pixelArray = wholeRenderTexHolder.GetPixels();
-
-        List<Color> diffColors = new List<Color>();
-
-
-        //diffColors = burster.HandleColorListJob(pixelArray);
-
-
-        diffColors = pixelArray.Distinct().ToList();
-
-
-
-
-
-        List<List<Vector2>> claimedPixels = new List<List<Vector2>>();
-
-            
-        for (int i = 0; i < diffColors.Count; i++)
+        //for (int z = 0; z < 1; z++)
+        for (int z = 0; z < animManager.animCells.Count; z++)
         {
-            //Loop thru the texture for each color. If it's 
-
-
-
-            Color thisColor = diffColors[i];
-            claimedPixels.Add(new List<Vector2>());
+            UnityEngine.Random.InitState(seedValue);
 
 
 
 
-            List<Vector2> listlistlist = burster.HandleJob(pixelArray, thisColor, wholeRenderTexHolder.width);
-
-            claimedPixels[i] = listlistlist;
-
-            //burster.HandleJob(pixelArray, thisColor, wholeRenderTexHolder.width);
+            Texture2D wholeRenderTexHolder = new Texture2D(animManager.animCells[z].cellCam.targetTexture.width, animManager.animCells[z].cellCam.targetTexture.height, TextureFormat.RGBA32, false, true);
 
 
+            RenderTexture.active = animManager.animCells[z].cellCam.targetTexture;
+
+            wholeRenderTexHolder.ReadPixels(new Rect(0, 0, animManager.animCells[z].cellCam.targetTexture.width, animManager.animCells[z].cellCam.targetTexture.height), 0, 0);
+            wholeRenderTexHolder.Apply(); // Apply the changes to the Texture2D
 
 
-
-
-            //for (int y = 0; y < pixelArray.Length; y++)
-            //{
-            //    if (thisColor.Equals(pixelArray[y]))
-            //    {
-            //        claimedPixels[i].Add(new Vector2(y % wholeRenderTexHolder.width, Mathf.Floor(y / wholeRenderTexHolder.width)));
-            //    }
-            //}
+            RenderTexture.active = null;
 
 
 
 
 
 
+            Texture2D wholeNormalRenderTexHolder = new Texture2D(animManager.animCells[z].cellNormalCam.targetTexture.width, animManager.animCells[z].cellNormalCam.targetTexture.height, TextureFormat.RGBA32, false, true);
+
+
+            RenderTexture.active = animManager.animCells[z].cellNormalCam.targetTexture;
+
+            wholeNormalRenderTexHolder.ReadPixels(new Rect(0, 0, animManager.animCells[z].cellNormalCam.targetTexture.width, animManager.animCells[z].cellNormalCam.targetTexture.height), 0, 0);
+            wholeNormalRenderTexHolder.Apply(); // Apply the changes to the Texture2D
+
+
+            RenderTexture.active = null;
 
 
 
 
-            //    //Go thru image and get bounds of areas of color
-            //for (int y = 0; y < renderCamTexture.height; y++)
-            //{
-            //    for (int x = 0; x < renderCamTexture.width; x++)
-            //    {
-            //        //renderTexHolder = new Texture2D(1, 1, TextureFormat.RGBA32, false, true);
-
-            //        // copy the single pixel value from the render texture to the texture2D on the GPU
-            //        //Graphics.CopyTexture(renderCamTexture, 0, 0, x, y, 1, 1, renderTexHolder, 0, 0, 0, 0);
-
-            //        Color pixelColor = wholeRenderTexHolder.GetPixel(x, y);
-
-            //        if (thisColor == pixelColor)
-            //        {
-            //            claimedPixels[i].Add(new Vector2(x,y));
-            //        }
-            //    }
-            //}
-
-        }
-
-        //claimedPixels.Sort((x, y) => x.Count.CompareTo(y.Count));
-
-        Debug.Log(diffColors.Count);
-
-        int colorCountToRemove = 0;
-
-        for (int i = 0; i < diffColors.Count; i++)
-        {
-            //Debug.Log(i +" " + claimedPixels[i].Count + "   " + diffColors[i]);
+            int xCell = z % (int)animManager.animationCellsXY.x;
+            int yCell = Mathf.FloorToInt(z / animManager.animationCellsXY.x);
+            Vector2 cellOffset = new Vector2(xCell * (wholeRenderTexHolder.width * (1f / renderScale)), yCell * (wholeRenderTexHolder.height * (1f / renderScale)));
 
 
 
-            Vector3 thisColorVector = new Vector3(diffColors[i].r, diffColors[i].g, diffColors[i].b);
 
-            bool hasBeenReplaced = false;
+            Color[] pixelArray = wholeRenderTexHolder.GetPixels();
 
-            for (int k = 0; k < diffColors.Count; k++)
+            List<Color> diffColors = new List<Color>();
+
+
+
+
+            diffColors = pixelArray.Distinct().ToList();
+
+
+            List<List<Vector2>> claimedPixels = new List<List<Vector2>>();
+
+
+            for (int i = 0; i < diffColors.Count; i++)
             {
-                if (claimedPixels[k].Count > 10000 * renderScale)
-                {
-                    Vector3 replacementColor = new Vector3(diffColors[k].r, diffColors[k].g, diffColors[k].b);
+                Color thisColor = diffColors[i];
+                claimedPixels.Add(new List<Vector2>());
 
 
-                    if (Vector3.Distance(thisColorVector, replacementColor) < 0.03f && thisColorVector != replacementColor && hasBeenReplaced == false)
-                    {
-                        hasBeenReplaced = true;
-                        colorCountToRemove++;
-
-                        claimedPixels[k].AddRange(claimedPixels[i]);
-
-                        foreach (Vector2 v2 in claimedPixels[i])
-                        {
-                            wholeRenderTexHolder.SetPixel((int)v2.x, (int)v2.y, diffColors[k]);
-
-                        }
 
 
-                        claimedPixels[i] = new List<Vector2>();
-                    }
-                }              
-            }   
-        }
+                List<Vector2> listlistlist = burster.HandleJob(pixelArray, thisColor, wholeRenderTexHolder.width);
 
-        Debug.Log("Removed " + colorCountToRemove);
-
-        for (int i = 0; i < claimedPixels.Count; i++)
-        {
-            if (claimedPixels[i] == new List<Vector2>())
-            {
-                claimedPixels.Remove(claimedPixels[i]);
+                claimedPixels[i] = listlistlist;
             }
 
 
-        }
+            Debug.Log(diffColors.Count);
 
-        if (printRunTimes)
-        {
-            stopwatch.Stop();
-            Debug.Log("Cleaned Image Starting To Calculate Lines! TIME = " + stopwatch.Elapsed);
-            stopwatch.Start();
-        }
+            int colorCountToRemove = 0;
 
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //Draw bounds around Colors based on claimed pixels
-
-        List<List<Vector2>> edgePointsPerColor = new List<List<Vector2>>();
-
-
-        List<List<Vector2>> simpleVertFillLinesByColor = new List<List<Vector2>>();
-
-
-
-
-
-
-        for (int i = 0; i < claimedPixels.Count; i++)
-        {
-            edgePointsPerColor.Add(new List<Vector2>());
-
-
-
-
-
-            if (claimedPixels[i].Count > 0)
+            for (int i = 0; i < diffColors.Count; i++)
             {
+                Vector3 thisColorVector = new Vector3(diffColors[i].r, diffColors[i].g, diffColors[i].b);
 
-                //Line Segments
-                for (int q = 0; q < claimedPixels[i].Count; q++)
+                bool hasBeenReplaced = false;
+
+                for (int k = 0; k < diffColors.Count; k++)
                 {
-                    //wholeRenderTexHolder.GetPixel((int)curScanPosition.x, (int)curScanPosition.y);
-
-                    //if the pixel to my right is a different color I am an edge, so add to edge point list
-                    //color check
-
-
-                    //use pixelArray - i == color q == pixel
-
-                    //Color rightColor = pixelArray[(int)claimedPixels[i][q].x + (((int)claimedPixels[i][q].y * wholeRenderTexHolder.width)) + 1];
-
-                    //if (q % 300 == 0)
-                    //{
-                    //    Debug.Log(rightColor + " " + diffColors[i]);
-                    //}
-
-                    if (diffColors[i] != pixelArray[((int)claimedPixels[i][q].x + (((int)claimedPixels[i][q].y * wholeRenderTexHolder.width)) + 1) % (pixelArray.Length - 1)])
+                    if (claimedPixels[k].Count > 10000 * renderScale)
                     {
-                        edgePointsPerColor[i].Add(claimedPixels[i][q]);
+                        Vector3 replacementColor = new Vector3(diffColors[k].r, diffColors[k].g, diffColors[k].b);
 
-                    }
 
-                    else if (diffColors[i] != pixelArray[Mathf.Abs(((int)claimedPixels[i][q].x + (((int)claimedPixels[i][q].y * wholeRenderTexHolder.width)) - 1)) % (pixelArray.Length - 1)])
-                    {
-                        edgePointsPerColor[i].Add(claimedPixels[i][q]);
+                        if (Vector3.Distance(thisColorVector, replacementColor) < 0.0003f && thisColorVector != replacementColor && hasBeenReplaced == false)
+                        if (Vector3.Distance(thisColorVector, replacementColor) < 0.0003f && thisColorVector != replacementColor && hasBeenReplaced == false)
+                        {
+                            hasBeenReplaced = true;
+                            colorCountToRemove++;
 
-                    }
+                            claimedPixels[k].AddRange(claimedPixels[i]);
 
-                    else if (diffColors[i] != pixelArray[((int)claimedPixels[i][q].x + ((((int)claimedPixels[i][q].y + 1) * wholeRenderTexHolder.width))) % (pixelArray.Length - 1)])
-                    {
-                        edgePointsPerColor[i].Add(claimedPixels[i][q]);
-                    }
+                            foreach (Vector2 v2 in claimedPixels[i])
+                            {
+                                wholeRenderTexHolder.SetPixel((int)v2.x, (int)v2.y, diffColors[k]);
 
-                    else if (diffColors[i] != pixelArray[Mathf.Abs(((int)claimedPixels[i][q].x + ((((int)claimedPixels[i][q].y - 1) * wholeRenderTexHolder.width)))) % (pixelArray.Length - 1)])
-                    {
-                        edgePointsPerColor[i].Add(claimedPixels[i][q]);
+                            }
+
+
+                            claimedPixels[i] = new List<Vector2>();
+                        }
                     }
                 }
             }
 
-           
+            Debug.Log("Removed " + colorCountToRemove);
 
-
-
-        }
-
-
-
-
-
-        if (printRunTimes)
-        {
-            stopwatch.Stop();
-            Debug.Log("Found Edges! TIME = " + stopwatch.Elapsed);
-            stopwatch.Start();
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-        List<List<Vector2>> outlinesToAddSplitUpColor = new List<List<Vector2>>();
-
-        for (int i = 0; i < edgePointsPerColor.Count; i++)
-        {
-            outlinesToAddSplitUpColor.AddRange(FindConcentrationsOptimized(edgePointsPerColor[i], 1.9f * renderScale));
-
-        }
-
-
-
-        if (printRunTimes)
-        {
-            stopwatch.Stop();
-            Debug.Log("Found Regions! TIME = " + stopwatch.Elapsed);
-            stopwatch.Start();
-        }
-
-
-
-
-        List<List<Vector2>> outlinesToAddSplitUpColorAndOutlineFix = new List<List<Vector2>>();
-
-        List<List<Vector2>> fillLineList= new List<List<Vector2>>();
-
-        for (int i = 0; i < outlinesToAddSplitUpColor.Count; i++)
-        {
-            //outlinesToAddSplitUpColor[i] = SimplifyPoints(outlinesToAddSplitUpColor[i], 20);
-
-
-            outlinesToAddSplitUpColor[i] = SortClockwise(outlinesToAddSplitUpColor[i]);
-
-            //Sort By closest //Fucked up
-            //outlinesToAddSplitUpColor[i] = SortPoints(outlinesToAddSplitUpColor[i]);
-
-
-
-
-            List<Vector2> sortedList = SortPoints(outlinesToAddSplitUpColor[i]);
-
-
-            stopwatch.Stop();
-            //Debug.Log("Sorted an outline! TIME = " + stopwatch.Elapsed);
-            stopwatch.Start();
-
-
-            //List<Vector2> sortedList = outlinesToAddSplitUpColor[i];
-
-
-            List<List<Vector2>> sortedSplitList = new List<List<Vector2>>();
-
-
-
-
-            List<Vector2> tempPointList = new List<Vector2>();
-
-            for (int v = 0; v < sortedList.Count - 1; v++)
+            for (int i = 0; i < claimedPixels.Count; i++)
             {
-                tempPointList.Add(sortedList[v]);
+                if (claimedPixels[i] == new List<Vector2>())
+                {
+                    claimedPixels.Remove(claimedPixels[i]);
+                }
+            }
 
-                //If this one and the next one are far apart split that boy
-                if (Vector2.Distance(sortedList[v], sortedList[v + 1]) > 2)
+            if (printRunTimes)
+            {
+                stopwatch.Stop();
+                Debug.Log("Cleaned Image Starting To Calculate Lines! TIME = " + stopwatch.Elapsed);
+                stopwatch.Start();
+            }
+
+
+            //Draw bounds around Colors based on claimed pixels
+
+            List<List<Vector2>> edgePointsPerColor = new List<List<Vector2>>();
+
+
+            List<List<Vector2>> simpleVertFillLinesByColor = new List<List<Vector2>>();
+
+
+            for (int i = 0; i < claimedPixels.Count; i++)
+            {
+                edgePointsPerColor.Add(new List<Vector2>());
+
+
+                if (claimedPixels[i].Count > 0)
+                {
+                    //Line Segments
+                    for (int q = 0; q < claimedPixels[i].Count; q++)
+                    {
+                        if (diffColors[i] != pixelArray[((int)claimedPixels[i][q].x + (((int)claimedPixels[i][q].y * wholeRenderTexHolder.width)) + 1) % (pixelArray.Length - 1)])
+                        {
+                            edgePointsPerColor[i].Add(claimedPixels[i][q]);
+
+                        }
+
+                        else if (diffColors[i] != pixelArray[Mathf.Abs(((int)claimedPixels[i][q].x + (((int)claimedPixels[i][q].y * wholeRenderTexHolder.width)) - 1)) % (pixelArray.Length - 1)])
+                        {
+                            edgePointsPerColor[i].Add(claimedPixels[i][q]);
+
+                        }
+
+                        else if (diffColors[i] != pixelArray[((int)claimedPixels[i][q].x + ((((int)claimedPixels[i][q].y + 1) * wholeRenderTexHolder.width))) % (pixelArray.Length - 1)])
+                        {
+                            edgePointsPerColor[i].Add(claimedPixels[i][q]);
+                        }
+
+                        else if (diffColors[i] != pixelArray[Mathf.Abs(((int)claimedPixels[i][q].x + ((((int)claimedPixels[i][q].y - 1) * wholeRenderTexHolder.width)))) % (pixelArray.Length - 1)])
+                        {
+                            edgePointsPerColor[i].Add(claimedPixels[i][q]);
+                        }
+                    }
+                }
+            }
+
+
+            if (printRunTimes)
+            {
+                stopwatch.Stop();
+                Debug.Log("Found Edges! TIME = " + stopwatch.Elapsed);
+                stopwatch.Start();
+            }
+
+
+
+
+
+            List<List<Vector2>> outlinesToAddSplitUpColor = new List<List<Vector2>>();
+
+            for (int i = 0; i < edgePointsPerColor.Count; i++)
+            {
+                outlinesToAddSplitUpColor.AddRange(FindConcentrationsOptimized(edgePointsPerColor[i], 1.9f * renderScale));
+
+            }
+
+
+
+            if (printRunTimes)
+            {
+                stopwatch.Stop();
+                Debug.Log("Found Regions! TIME = " + stopwatch.Elapsed);
+                stopwatch.Start();
+            }
+
+
+
+
+            List<List<Vector2>> outlinesToAddSplitUpColorAndOutlineFix = new List<List<Vector2>>();
+
+            List<List<Vector2>> fillLineList = new List<List<Vector2>>();
+
+            for (int i = 0; i < outlinesToAddSplitUpColor.Count; i++)
+            {
+                outlinesToAddSplitUpColor[i] = SortClockwise(outlinesToAddSplitUpColor[i]);
+
+
+                List<Vector2> sortedList = SortPoints(outlinesToAddSplitUpColor[i]);
+
+
+                List<List<Vector2>> sortedSplitList = new List<List<Vector2>>();
+
+
+                List<Vector2> tempPointList = new List<Vector2>();
+
+
+                for (int v = 0; v < sortedList.Count - 1; v++)
+                {
+                    tempPointList.Add(sortedList[v]);
+
+                    //If this one and the next one are far apart split that boy
+                    if (Vector2.Distance(sortedList[v], sortedList[v + 1]) > 2)
+                    {
+                        if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
+                        {
+                            tempPointList.Add(tempPointList[0]);
+                        }
+
+
+                        sortedSplitList.Add(tempPointList);
+
+                        tempPointList = new List<Vector2>();
+                    }
+                }
+
+                if (tempPointList.Count > 1)
                 {
                     if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
                     {
                         tempPointList.Add(tempPointList[0]);
                     }
-
-
-
-                    sortedSplitList.Add(tempPointList);
-
-                    tempPointList = new List<Vector2>();
-                }
-            }
-
-            if (tempPointList.Count > 1)
-            {
-                if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
-                {
-                    tempPointList.Add(tempPointList[0]);
-                }
-            }
-
-            sortedSplitList.Add(tempPointList);
-
-            //outlinesToAddSplitUpColorAndOutlineFix = sortedSplitList;
-
-            //sortedList = new List<Vector2>();
-
-            foreach (List<Vector2> lv2 in sortedSplitList)
-            {
-                float widthOfLineSegment = 0;
-                float minX = 100000000;
-                float maxX = -10000000;
-
-                foreach (Vector2 lv in lv2)
-                {
-                    if (lv.x < minX)
-                    {
-                        minX = lv.x;
-                    }
-
-                    if (lv.x > maxX)
-                    {
-                        maxX = lv.x;
-                    }
                 }
 
-                widthOfLineSegment = minX - maxX;
+                sortedSplitList.Add(tempPointList);
 
 
-                if (Mathf.Abs(widthOfLineSegment) > 1)
+                foreach (List<Vector2> lv2 in sortedSplitList)
                 {
                     outlinesToAddSplitUpColorAndOutlineFix.Add(lv2);
                 }
             }
-        }
-
-
-
-
-        if (printRunTimes)
-        {
-            stopwatch.Stop();
-            Debug.Log("Edge Lines Calculated! TIME = " + stopwatch.Elapsed);
-            stopwatch.Start();
-        }
 
 
 
 
 
-        List<List<Vector2>> finalLineList = new List<List<Vector2>>();
-
-        List<List<List<Vector2>>> finalLineListByColor = new List<List<List<Vector2>>>();
-
-
-        for (int q = 0; q < diffColors.Count; q++)
-        {
-
-            finalLineListByColor.Add(new List<List<Vector2>>());
-        }
-
-
-
-
-        //Here we spawn in fill lines
-
-        int fillLineCount = 0;
-
-        int colorAttempts = 0;
-
-        for (int i = 0; i < fillLineCount; i++)
-        {
-            int lineSegmentMaxCount = 20;
-
-            List<Vector2> thisFillLine = new List<Vector2>();
-
-
-
-
-            Vector2 additionalOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)).normalized * 0.5f;
-
-
-            //Get a random position, if that position has no color on normal map find a different one
-            Vector2 lineStartPos = new Vector2(UnityEngine.Random.Range(0, wholeRenderTexHolder.width), UnityEngine.Random.Range(0, wholeRenderTexHolder.height));
-
-            Color startingColor = wholeRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
-
-            Color startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
-
-            while (startingNormalColor.maxColorComponent < 0.01f)
+            if (printRunTimes)
             {
-                lineStartPos = new Vector2(UnityEngine.Random.Range(0, wholeRenderTexHolder.width), UnityEngine.Random.Range(0, wholeRenderTexHolder.height));
-
-                startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
-
-                colorAttempts++;
-
-                if (colorAttempts > 2000)
-                {
-                    startingNormalColor = Color.cyan;
-                }
+                stopwatch.Stop();
+                Debug.Log("Edge Lines Calculated! TIME = " + stopwatch.Elapsed);
+                stopwatch.Start();
             }
 
-            //thisFillLine.Add(lineStartPos);
 
-            Vector2 curLineWritingPos = lineStartPos;
 
-            //Advance based on normal map colors, if that point is a different color in the color map, end this line
-            for (int q = 0; q < lineSegmentMaxCount; q++)
+            List<List<Vector2>> finalLineList = new List<List<Vector2>>();
+
+            List<List<List<Vector2>>> finalLineListByColor = new List<List<List<Vector2>>>();
+
+
+
+
+            for (int q = 0; q < diffColors.Count; q++)
             {
-                startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y);
+
+                finalLineListByColor.Add(new List<List<Vector2>>());
+            }
 
 
-                //If this pixel is the same color
-                if (wholeRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y) != startingColor || startingNormalColor.maxColorComponent < 0.01f || curLineWritingPos.x > wholeNormalRenderTexHolder.width || curLineWritingPos.y > wholeNormalRenderTexHolder.height || curLineWritingPos.x < 0 || curLineWritingPos.y < 0)
+
+
+            //Here we spawn in fill lines
+
+            int fillLineCount = squiggleLineFillCount;
+
+            int colorAttempts = 0;
+
+            for (int i = 0; i < fillLineCount; i++)
+            {
+                int lineSegmentMaxCount = 35;
+
+                List<Vector2> thisFillLine = new List<Vector2>();
+
+
+                Vector2 additionalOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)).normalized * 0.4f;
+
+
+                //Get a random position, if that position has no color on normal map find a different one
+                Vector2 lineStartPos = new Vector2(UnityEngine.Random.Range(0, wholeRenderTexHolder.width), UnityEngine.Random.Range(0, wholeRenderTexHolder.height));
+
+                Color startingColor = wholeRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
+
+                Color startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
+
+                while (startingNormalColor.maxColorComponent < 0.01f)
                 {
-                    if (q == 0)
+                    lineStartPos = new Vector2(UnityEngine.Random.Range(0, wholeRenderTexHolder.width), UnityEngine.Random.Range(0, wholeRenderTexHolder.height));
+
+                    startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
+
+                    colorAttempts++;
+
+                    if (colorAttempts > 2000)
                     {
-                        i--;
+                        startingNormalColor = Color.cyan;
                     }
-
-
-                    q = lineSegmentMaxCount;
-                }
-                else
-                {
-                    thisFillLine.Add(curLineWritingPos);
-
-                    curLineWritingPos += (new Vector2(startingNormalColor.r - 0.5f, startingNormalColor.g - 0.5f) + additionalOffset).normalized * 10f;
-
-                    //curLineWritingPos = new Vector2((int)curLineWritingPos.x, (int)curLineWritingPos.y);
                 }
 
 
-            }
+                Vector2 curLineWritingPos = lineStartPos;
 
-            if (thisFillLine.Count > 1)
-            {
-                fillLineList.Add(thisFillLine);
-            }
-
-        }
-
-
-
-        fillLineList = PathCrossingRemover.RemoveCrossingPaths(fillLineList, 5);
-
-
-
-
-        //outlinesToAddSplitUpColorAndOutlineFix.AddRange(fillLineList);
-
-
-
-        bool hasBGFilled = false;
-
-
-        if (useSimpleFillForRender)
-        {
-
-            //Starts at 1 to avoid filling in "empty area", make 0 if you want to fill all colors
-            for (int q = 1; q < claimedPixels.Count; q++)
-            {
-                if (fillBGColor && hasBGFilled == false)
+                //Advance based on normal map colors, if that point is a different color in the color map, end this line
+                for (int q = 0; q < lineSegmentMaxCount; q++)
                 {
-                    q = 0;
-
-                    hasBGFilled = true;
-                }
+                    startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y);
 
 
-                List<List<Vector2>> FUICK = GroupVerticalNeighbors(claimedPixels[q]);
-
-                simpleVertFillLinesByColor.AddRange(FUICK);
-            }
-
-
-            outlinesToAddSplitUpColorAndOutlineFix.AddRange(simpleVertFillLinesByColor);
-        }
-
-
-        //if (useSimpleFillForRender)
-        //{
-
-        //    //Starts at 1 to avoid filling in "empty area", make 0 if you want to fill all colors
-        //    for (int q = 1; q < claimedPixels.Count; q++)
-        //    {
-        //        if (fillBGColor && hasBGFilled == false)
-        //        {
-        //            q = 0;
-
-        //            hasBGFilled = true;
-        //        }
-
-
-        //        List<Vector2> pointsModded = new List<Vector2>();
-
-        //        for (int i = 0; i < claimedPixels[q].Count; i++)
-        //        {
-        //            if (claimedPixels[q][i].y % renderScale == 0 && claimedPixels[q][i].x % renderScale == 0)
-        //            {
-        //                pointsModded.Add(claimedPixels[q][i]);
-        //            }
-
-        //            //if (points[i].y % simpleVerticleFillMod == 0 && points[i].x % renderScale == 0)
-        //            //{
-        //            //    pointsModded.Add(points[i]);
-        //            //}
-        //        }
-
-        //        List<List<Vector2>> FUICK = FindPaths(pointsModded, renderScale);
-
-        //        simpleVertFillLinesByColor.AddRange(FUICK);
-        //    }
-
-
-        //    outlinesToAddSplitUpColorAndOutlineFix.AddRange(simpleVertFillLinesByColor);
-        //}
-
-
-
-
-
-
-        //for (int q = 0; q < claimedPixels.Count; q++)
-        //{
-        //    List<List<Vector2>> FUICK = OrganizeIntoScanLinesWithBreaks(claimedPixels[q]);
-
-        //    simpleVertFillLinesByColor.AddRange(ConnectPaths(FUICK));
-
-
-        //}
-
-
-
-        for (int q = 0; q < outlinesToAddSplitUpColorAndOutlineFix.Count; q++)
-        {
-            outlinesToAddSplitUpColorAndOutlineFix[q] = SimplifyPath(outlinesToAddSplitUpColorAndOutlineFix[q]);
-        }
-
-
-
-
-        for (int i = 0; i < outlinesToAddSplitUpColorAndOutlineFix.Count; i++)
-        {
-            List<Vector2> scaledPath = new List<Vector2>();
-
-
-            for (int u = 0; u < outlinesToAddSplitUpColorAndOutlineFix[i].Count; u++)
-            {
-                scaledPath.Add(outlinesToAddSplitUpColorAndOutlineFix[i][u] * (1f / renderScale));
-            }
-
-            finalLineList.Add(scaledPath);
-
-
-
-
-
-
-            if (outlinesToAddSplitUpColorAndOutlineFix[i].Count > 0)
-            {
-                Color lineColor = wholeRenderTexHolder.GetPixel((int)outlinesToAddSplitUpColorAndOutlineFix[i][0].x, (int)outlinesToAddSplitUpColorAndOutlineFix[i][0].y);
-
-                for (int q = 0; q < diffColors.Count; q++)
-                {
-
-                    if (diffColors[q] == lineColor)
+                    //If this pixel is the same color
+                    if (wholeRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y) != startingColor || startingNormalColor.maxColorComponent < 0.01f || curLineWritingPos.x > wholeNormalRenderTexHolder.width || curLineWritingPos.y > wholeNormalRenderTexHolder.height || curLineWritingPos.x < 0 || curLineWritingPos.y < 0)
                     {
-                        //Debug.Log(lineColor + " " + q);
-
-                        //PlacePath(10, scaledPath, i, transform, lineColor);
-
-                        if (scaledPath.Count > 1)
+                        if (q == 0)
                         {
-                            finalLineListByColor[q].Add(scaledPath);
+                            i--;
                         }
 
 
-                    }
-                }
-
-
-            }
-        }
-
-
-
-
-
-
-
-
-        //asign pen based on render color
-        if (pensToUse.Count > 0)
-        {
-            //use pen colors
-            List<List<List<Vector2>>> claimedPixelsByPen = new List<List<List<Vector2>>>();
-
-
-            for (int u = 0; u < pensToUse.Count; u++)
-            {
-                claimedPixelsByPen.Add(new List<List<Vector2>>());
-            }
-
-
-
-            for (int q = 0; q < diffColors.Count - colorCountToRemove; q++)
-            {
-                //go thru all colors in the image, find the pen color that is closest and use that one
-                int penIndex = 0;
-                float colorDistance = 1000000000000000;
-
-                for (int u = 0; u < pensToUse.Count; u++)
-                {
-                    float thisColorDist = Vector3.Distance(new Vector3(pensToUse[u].r, pensToUse[u].g, pensToUse[u].b), new Vector3(diffColors[q].r, diffColors[q].g, diffColors[q].b));
-
-                    if (thisColorDist < colorDistance)
-                    {
-                        penIndex = u;
-                        colorDistance = thisColorDist;
-                    }
-                }
-
-
-                claimedPixelsByPen[penIndex].AddRange(finalLineListByColor[q]);
-
-            }
-
-            finalLineListByColor = claimedPixelsByPen;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (printRunTimes)
-        {
-            stopwatch.Stop();
-            Debug.Log("Start Drawing Lines! TIME = " + stopwatch.Elapsed);
-            stopwatch.Start();
-        }
-
-
-
-
-        //for (int q = 0; q < finalLineListByColor.Count; q++)
-        //{
-        //    //finalLineListByColor[q] = PathCombiner.CombineNearbyLines(finalLineListByColor[q], 2f);
-        //}
-
-
-
-        int lineCountCount = 0;
-
-        for (int q = 0; q < finalLineListByColor.Count; q++)
-        {
-            for (int k = 0; k < finalLineListByColor[q].Count; k++)
-            {
-                if (pensToUse.Count == 0)
-                {
-                    PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, diffColors[q]);
-                }
-                else
-                {
-                    PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, pensToUse[q]);
-                }
-
-
-                lineCountCount++;
-            }
-
-        }
-
-
-        //for (int i = 0; i < finalLineListByColor.Count; i++)
-        //{
-        //    for (int q = 0; q < finalLineListByColor[i].Count; q++)
-        //    {
-
-        //        //finalLineList.Add(finalLineListByColor[i][q]);
-        //        //PlacePath(1, finalLineListByColor[i][q], i, transform, diffColors[i]);
-        //    }
-
-
-        //}
-
-
-
-
-        //place boarder
-        List<Vector2> boarderPoints = new List<Vector2>();
-
-        //bottom
-        boarderPoints.Add(new Vector3(0 , 0, 0));
-        boarderPoints.Add(new Vector3(renderCamTexture.width * (1f / renderScale), 0, 0));
-        boarderPoints.Add(new Vector3(renderCamTexture.width * (1f / renderScale), renderCamTexture.height * (1f / renderScale), 0));
-        boarderPoints.Add(new Vector3(0, renderCamTexture.height * (1f / renderScale), 0));
-        boarderPoints.Add(new Vector3(0, 0, 0));
-
-
-        PlacePath(lineWidth, boarderPoints, 0, transform, new Color(10, 10, 10));
-
-
-
-        SetRenderValues(lineObjects, unlitMat, Color.white, false, false);
-
-        GameObject holder = Instantiate(new GameObject(), transform);
-
-        foreach(LineRenderer lr in lineObjects)
-        {
-            lr.transform.SetParent(holder.transform);
-        }
-
-        //finalLineList.Add(boarderPoints);
-
-
-        finalLineListByColor[0].Add(boarderPoints);
-
-        //SetRenderValues(lineObjects, unlitMat, Color.black, true);
-
-        //Offset The lines in the SVG file
-        for (int i = 0; i < finalLineListByColor.Count; i++)
-        {
-            for (int u = 0; u < finalLineListByColor[i].Count; u++)
-            {
-                for (int g = 0; g < finalLineListByColor[i][u].Count; g++)
-                {
-                    finalLineListByColor[i][u][g] = new Vector2(finalLineListByColor[i][u][g].x, (wholeRenderTexHolder.height / renderScale) - finalLineListByColor[i][u][g].y);
-
-                    if (useAnimationSVGOffset)
-                    {
-                        finalLineListByColor[i][u][g] -= new Vector2(-(96 / 1.5f) + 5,-5);
+                        q = lineSegmentMaxCount;
                     }
                     else
                     {
-                        finalLineListByColor[i][u][g] += new Vector2(clippingSize.x, clippingSize.y);
+                        thisFillLine.Add(curLineWritingPos);
+
+                        curLineWritingPos += (new Vector2(startingNormalColor.r - 0.5f, startingNormalColor.g - 0.5f) + additionalOffset).normalized * 3f * (renderScale / 2f) * UnityEngine.Random.Range(0.5f, 1.5f);
                     }
 
 
                 }
+
+                if (thisFillLine.Count > 1)
+                {
+                    fillLineList.Add(thisFillLine);
+                }
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //var FAKEoutlineList = finalLineListByColor;
+
+
+            for (int i = 0; i < outlinesToAddSplitUpColorAndOutlineFix.Count; i++)
+            {
+                List<Vector2> scaledPath = new List<Vector2>();
+
+
+
+                for (int u = 0; u < outlinesToAddSplitUpColorAndOutlineFix[i].Count; u++)
+                {
+                    Vector2 posToAdd = (outlinesToAddSplitUpColorAndOutlineFix[i][u] * (1f / renderScale));
+
+                    posToAdd = new Vector2(posToAdd.x + (96 / 1.5f) - 5, 5 + (animManager.animCells[z].cellCam.targetTexture.height * (1 /renderScale)) - posToAdd.y);
+
+                    posToAdd += cellOffset;
+
+                    scaledPath.Add(posToAdd);
+                }
+
+                //finalLineList.Add(scaledPath);
+
+
+                if (outlinesToAddSplitUpColorAndOutlineFix[i].Count > 0)
+                {
+                    Color lineColor = wholeRenderTexHolder.GetPixel((int)outlinesToAddSplitUpColorAndOutlineFix[i][0].x, (int)outlinesToAddSplitUpColorAndOutlineFix[i][0].y);
+
+                    for (int q = 0; q < diffColors.Count; q++)
+                    {
+                        if (diffColors[q] == lineColor)
+                        {
+                            if (scaledPath.Count > 1)
+                            {
+                                float lineDist = 0;
+
+                                for (int c = 0; c < scaledPath.Count - 1; c++)
+                                {
+                                    lineDist += Vector3.Distance(scaledPath[c], scaledPath[c + 1]);
+                                }
+
+                                if (lineDist > 3)
+                                {
+                                    outlineList.Add(SimplifyPath(scaledPath));
+                                }
+
+
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            //outlineList.AddRange(outlinesToAddSplitUpColorAndOutlineFix);
+
+
+
+
+            fillLineList = PathCrossingRemover.RemoveCrossingPaths(fillLineList, 5);
+
+
+            outlinesToAddSplitUpColorAndOutlineFix.AddRange(fillLineList);
+
+
+
+
+            bool hasBGFilled = false;
+
+
+            if (useSimpleFillForRender)
+            {
+
+                //Starts at 1 to avoid filling in "empty area", make 0 if you want to fill all colors
+                for (int q = 1; q < claimedPixels.Count; q++)
+                {
+                    if (fillBGColor && hasBGFilled == false)
+                    {
+                        q = 0;
+
+                        hasBGFilled = true;
+                    }
+
+
+                    List<List<Vector2>> FUICK = GroupVerticalNeighbors(claimedPixels[q]);
+
+                    simpleVertFillLinesByColor.AddRange(FUICK);
+                }
+
+
+                outlinesToAddSplitUpColorAndOutlineFix.AddRange(simpleVertFillLinesByColor);
+            }
+
+
+
+
+            for (int q = 0; q < outlinesToAddSplitUpColorAndOutlineFix.Count; q++)
+            {
+                outlinesToAddSplitUpColorAndOutlineFix[q] = SimplifyPath(outlinesToAddSplitUpColorAndOutlineFix[q]);
+            }
+
+
+
+
+            for (int i = 0; i < outlinesToAddSplitUpColorAndOutlineFix.Count; i++)
+            {
+                List<Vector2> scaledPath = new List<Vector2>();
+
+
+                for (int u = 0; u < outlinesToAddSplitUpColorAndOutlineFix[i].Count; u++)
+                {
+                    scaledPath.Add(outlinesToAddSplitUpColorAndOutlineFix[i][u] * (1f / renderScale));
+                }
+
+                finalLineList.Add(scaledPath);
+
+
+                if (outlinesToAddSplitUpColorAndOutlineFix[i].Count > 0)
+                {
+                    Color lineColor = wholeRenderTexHolder.GetPixel((int)outlinesToAddSplitUpColorAndOutlineFix[i][0].x, (int)outlinesToAddSplitUpColorAndOutlineFix[i][0].y);
+
+                    for (int q = 0; q < diffColors.Count; q++)
+                    {
+                        if (diffColors[q] == lineColor)
+                        {
+                            if (scaledPath.Count > 1)
+                            {
+                                finalLineListByColor[q].Add(scaledPath);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+            //asign pen based on render color
+            if (pensToUse.Count > 0)
+            {
+                //use pen colors
+                List<List<List<Vector2>>> claimedPixelsByPen = new List<List<List<Vector2>>>();
+
+
+                for (int u = 0; u < pensToUse.Count; u++)
+                {
+                    claimedPixelsByPen.Add(new List<List<Vector2>>());
+                }
+
+
+
+                for (int q = 0; q < diffColors.Count - colorCountToRemove; q++)
+                {
+                    //go thru all colors in the image, find the pen color that is closest and use that one
+                    int penIndex = 0;
+                    float colorDistance = 1000000000000000;
+
+                    for (int u = 0; u < pensToUse.Count; u++)
+                    {
+                        //float thisColorDist = Vector3.Distance(new Vector3(pensToUse[u].r, pensToUse[u].g, pensToUse[u].b), new Vector3(diffColors[q].r, diffColors[q].g, diffColors[q].b));
+
+
+                        float penH, penS, penV;
+
+                        Color.RGBToHSV(pensToUse[u], out penH, out penS, out penV);
+
+
+                        float baseH, baseS, baseV;
+
+                        Color.RGBToHSV(diffColors[q], out baseH, out baseS, out baseV);
+
+
+
+                        //float thisColorDist = (Mathf.Abs(penH - baseH) * 2.2f) + (Mathf.Abs(penV - baseV) * 2f);
+
+                        float thisColorDist = Vector3.Distance(new Vector3(penH * 2f, penS *.5f, penV), new Vector3(baseH * 2f, baseS *0.5f, baseV));
+
+                        if (thisColorDist < colorDistance)
+                        {
+                            penIndex = u;
+                            colorDistance = thisColorDist;
+                        }
+                    }
+
+                    claimedPixelsByPen[penIndex].AddRange(finalLineListByColor[q]);
+
+                }
+
+                finalLineListByColor = claimedPixelsByPen;
+            }
+
+
+
+
+
+
+            if (printRunTimes)
+            {
+                stopwatch.Stop();
+                Debug.Log("Start Drawing Lines! TIME = " + stopwatch.Elapsed);
+                stopwatch.Start();
+            }
+
+
+
+
+            //for (int q = 0; q < finalLineListByColor.Count; q++)
+            //{
+            //    //finalLineListByColor[q] = PathCombiner.CombineNearbyLines(finalLineListByColor[q], 2f);
+            //}
+
+
+
+
+
+
+
+
+
+
+            //place boarder
+            List<Vector2> boarderPoints = new List<Vector2>();
+
+            //bottom
+            boarderPoints.Add(new Vector3(0, 0, 0));
+            boarderPoints.Add(new Vector3(wholeRenderTexHolder.width * (1f / renderScale), 0, 0));
+            boarderPoints.Add(new Vector3(wholeRenderTexHolder.width * (1f / renderScale), wholeRenderTexHolder.height * (1f / renderScale), 0));
+            boarderPoints.Add(new Vector3(0, wholeRenderTexHolder.height * (1f / renderScale), 0));
+            boarderPoints.Add(new Vector3(0, 0, 0));
+
+
+            PlacePath(lineWidth, boarderPoints, 0, transform, new Color(10, 10, 10));
+
+
+            SetRenderValues(lineObjects, unlitMat, Color.white, false, false);
+
+            GameObject holder = Instantiate(new GameObject(), transform);
+
+            foreach (LineRenderer lr in lineObjects)
+            {
+                lr.transform.SetParent(holder.transform);
+            }
+
+
+            finalLineListByColor[0].Add(boarderPoints);
+
+
+
+
+            //Offset based on cell 4x 3y  using z - animationCell index
+
+
+
+
+
+            //Offset The lines in the SVG file
+            for (int i = 0; i < finalLineListByColor.Count; i++)
+            {
+                for (int u = 0; u < finalLineListByColor[i].Count; u++)
+                {
+                    for (int g = 0; g < finalLineListByColor[i][u].Count; g++)
+                    {
+                        finalLineListByColor[i][u][g] = new Vector2(finalLineListByColor[i][u][g].x, (wholeRenderTexHolder.height / renderScale) - finalLineListByColor[i][u][g].y);
+
+                        if (useAnimationSVGOffset)
+                        {
+                            finalLineListByColor[i][u][g] -= new Vector2(-(96 / 1.5f) + 5, -5);
+                        }
+                        else
+                        {
+                            finalLineListByColor[i][u][g] += new Vector2(clippingSize.x, clippingSize.y);
+                        }
+
+
+
+
+
+
+
+                        finalLineListByColor[i][u][g] += cellOffset;
+                    }
+                }
+
+                finalCompleteLineListByColor.Add(new List<List<Vector2>>());
+
+                finalCompleteLineListByColor[i].AddRange(finalLineListByColor[i]);
+            }
+
+
+
+
+
+
+
+
+
+            //Shit way to reduce lines
+
+
+            //for (int q = 0; q < finalLineListByColor.Count; q++)
+            //{
+            //    float closeLineSearchRangeE = 8;
+
+            //    List<List<Vector2>> reallySmushedOutlineListE = new List<List<Vector2>>();
+
+            //    List<List<Vector2>> finalLineListByColorHolder = finalLineListByColor[q];
+
+
+
+            //    while (finalLineListByColorHolder.Count > 0)
+            //    {
+
+
+            //        if (finalLineListByColorHolder.Count > 1)
+            //        {
+            //            if (Vector3.Distance(finalLineListByColorHolder[0].Last(), finalLineListByColorHolder[1][0]) < closeLineSearchRangeE)
+            //            {
+            //                finalLineListByColorHolder[0].AddRange(finalLineListByColorHolder[0 + 1]);
+
+            //                Debug.Log("Merged outlines at distisnace of ");
+
+            //                finalLineListByColorHolder.RemoveAt(1);
+            //            }
+            //            else
+            //            {
+
+
+
+            //                reallySmushedOutlineListE.Add(finalLineListByColorHolder[0]);
+
+            //                finalLineListByColorHolder.RemoveAt(0);
+            //            }
+            //        }
+            //        else
+            //        {
+
+
+            //            reallySmushedOutlineListE.Add(finalLineListByColorHolder[0]);
+
+            //            finalLineListByColorHolder.RemoveAt(0);
+            //        }
+            //    }
+
+
+            //    Debug.Log("Merged outlines  " + finalLineListByColor[q].Count + " " + reallySmushedOutlineListE.Count);
+
+            //    finalLineListByColor[q] = reallySmushedOutlineListE;
+
+            //}
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            int lineCountCount = 0;
+
+            for (int q = 0; q < finalLineListByColor.Count; q++)
+            {
+                for (int k = 0; k < finalLineListByColor[q].Count; k++)
+                {
+                    if (pensToUse.Count == 0)
+                    {
+                        PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, diffColors[q]);
+                    }
+                    else
+                    {
+                        PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, pensToUse[q]);
+                    }
+
+
+                    lineCountCount++;
+                }
+            }
+
+
+
+            if (printRunTimes)
+            {
+                stopwatch.Stop();
+                Debug.Log("Start SVG Saving! TIME = " + stopwatch.Elapsed);
+                stopwatch.Start();
+            }
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+
+
+        float closeLineSearchRange = 3;
+
+        List<List<Vector2>> reallySmushedOutlineList = new List<List<Vector2>>();
+
+        List<List<Vector2>> outlineListHolder = outlineList;
+
+        while (outlineListHolder.Count > 0)
+        {
+
+
+            if (outlineListHolder[0].Count > 2 && outlineListHolder.Count > 1)
+            {
+                if (Vector3.Distance(outlineListHolder[0].Last(), outlineListHolder[1][0]) < closeLineSearchRange)
+                {
+                    outlineListHolder[0].AddRange(outlineListHolder[1]);
+
+                    Debug.Log("Merged outlines at distisnace of ");
+
+                    outlineListHolder.RemoveAt(1);
+                }
+                else
+                {
+
+
+                    reallySmushedOutlineList.Add(outlineListHolder[0]);
+
+
+                    outlineListHolder.RemoveAt(0);
+                }
+            }
+            else
+            {
+                reallySmushedOutlineList.Add(outlineListHolder[0]);
+
+                outlineListHolder.RemoveAt(0);
             }
         }
 
 
-        if (printRunTimes)
+        outlineList = reallySmushedOutlineList;
+
+
+
+
+
+
+        if (pensToUse.Count > 0)
         {
-            stopwatch.Stop();
-            Debug.Log("Start SVG Saving! TIME = " + stopwatch.Elapsed);
-            stopwatch.Start();
+            GenerateSVG(outlineList, false, false,1000, Color.black, svgSize);
         }
 
 
@@ -1237,20 +1199,21 @@ public class svgVisual : MonoBehaviour
         {
             for (int q = 0; q < pensToUse.Count; q++)
             {
-                GenerateSVG(finalLineListByColor[q], false, false, q, pensToUse[q], svgSize);
+                GenerateSVG(finalCompleteLineListByColor[q], false, false, q, pensToUse[q], svgSize);
             }
         }
         else
         {
-            //Claimed pixels = [Color][Position], we remove the cleaned colors from the claimedPixels but not anywhere else like diff colors 
-            for (int q = 0; q < diffColors.Count - colorCountToRemove; q++)
-            {
-                GenerateSVG(finalLineListByColor[q], false, false, q, diffColors[q], svgSize);
-            }
+            //You have to preselect pen colors for now
+
+            ////Claimed pixels = [Color][Position], we remove the cleaned colors from the claimedPixels but not anywhere else like diff colors 
+            //for (int q = 0; q < diffColors.Count - colorCountToRemove; q++)
+            //{
+            //    GenerateSVG(finalCompleteLineListByColor[q], false, false, q, diffColors[q], svgSize);
+            //}
         }
 
-        pc.SlamTogether(finalLineListByColor, yourFileName);
-
+        pc.SlamTogether(finalCompleteLineListByColor, yourFileName);
 
 
 
@@ -1857,7 +1820,7 @@ public class svgVisual : MonoBehaviour
             foreach (var pathToRemove in pathsToRemove)
             {
                 filteredPaths.Remove(pathToRemove);
-                Debug.Log("FUCK REMOVED");
+                //Debug.Log("FUCK REMOVED");
             }
 
             return filteredPaths;
@@ -2992,8 +2955,8 @@ public class svgVisual : MonoBehaviour
 
                 thisPath += "\"";
 
-                svgContent.AppendLine(thisPath);
-                svgContent.AppendLine($"      id = \"{i}\" />");
+                svgContent.AppendLine(thisPath + $"      id = \"{i}\" />");
+                //svgContent.AppendLine();
 
                 //Debug.Log(i + " ID");
 

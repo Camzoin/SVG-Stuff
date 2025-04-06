@@ -519,6 +519,27 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "12c404ea0bfd4852b10c3b7ac458b480",
+    "m_Id": 1501456880,
+    "m_DisplayName": "Vector2",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_Vector2",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.AddNode",
     "m_ObjectId": "17e70815318f4e9d8e291b5e9d077825",
     "m_Group": {
@@ -1184,6 +1205,9 @@
             "m_Id": "dd33aecb066e418291dc53045545bd54"
         },
         {
+            "m_Id": "85243ae46a0c46a99a18d86b62e7267e"
+        },
+        {
             "m_Id": "11c2c8d755e44629af7c09d21e30a810"
         }
     ],
@@ -1199,12 +1223,14 @@
     "m_PropertyGuids": [
         "2c321218-1670-4cca-b8a1-ce1d5e59cc8e",
         "2af0d5fc-7588-402c-8eef-4e1f4241578b",
-        "4bc7c4ab-452d-484b-9f1c-e2a066c8dbae"
+        "4bc7c4ab-452d-484b-9f1c-e2a066c8dbae",
+        "02c50a81-2f05-4a9e-95ca-61d4e18644c5"
     ],
     "m_PropertyIds": [
         -201655154,
         -20640072,
-        229987711
+        229987711,
+        1501456880
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
@@ -1453,6 +1479,27 @@
     "m_Labels": [
         "Y"
     ]
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "85243ae46a0c46a99a18d86b62e7267e",
+    "m_Id": 1501456880,
+    "m_DisplayName": "Vector2",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_Vector2",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
 }
 
 {
@@ -1878,6 +1925,9 @@
             "m_Id": "e7e023ebe3364341ab38b00e18671af8"
         },
         {
+            "m_Id": "12c404ea0bfd4852b10c3b7ac458b480"
+        },
+        {
             "m_Id": "59e0c9e600cb486daebca7d0fc5ba976"
         }
     ],
@@ -1893,12 +1943,14 @@
     "m_PropertyGuids": [
         "2c321218-1670-4cca-b8a1-ce1d5e59cc8e",
         "2af0d5fc-7588-402c-8eef-4e1f4241578b",
-        "4bc7c4ab-452d-484b-9f1c-e2a066c8dbae"
+        "4bc7c4ab-452d-484b-9f1c-e2a066c8dbae",
+        "02c50a81-2f05-4a9e-95ca-61d4e18644c5"
     ],
     "m_PropertyIds": [
         -201655154,
         -20640072,
-        229987711
+        229987711,
+        1501456880
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []

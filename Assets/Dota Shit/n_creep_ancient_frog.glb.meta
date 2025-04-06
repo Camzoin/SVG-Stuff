@@ -1,0 +1,46 @@
+fileFormatVersion: 2
+guid: 4d03867ba93013d4da51cbf0f56b7ef2
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    texturesReadable: 0
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 1
+    originalUri: Assets\Dota Shit\n_creep_froglet_weapon_color_psd_7882e480.png
+    assetPath: Assets\Dota Shit\n_creep_froglet_weapon_color_psd_7882e480.png
+  - type: 1
+    originalUri: Assets\Dota Shit\n_creep_ancient_frog_color_psd_eb1a780f.png
+    assetPath: Assets\Dota Shit\n_creep_ancient_frog_color_psd_eb1a780f.png
+  - type: 1
+    originalUri: Assets\Dota Shit\n_creep_froglet_normal_psd_936edae3.png
+    assetPath: Assets\Dota Shit\n_creep_froglet_normal_psd_936edae3.png
+  - type: 1
+    originalUri: Assets\Dota Shit\n_creep_froglet_weapon_normal_psd_c758f186.png
+    assetPath: Assets\Dota Shit\n_creep_froglet_weapon_normal_psd_c758f186.png
+  - type: 1
+    originalUri: Assets\Dota Shit\n_creep_froglet_diffusemask_psd_a4b5c606_orm_1248284598.png
+    assetPath: Assets\Dota Shit\n_creep_froglet_diffusemask_psd_a4b5c606_orm_1248284598.png
+  - type: 1
+    originalUri: Assets\Dota Shit\n_creep_froglet_weapon_metalnessmask_psd_e0d17e21_orm_461661715.png
+    assetPath: Assets\Dota Shit\n_creep_froglet_weapon_metalnessmask_psd_e0d17e21_orm_461661715.png
+  reportItems: []
