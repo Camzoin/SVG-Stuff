@@ -1,0 +1,63 @@
+newmtl tree1:lambert_tree1
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_7_CMP.png
+newmtl tree1:lambert_tent01
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_8_CMP.png
+newmtl tree1:lambert_tent02
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_9_CMP.png
+newmtl tree1:lambert_deck2
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_10_CMP.png
+newmtl tree1:lambert_rope
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_11_CMP.png
+newmtl tree1:lambert_deck20
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_10_CMP.png
+newmtl tree1:lambert_leaf02
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_12_CMP.png

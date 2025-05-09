@@ -1,0 +1,54 @@
+newmtl lambert_gondra02
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_34_CMP.png
+newmtl phong_gondra
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_35_CMP.png
+newmtl lambert_gondra020
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_34_CMP.png
+newmtl phong_gondra0
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_35_CMP.png
+newmtl lambert_gondra021
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_34_CMP.png
+newmtl phong_gondra1
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_35_CMP.png

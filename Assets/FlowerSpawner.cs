@@ -37,17 +37,20 @@ public class FlowerSpawner : MonoBehaviour
 
     public List<Material> matsToRanomize = new List<Material>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public Material normalMat;
+
+
+    [ContextMenu("Normalize Me Capn")]
+    public void MakeMeNormal()
     {
-        
+        List<Renderer> allChildrenRends = this.gameObject.GetComponentsInChildren<Renderer>().ToList();
+
+        foreach(Renderer r in allChildrenRends)
+        {
+            r.material = normalMat;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     [ContextMenu("PopulateFlowers")]
     public void PopulateFlowers()
     {
@@ -58,19 +61,41 @@ public class FlowerSpawner : MonoBehaviour
 
         flowerBulbPoints = GenerateBulbPoints();
 
+        List<float> bulbHeights = new List<float>();
 
         foreach (Vector3 v3 in flowerBulbPoints)
         {
-            if (v3 != Vector3.up * flowerHeight)
+            Debug.Log(v3 - transform.position);
+
+            bulbHeights.Add((v3 - transform.position).y);
+        }
+
+        float offsetIntenseMax = bulbHeights.Max() - bulbHeights.Min();
+
+
+
+        for (int i = 0; i < flowerBulbPoints.Count; i++)
+        {
+            if (flowerBulbPoints[i] != Vector3.up * flowerHeight)
                 //if (Vector3.Distance(v3, Vector3.up * flowerHeight) > flowerCount / 30f)
             {
                 GameObject thisFlower = Instantiate(flowerPrefab, flowerHolder);
 
-                Vector3 stemPos = flowerHolder.parent.transform.position + (new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized * UnityEngine.Random.Range(0f, vaseWidth));
+                //Vector3 stemNeckBase = (new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized);
 
-                Vector3 neckPos = flowerHolder.parent.transform.position + (new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized * UnityEngine.Random.Range(0f, vaseHoleRadius));
+                Vector3 localPos = flowerBulbPoints[i] - transform.position;
 
-                thisFlower.transform.GetChild(0).transform.position = v3;
+                Vector3 stemNeckBase = new Vector3(localPos.x, 0, localPos.z).normalized;
+
+                //float offsetIntense = UnityEngine.Random.Range(0f, 1f);
+
+                float offsetIntense = 1f - (bulbHeights[i] / bulbHeights.Max());
+
+                Vector3 stemPos = flowerHolder.parent.transform.position + (stemNeckBase * (offsetIntense * vaseWidth));
+
+                Vector3 neckPos = flowerHolder.parent.transform.position + (stemNeckBase * (offsetIntense * vaseHoleRadius));
+
+                thisFlower.transform.GetChild(0).transform.position = flowerBulbPoints[i];
 
                 thisFlower.transform.GetChild(1).transform.position = neckPos + (Vector3.up * vaseHeight);
 

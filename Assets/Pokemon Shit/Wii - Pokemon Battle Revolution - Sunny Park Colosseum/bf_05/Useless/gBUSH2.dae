@@ -1,0 +1,1523 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.4.1" xmlns="http://www.collada.org/2005/11/COLLADASchema">
+    <asset>
+        <created>2022-10-28T08:34:57.5448605-05:00</created>
+        <modified>2022-10-28T08:34:57.5448605-05:00</modified>
+        <unit name="Meter" />
+        <contributor>
+            <authoring_tool>IONET Exporter</authoring_tool>
+        </contributor>
+    </asset>
+    <library_images>
+        <image id="Texture_29_CMP-image" name="Texture_29_CMP">
+            <init_from>Texture_29_CMP.png</init_from>
+        </image>
+        <image id="Texture_30_RGB5A3-image" name="Texture_30_RGB5A3">
+            <init_from>Texture_30_RGB5A3.png</init_from>
+        </image>
+        <image id="Texture_31_RGB5A3-image" name="Texture_31_RGB5A3">
+            <init_from>Texture_31_RGB5A3.png</init_from>
+        </image>
+    </library_images>
+    <library_materials>
+        <material id="lambert_bush011" name="lambert_bush011">
+            <instance_effect url="#lambert_bush011-effect" />
+        </material>
+        <material id="bush_b_m1" name="bush_b_m1">
+            <instance_effect url="#bush_b_m1-effect" />
+        </material>
+        <material id="bush_c_m1" name="bush_c_m1">
+            <instance_effect url="#bush_c_m1-effect" />
+        </material>
+    </library_materials>
+    <library_effects>
+        <effect id="lambert_bush011-effect" name="lambert_bush011">
+            <profile_COMMON>
+                <newparam sid="Texture_29_CMP-image_surface">
+                    <surface type="2D">
+                        <init_from>Texture_29_CMP-image</init_from>
+                    </surface>
+                </newparam>
+                <newparam sid="Texture_29_CMP-image_sampler">
+                    <sampler2D>
+                        <source>Texture_29_CMP-image_surface</source>
+                        <wrap_s>CLAMP</wrap_s>
+                        <wrap_t>CLAMP</wrap_t>
+                    </sampler2D>
+                </newparam>
+                <technique sid="standard">
+                    <phong>
+                        <emission>
+                            <color sid="emission">0 0 0 1</color>
+                        </emission>
+                        <ambient>
+                            <color sid="ambient">0 0 0 1</color>
+                        </ambient>
+                        <diffuse>
+                            <texture texture="Texture_29_CMP-image_sampler" texcoord="CHANNEL0" />
+                        </diffuse>
+                        <specular>
+                            <color sid="specular">0.227451 0.5137255 0.07058824 0.4352941</color>
+                        </specular>
+                        <reflective>
+                            <color sid="reflective">1 1 1 1</color>
+                        </reflective>
+                        <shininess>
+                            <float sid="shininess">50</float>
+                        </shininess>
+                        <reflectivity>
+                            <float sid="reflectivity">1</float>
+                        </reflectivity>
+                        <transparency>
+                            <float sid="transparency">1</float>
+                        </transparency>
+                    </phong>
+                </technique>
+            </profile_COMMON>
+        </effect>
+        <effect id="bush_b_m1-effect" name="bush_b_m1">
+            <profile_COMMON>
+                <newparam sid="Texture_30_RGB5A3-image_surface">
+                    <surface type="2D">
+                        <init_from>Texture_30_RGB5A3-image</init_from>
+                    </surface>
+                </newparam>
+                <newparam sid="Texture_30_RGB5A3-image_sampler">
+                    <sampler2D>
+                        <source>Texture_30_RGB5A3-image_surface</source>
+                        <wrap_s>CLAMP</wrap_s>
+                        <wrap_t>CLAMP</wrap_t>
+                    </sampler2D>
+                </newparam>
+                <technique sid="standard">
+                    <phong>
+                        <emission>
+                            <color sid="emission">0 0 0 1</color>
+                        </emission>
+                        <ambient>
+                            <color sid="ambient">0 0 0 1</color>
+                        </ambient>
+                        <diffuse>
+                            <texture texture="Texture_30_RGB5A3-image_sampler" texcoord="CHANNEL0" />
+                        </diffuse>
+                        <specular>
+                            <color sid="specular">0.2352941 0.4588235 0.7607843 0.5607843</color>
+                        </specular>
+                        <reflective>
+                            <color sid="reflective">1 1 1 1</color>
+                        </reflective>
+                        <shininess>
+                            <float sid="shininess">50</float>
+                        </shininess>
+                        <reflectivity>
+                            <float sid="reflectivity">1</float>
+                        </reflectivity>
+                        <transparency>
+                            <float sid="transparency">1</float>
+                        </transparency>
+                    </phong>
+                </technique>
+            </profile_COMMON>
+        </effect>
+        <effect id="bush_c_m1-effect" name="bush_c_m1">
+            <profile_COMMON>
+                <newparam sid="Texture_31_RGB5A3-image_surface">
+                    <surface type="2D">
+                        <init_from>Texture_31_RGB5A3-image</init_from>
+                    </surface>
+                </newparam>
+                <newparam sid="Texture_31_RGB5A3-image_sampler">
+                    <sampler2D>
+                        <source>Texture_31_RGB5A3-image_surface</source>
+                        <wrap_s>CLAMP</wrap_s>
+                        <wrap_t>CLAMP</wrap_t>
+                    </sampler2D>
+                </newparam>
+                <technique sid="standard">
+                    <phong>
+                        <emission>
+                            <color sid="emission">0 0 0 1</color>
+                        </emission>
+                        <ambient>
+                            <color sid="ambient">0 0 0 1</color>
+                        </ambient>
+                        <diffuse>
+                            <texture texture="Texture_31_RGB5A3-image_sampler" texcoord="CHANNEL0" />
+                        </diffuse>
+                        <specular>
+                            <color sid="specular">0.2352941 0.4588235 0.7607843 0.5607843</color>
+                        </specular>
+                        <reflective>
+                            <color sid="reflective">1 1 1 1</color>
+                        </reflective>
+                        <shininess>
+                            <float sid="shininess">50</float>
+                        </shininess>
+                        <reflectivity>
+                            <float sid="reflectivity">1</float>
+                        </reflectivity>
+                        <transparency>
+                            <float sid="transparency">1</float>
+                        </transparency>
+                    </phong>
+                </technique>
+            </profile_COMMON>
+        </effect>
+    </library_effects>
+    <library_geometries>
+        <geometry id="bush03_0-geometry" name="bush03_0">
+            <mesh>
+                <source id="bush03_0-geometry-POSITION">
+                    <float_array id="bush03_0-geometry-POSITION-array" count="36">-513.4956 40 125.3092 -462.9021 0 143.7636 -513.4956 0 125.3092 -462.9021 40 143.7636 -462.9021 0 143.7636 -513.4956 40 125.3092 -462.9021 40 143.7636 -413.5432 0 122.2237 -462.9021 0 143.7636 -413.5432 40 122.2237 -413.5432 0 122.2237 -462.9021 40 143.7636</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush03_0-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_0-geometry-NORMAL">
+                    <float_array id="bush03_0-geometry-NORMAL-array" count="9">-0.3426741 -8.43055E-11 0.9394543 0.03085445 4.959E-10 0.9995239 0.3999667 1.005126E-09 0.9165297</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush03_0-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_0-geometry-TEXCOORD">
+                    <float_array id="bush03_0-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush03_0-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_0-geometry-COLOR">
+                    <float_array id="bush03_0-geometry-COLOR-array" count="12">1 1 1 1 0.827451 0.8313726 0.8392157 1 0.9019608 0.9058824 0.9137255 1</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush03_0-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush03_0-vertices">
+                    <input semantic="POSITION" source="#bush03_0-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="lambert_bush011">
+                    <input semantic="VERTEX" source="#bush03_0-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush03_0-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush03_0-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush03_0-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 1 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 0 8 1 1 1 7 2 4 1 6 1 3 0 11 1 3 0 10 2 4 1 9 2 5 2</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush03_1-geometry" name="bush03_1">
+            <mesh>
+                <source id="bush03_1-geometry-POSITION">
+                    <float_array id="bush03_1-geometry-POSITION-array" count="36">-515.7856 40 137.0539 -465.1922 1.137236E-06 155.5083 -515.7856 2.461666E-06 137.0539 -465.1922 40 155.5083 -465.1922 1.137236E-06 155.5083 -515.7856 40 137.0539 -465.1922 40 155.5083 -415.8333 7.22512E-07 133.9684 -465.1922 1.137236E-06 155.5083 -415.8333 40 133.9684 -415.8333 7.22512E-07 133.9684 -465.1922 40 155.5083</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush03_1-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_1-geometry-NORMAL">
+                    <float_array id="bush03_1-geometry-NORMAL-array" count="9">-0.3426743 -1.515229E-09 0.9394543 0.03085424 -2.961082E-09 0.9995239 0.3999666 -3.983109E-09 0.9165297</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush03_1-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_1-geometry-TEXCOORD">
+                    <float_array id="bush03_1-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush03_1-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_1-geometry-COLOR">
+                    <float_array id="bush03_1-geometry-COLOR-array" count="12">1 1 1 1 0.827451 0.8313726 0.8392157 1 0.9019608 0.9058824 0.9137255 1</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush03_1-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush03_1-vertices">
+                    <input semantic="POSITION" source="#bush03_1-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="bush_b_m1">
+                    <input semantic="VERTEX" source="#bush03_1-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush03_1-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush03_1-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush03_1-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 1 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 0 8 1 1 1 7 2 4 1 6 1 3 0 11 1 3 0 10 2 4 1 9 2 5 2</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush03_2-geometry" name="bush03_2">
+            <mesh>
+                <source id="bush03_2-geometry-POSITION">
+                    <float_array id="bush03_2-geometry-POSITION-array" count="36">-517.7571 40 151.7457 -467.1636 -1.123538E-06 170.2002 -517.7571 2.326223E-06 151.7457 -467.1636 40 170.2002 -467.1636 -1.123538E-06 170.2002 -517.7571 40 151.7457 -467.1636 40 170.2002 -417.8047 -3.149297E-06 148.6604 -467.1636 -1.123538E-06 170.2002 -417.8047 40 148.6604 -417.8047 -3.149297E-06 148.6604 -467.1636 40 170.2002</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush03_2-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_2-geometry-NORMAL">
+                    <float_array id="bush03_2-geometry-NORMAL-array" count="9">-0.3426749 4.747044E-09 0.939454 0.03085374 5.059088E-09 0.9995239 0.3999662 4.647014E-09 0.9165299</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush03_2-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_2-geometry-TEXCOORD">
+                    <float_array id="bush03_2-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush03_2-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_2-geometry-COLOR">
+                    <float_array id="bush03_2-geometry-COLOR-array" count="12">1 1 1 1 0.827451 0.8313726 0.8392157 1 0.9019608 0.9058824 0.9137255 1</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush03_2-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush03_2-vertices">
+                    <input semantic="POSITION" source="#bush03_2-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="bush_c_m1">
+                    <input semantic="VERTEX" source="#bush03_2-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush03_2-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush03_2-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush03_2-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 1 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 0 8 1 1 1 7 2 4 1 6 1 3 0 11 1 3 0 10 2 4 1 9 2 5 2</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush01_0-geometry" name="bush01_0">
+            <mesh>
+                <source id="bush01_0-geometry-POSITION">
+                    <float_array id="bush01_0-geometry-POSITION-array" count="36">-488.3358 40 437.5474 -439.1982 0 459.5872 -488.3358 0 437.5474 -439.1982 40 459.5872 -439.1982 0 459.5872 -488.3358 40 437.5474 -439.1982 40 459.5872 -388.42 0 441.6473 -439.1982 0 459.5872 -388.42 40 441.6473 -388.42 0 441.6473 -439.1982 40 459.5872</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush01_0-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_0-geometry-NORMAL">
+                    <float_array id="bush01_0-geometry-NORMAL-array" count="9">-0.4092502 4.840435E-09 0.9124222 -0.04099932 -5.911547E-10 0.9991592 0.3331198 -5.938131E-09 0.9428845</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush01_0-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_0-geometry-TEXCOORD">
+                    <float_array id="bush01_0-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush01_0-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_0-geometry-COLOR">
+                    <float_array id="bush01_0-geometry-COLOR-array" count="20">0.9686275 0.9882353 1 1 0.9019608 0.9058824 0.9137255 1 0.8039216 0.8235294 0.8392157 1 0.7098039 0.7215686 0.7372549 1 0.7098039 0.7176471 0.7333333 1</float_array>
+                    <technique_common>
+                        <accessor count="5" offset="0" source="bush01_0-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush01_0-vertices">
+                    <input semantic="POSITION" source="#bush01_0-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="lambert_bush011">
+                    <input semantic="VERTEX" source="#bush01_0-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush01_0-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush01_0-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush01_0-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 2 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 1 8 1 1 1 7 2 4 3 6 1 3 1 11 1 3 1 10 2 4 3 9 2 5 4</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush01_1-geometry" name="bush01_1">
+            <mesh>
+                <source id="bush01_1-geometry-POSITION">
+                    <float_array id="bush01_1-geometry-POSITION-array" count="36">-490.8586 40 448.546 -441.7209 5.781135E-07 470.5858 -490.8586 1.660053E-06 448.546 -441.7209 40 470.5858 -441.7209 5.781135E-07 470.5858 -490.8586 40 448.546 -441.7209 40 470.5858 -390.9427 -6.217393E-07 452.6459 -441.7209 5.781135E-07 470.5858 -390.9427 40 452.6459 -390.9427 -6.217393E-07 452.6459 -441.7209 40 470.5858</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush01_1-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_1-geometry-NORMAL">
+                    <float_array id="bush01_1-geometry-NORMAL-array" count="9">-0.40925 -5.174195E-09 0.9124223 -0.04099911 -5.063602E-09 0.9991592 0.33312 -4.228245E-09 0.9428844</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush01_1-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_1-geometry-TEXCOORD">
+                    <float_array id="bush01_1-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush01_1-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_1-geometry-COLOR">
+                    <float_array id="bush01_1-geometry-COLOR-array" count="20">0.9686275 0.9882353 1 1 0.9019608 0.9058824 0.9137255 1 0.8039216 0.8235294 0.8392157 1 0.7098039 0.7215686 0.7372549 1 0.7098039 0.7176471 0.7333333 1</float_array>
+                    <technique_common>
+                        <accessor count="5" offset="0" source="bush01_1-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush01_1-vertices">
+                    <input semantic="POSITION" source="#bush01_1-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="bush_b_m1">
+                    <input semantic="VERTEX" source="#bush01_1-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush01_1-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush01_1-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush01_1-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 2 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 1 8 1 1 1 7 2 4 3 6 1 3 1 11 1 3 1 10 2 4 3 9 2 5 4</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush01_2-geometry" name="bush01_2">
+            <mesh>
+                <source id="bush01_2-geometry-POSITION">
+                    <float_array id="bush01_2-geometry-POSITION-array" count="36">-492.0302 40 460.1187 -442.8925 -3.152984E-07 482.1585 -492.0302 1.980385E-07 460.1187 -442.8925 40 482.1585 -442.8925 -3.152984E-07 482.1585 -492.0302 40 460.1187 -442.8925 40 482.1585 -392.1144 -1.255776E-06 464.2187 -442.8925 -3.152984E-07 482.1585 -392.1144 40 464.2187 -392.1144 -1.255776E-06 464.2187 -442.8925 40 482.1585</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush01_2-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_2-geometry-NORMAL">
+                    <float_array id="bush01_2-geometry-NORMAL-array" count="9">-0.4092506 -4.936628E-09 0.912422 -0.04099966 -6.123294E-11 0.9991592 0.3331197 4.822927E-09 0.9428846</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush01_2-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_2-geometry-TEXCOORD">
+                    <float_array id="bush01_2-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush01_2-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_2-geometry-COLOR">
+                    <float_array id="bush01_2-geometry-COLOR-array" count="20">0.9686275 0.9882353 1 1 0.9019608 0.9058824 0.9137255 1 0.8039216 0.8235294 0.8392157 1 0.7098039 0.7215686 0.7372549 1 0.7098039 0.7176471 0.7333333 1</float_array>
+                    <technique_common>
+                        <accessor count="5" offset="0" source="bush01_2-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush01_2-vertices">
+                    <input semantic="POSITION" source="#bush01_2-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="bush_c_m1">
+                    <input semantic="VERTEX" source="#bush01_2-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush01_2-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush01_2-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush01_2-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 2 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 1 8 1 1 1 7 2 4 3 6 1 3 1 11 1 3 1 10 2 4 3 9 2 5 4</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush011_0-geometry" name="bush011_0">
+            <mesh>
+                <source id="bush011_0-geometry-POSITION">
+                    <float_array id="bush011_0-geometry-POSITION-array" count="36">95.41698 40 422.7858 46.33146 -1.32363E-16 439.2869 95.41698 4.737319E-16 422.7858 46.33146 40 439.2869 46.33146 -1.32363E-16 439.2869 95.41698 40 422.7858 46.33146 40 439.2869 7.89634 2.167606E-15 477.0097 46.33146 -1.32363E-16 439.2869 7.89634 40 477.0097 7.89634 2.167606E-15 477.0097 46.33146 40 439.2869</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush011_0-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_0-geometry-NORMAL">
+                    <float_array id="bush011_0-geometry-NORMAL-array" count="9">-0.3186468 -2.466848E-09 -0.9478735 -0.522835 -1.276564E-09 -0.8524339 -0.7004624 -2.142776E-11 -0.7136893</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush011_0-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_0-geometry-TEXCOORD">
+                    <float_array id="bush011_0-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush011_0-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_0-geometry-COLOR">
+                    <float_array id="bush011_0-geometry-COLOR-array" count="12">1 1 1 1 0.9019608 0.9058824 0.9137255 1 0.8313726 0.8509804 0.9137255 1</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush011_0-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush011_0-vertices">
+                    <input semantic="POSITION" source="#bush011_0-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="lambert_bush011">
+                    <input semantic="VERTEX" source="#bush011_0-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush011_0-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush011_0-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush011_0-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 1 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 1 8 1 1 1 7 2 4 2 6 1 3 1 11 1 3 1 10 2 4 2 9 2 5 2</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush011_1-geometry" name="bush011_1">
+            <mesh>
+                <source id="bush011_1-geometry-POSITION">
+                    <float_array id="bush011_1-geometry-POSITION-array" count="36">90.67453 40 415.5429 41.58902 1.06721E-06 432.044 90.67453 1.489556E-06 415.5429 41.58902 40 432.044 41.58902 1.06721E-06 432.044 90.67453 40 415.5429 41.58902 40 432.044 3.153893 3.956283E-07 469.7668 41.58902 1.06721E-06 432.044 3.153893 40 469.7668 3.153893 3.956283E-07 469.7668 41.58902 40 432.044</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush011_1-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_1-geometry-NORMAL">
+                    <float_array id="bush011_1-geometry-NORMAL-array" count="9">-0.3186474 2.307742E-09 -0.9478734 -0.522835 5.105534E-10 -0.8524339 -0.700462 -1.312572E-09 -0.7136897</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush011_1-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_1-geometry-TEXCOORD">
+                    <float_array id="bush011_1-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush011_1-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_1-geometry-COLOR">
+                    <float_array id="bush011_1-geometry-COLOR-array" count="12">1 1 1 1 0.9019608 0.9058824 0.9137255 1 0.8313726 0.8509804 0.9137255 1</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush011_1-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush011_1-vertices">
+                    <input semantic="POSITION" source="#bush011_1-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="bush_b_m1">
+                    <input semantic="VERTEX" source="#bush011_1-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush011_1-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush011_1-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush011_1-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 1 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 1 8 1 1 1 7 2 4 2 6 1 3 1 11 1 3 1 10 2 4 2 9 2 5 2</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush011_2-geometry" name="bush011_2">
+            <mesh>
+                <source id="bush011_2-geometry-POSITION">
+                    <float_array id="bush011_2-geometry-POSITION-array" count="36">83.72702 40 407.1237 34.64151 1.342298E-06 423.6248 83.72702 2.157006E-06 407.1237 34.64151 40 423.6248 34.64151 1.342298E-06 423.6248 83.72702 40 407.1237 34.64151 40 423.6248 -3.793617 7.222824E-07 461.3476 34.64151 1.342298E-06 423.6248 -3.793617 40 461.3476 -3.793617 7.222824E-07 461.3476 34.64151 40 423.6248</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush011_2-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_2-geometry-NORMAL">
+                    <float_array id="bush011_2-geometry-NORMAL-array" count="9">-0.318648 6.918953E-10 -0.9478731 -0.5228353 7.366848E-10 -0.8524337 -0.700462 7.440499E-10 -0.7136897</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush011_2-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_2-geometry-TEXCOORD">
+                    <float_array id="bush011_2-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush011_2-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_2-geometry-COLOR">
+                    <float_array id="bush011_2-geometry-COLOR-array" count="12">1 1 1 1 0.9019608 0.9058824 0.9137255 1 0.8313726 0.8509804 0.9137255 1</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush011_2-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush011_2-vertices">
+                    <input semantic="POSITION" source="#bush011_2-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="bush_c_m1">
+                    <input semantic="VERTEX" source="#bush011_2-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush011_2-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush011_2-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush011_2-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 1 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 1 8 1 1 1 7 2 4 2 6 1 3 1 11 1 3 1 10 2 4 2 9 2 5 2</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush010_0-geometry" name="bush010_0">
+            <mesh>
+                <source id="bush010_0-geometry-POSITION">
+                    <float_array id="bush010_0-geometry-POSITION-array" count="36">400.8355 40 508.6069 348.7284 -2.273122E-13 522.2127 400.8355 -2.249428E-13 508.6069 348.7284 40 522.2127 348.7284 -2.273122E-13 522.2127 400.8355 40 508.6069 348.7284 40 522.2127 320.3896 -2.247798E-13 568.0077 348.7284 -2.273122E-13 522.2127 320.3896 40 568.0077 320.3896 -2.247798E-13 568.0077 348.7284 40 522.2127</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush010_0-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_0-geometry-NORMAL">
+                    <float_array id="bush010_0-geometry-NORMAL-array" count="9">-0.2526421 -3.437069E-09 -0.9675598 -0.5940077 -4.91133E-09 -0.8044594 -0.8503516 -5.682621E-09 -0.5262149</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush010_0-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_0-geometry-TEXCOORD">
+                    <float_array id="bush010_0-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush010_0-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_0-geometry-COLOR">
+                    <float_array id="bush010_0-geometry-COLOR-array" count="24">0.9019608 0.9215686 0.9215686 1 0.7333333 0.7529412 0.7960784 1 0.827451 0.8509804 0.8509804 1 0.8431373 0.8627451 0.9215686 1 0.682353 0.6980392 0.7411765 1 0.7568628 0.7764706 0.8313726 1</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush010_0-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush010_0-vertices">
+                    <input semantic="POSITION" source="#bush010_0-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="lambert_bush011">
+                    <input semantic="VERTEX" source="#bush010_0-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush010_0-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush010_0-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush010_0-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 2 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 3 8 1 1 1 7 2 4 4 6 1 3 3 11 1 3 3 10 2 4 4 9 2 5 5</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush010_1-geometry" name="bush010_1">
+            <mesh>
+                <source id="bush010_1-geometry-POSITION">
+                    <float_array id="bush010_1-geometry-POSITION-array" count="36">392.6485 40 501.4533 340.5414 -8.812743E-07 515.0591 392.6485 3.905879E-07 501.4533 340.5414 40 515.0591 340.5414 -8.812743E-07 515.0591 392.6485 40 501.4533 340.5414 40 515.0591 312.2025 -2.608805E-06 560.8539 340.5414 -8.812743E-07 515.0591 312.2025 40 560.8539 312.2025 -2.608805E-06 560.8539 340.5414 40 515.0591</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush010_1-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_1-geometry-NORMAL">
+                    <float_array id="bush010_1-geometry-NORMAL-array" count="9">-0.2526414 2.247498E-09 -0.9675601 -0.5940068 -1.739947E-09 -0.80446 -0.8503509 -5.478349E-09 -0.526216</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush010_1-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_1-geometry-TEXCOORD">
+                    <float_array id="bush010_1-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush010_1-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_1-geometry-COLOR">
+                    <float_array id="bush010_1-geometry-COLOR-array" count="24">0.9019608 0.9215686 0.9215686 1 0.7333333 0.7529412 0.7960784 1 0.827451 0.8509804 0.8509804 1 0.8431373 0.8627451 0.9215686 1 0.6784314 0.6941177 0.7372549 1 0.7568628 0.7764706 0.8313726 1</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush010_1-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush010_1-vertices">
+                    <input semantic="POSITION" source="#bush010_1-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="bush_b_m1">
+                    <input semantic="VERTEX" source="#bush010_1-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush010_1-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush010_1-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush010_1-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 2 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 3 8 1 1 1 7 2 4 4 6 1 3 3 11 1 3 3 10 2 4 4 9 2 5 5</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="bush010_2-geometry" name="bush010_2">
+            <mesh>
+                <source id="bush010_2-geometry-POSITION">
+                    <float_array id="bush010_2-geometry-POSITION-array" count="36">382.9963 40 494.7338 330.8892 -3.67999E-07 508.3396 382.9963 -7.613639E-07 494.7338 330.8892 40 508.3396 330.8892 -3.67999E-07 508.3396 382.9963 40 494.7338 330.8892 40 508.3396 302.5504 -9.082411E-07 554.1345 330.8892 -3.67999E-07 508.3396 302.5504 40 554.1345 302.5504 -9.082411E-07 554.1345 330.8892 40 508.3396</float_array>
+                    <technique_common>
+                        <accessor count="12" offset="0" source="bush010_2-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_2-geometry-NORMAL">
+                    <float_array id="bush010_2-geometry-NORMAL-array" count="9">-0.2526419 6.035842E-09 -0.9675599 -0.5940075 9.122427E-09 -0.8044596 -0.8503515 1.09033E-08 -0.5262151</float_array>
+                    <technique_common>
+                        <accessor count="3" offset="0" source="bush010_2-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_2-geometry-TEXCOORD">
+                    <float_array id="bush010_2-geometry-TEXCOORD-array" count="12">0 0.9777589 0.5 0 0 0 0.5 0.9777589 1 0 1 0.9777589</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush010_2-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_2-geometry-COLOR">
+                    <float_array id="bush010_2-geometry-COLOR-array" count="24">0.9019608 0.9215686 0.9215686 1 0.7333333 0.7529412 0.7960784 1 0.827451 0.8509804 0.8509804 1 0.8431373 0.8627451 0.9215686 1 0.6745098 0.6941177 0.7333333 1 0.7568628 0.7764706 0.8313726 1</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="bush010_2-geometry-COLOR-array" stride="4">
+                            <param name="R" type="double" />
+                            <param name="G" type="double" />
+                            <param name="B" type="double" />
+                            <param name="A" type="double" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="bush010_2-vertices">
+                    <input semantic="POSITION" source="#bush010_2-geometry-POSITION" />
+                </vertices>
+                <triangles count="4" material="bush_c_m1">
+                    <input semantic="VERTEX" source="#bush010_2-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#bush010_2-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#bush010_2-geometry-TEXCOORD" offset="2" set="0" />
+                    <input semantic="COLOR" source="#bush010_2-geometry-COLOR" offset="3" set="0" />
+                    <p>2 0 2 2 1 1 1 1 0 0 0 0 5 0 0 0 4 1 1 1 3 1 3 3 8 1 1 1 7 2 4 4 6 1 3 3 11 1 3 3 10 2 4 4 9 2 5 5</p>
+                </triangles>
+            </mesh>
+        </geometry>
+        <geometry id="kasu2_0-geometry" name="kasu2_0">
+            <mesh>
+                <source id="kasu2_0-geometry-POSITION">
+                    <float_array id="kasu2_0-geometry-POSITION-array" count="18">-0.5 -169.4205 -1596.874 0.5 -169.4205 -1596.874 0.5 -170.4205 -1596.874 -0.5 -169.4205 -1596.874 0.5 -170.4205 -1596.874 -0.5 -170.4205 -1596.874</float_array>
+                    <technique_common>
+                        <accessor count="6" offset="0" source="kasu2_0-geometry-POSITION-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="kasu2_0-geometry-NORMAL">
+                    <float_array id="kasu2_0-geometry-NORMAL-array" count="3">0 0 1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="kasu2_0-geometry-NORMAL-array" stride="3">
+                            <param name="X" type="float" />
+                            <param name="Y" type="float" />
+                            <param name="Z" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="kasu2_0-geometry-TEXCOORD">
+                    <float_array id="kasu2_0-geometry-TEXCOORD-array" count="8">0 1 1 1 1 0 0 0</float_array>
+                    <technique_common>
+                        <accessor count="4" offset="0" source="kasu2_0-geometry-TEXCOORD-array" stride="2">
+                            <param name="S" type="float" />
+                            <param name="T" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <vertices id="kasu2_0-vertices">
+                    <input semantic="POSITION" source="#kasu2_0-geometry-POSITION" />
+                </vertices>
+                <triangles count="2" material="lambert_bush011">
+                    <input semantic="VERTEX" source="#kasu2_0-vertices" offset="0" set="0" />
+                    <input semantic="NORMAL" source="#kasu2_0-geometry-NORMAL" offset="1" set="0" />
+                    <input semantic="TEXCOORD" source="#kasu2_0-geometry-TEXCOORD" offset="2" set="0" />
+                    <p>2 0 2 1 0 1 0 0 0 5 0 3 4 0 2 3 0 0</p>
+                </triangles>
+            </mesh>
+        </geometry>
+    </library_geometries>
+    <library_controllers>
+        <controller id="bush03_0-controller" name="bush03_0">
+            <skin source="#bush03_0-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush03_0-joints">
+                    <Name_array id="bush03_0-joints-array" count="1">bush03</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush03_0-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_0-matrices">
+                    <float_array id="bush03_0-matrices-array" count="16">1.000001 1E-06 1E-06 465.6502 1E-06 1.000001 1E-06 1E-06 1E-06 1E-06 1.000001 -146.2119 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush03_0-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_0-weights">
+                    <float_array id="bush03_0-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush03_0-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush03_0-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush03_0-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush03_0-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush03_0-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush03_1-controller" name="bush03_1">
+            <skin source="#bush03_1-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush03_1-joints">
+                    <Name_array id="bush03_1-joints-array" count="1">bush03</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush03_1-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_1-matrices">
+                    <float_array id="bush03_1-matrices-array" count="16">1.000001 1E-06 1E-06 465.6502 1E-06 1.000001 1E-06 1E-06 1E-06 1E-06 1.000001 -146.2119 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush03_1-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_1-weights">
+                    <float_array id="bush03_1-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush03_1-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush03_1-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush03_1-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush03_1-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush03_1-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush03_2-controller" name="bush03_2">
+            <skin source="#bush03_2-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush03_2-joints">
+                    <Name_array id="bush03_2-joints-array" count="1">bush03</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush03_2-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_2-matrices">
+                    <float_array id="bush03_2-matrices-array" count="16">1.000001 1E-06 1E-06 465.6502 1E-06 1.000001 1E-06 1E-06 1E-06 1E-06 1.000001 -146.2119 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush03_2-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush03_2-weights">
+                    <float_array id="bush03_2-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush03_2-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush03_2-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush03_2-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush03_2-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush03_2-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush01_0-controller" name="bush01_0">
+            <skin source="#bush01_0-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush01_0-joints">
+                    <Name_array id="bush01_0-joints-array" count="1">bush01</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush01_0-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_0-matrices">
+                    <float_array id="bush01_0-matrices-array" count="16">1.000001 1E-06 1E-06 440.2251 1E-06 1.000001 1E-06 1E-06 1E-06 1E-06 1.000001 -459.853 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush01_0-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_0-weights">
+                    <float_array id="bush01_0-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush01_0-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush01_0-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush01_0-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush01_0-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush01_0-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush01_1-controller" name="bush01_1">
+            <skin source="#bush01_1-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush01_1-joints">
+                    <Name_array id="bush01_1-joints-array" count="1">bush01</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush01_1-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_1-matrices">
+                    <float_array id="bush01_1-matrices-array" count="16">1.000001 1E-06 1E-06 440.2251 1E-06 1.000001 1E-06 1E-06 1E-06 1E-06 1.000001 -459.853 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush01_1-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_1-weights">
+                    <float_array id="bush01_1-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush01_1-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush01_1-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush01_1-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush01_1-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush01_1-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush01_2-controller" name="bush01_2">
+            <skin source="#bush01_2-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush01_2-joints">
+                    <Name_array id="bush01_2-joints-array" count="1">bush01</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush01_2-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_2-matrices">
+                    <float_array id="bush01_2-matrices-array" count="16">1.000001 1E-06 1E-06 440.2251 1E-06 1.000001 1E-06 1E-06 1E-06 1E-06 1.000001 -459.853 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush01_2-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush01_2-weights">
+                    <float_array id="bush01_2-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush01_2-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush01_2-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush01_2-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush01_2-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush01_2-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush011_0-controller" name="bush011_0">
+            <skin source="#bush011_0-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush011_0-joints">
+                    <Name_array id="bush011_0-joints-array" count="1">bush011</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush011_0-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_0-matrices">
+                    <float_array id="bush011_0-matrices-array" count="16">-0.9130963 1E-06 0.4077426 -139.4456 1E-06 1.000001 1E-06 1E-06 -0.4077406 1E-06 -0.9130963 421.0833 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush011_0-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_0-weights">
+                    <float_array id="bush011_0-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush011_0-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush011_0-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush011_0-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush011_0-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush011_0-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush011_1-controller" name="bush011_1">
+            <skin source="#bush011_1-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush011_1-joints">
+                    <Name_array id="bush011_1-joints-array" count="1">bush011</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush011_1-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_1-matrices">
+                    <float_array id="bush011_1-matrices-array" count="16">-0.9130963 1E-06 0.4077426 -139.4456 1E-06 1.000001 1E-06 1E-06 -0.4077406 1E-06 -0.9130963 421.0833 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush011_1-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_1-weights">
+                    <float_array id="bush011_1-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush011_1-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush011_1-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush011_1-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush011_1-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush011_1-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush011_2-controller" name="bush011_2">
+            <skin source="#bush011_2-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush011_2-joints">
+                    <Name_array id="bush011_2-joints-array" count="1">bush011</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush011_2-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_2-matrices">
+                    <float_array id="bush011_2-matrices-array" count="16">-0.9130963 1E-06 0.4077426 -139.4456 1E-06 1.000001 1E-06 1E-06 -0.4077406 1E-06 -0.9130963 421.0833 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush011_2-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush011_2-weights">
+                    <float_array id="bush011_2-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush011_2-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush011_2-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush011_2-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush011_2-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush011_2-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush010_0-controller" name="bush010_0">
+            <skin source="#bush010_0-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush010_0-joints">
+                    <Name_array id="bush010_0-joints-array" count="1">bush010</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush010_0-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_0-matrices">
+                    <float_array id="bush010_0-matrices-array" count="16">-0.8122891 1E-06 0.5832546 -24.24722 1E-06 1.000001 1E-06 1E-06 -0.5832526 1E-06 -0.8122891 627.0835 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush010_0-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_0-weights">
+                    <float_array id="bush010_0-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush010_0-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush010_0-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush010_0-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush010_0-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush010_0-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush010_1-controller" name="bush010_1">
+            <skin source="#bush010_1-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush010_1-joints">
+                    <Name_array id="bush010_1-joints-array" count="1">bush010</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush010_1-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_1-matrices">
+                    <float_array id="bush010_1-matrices-array" count="16">-0.8122891 1E-06 0.5832546 -24.24722 1E-06 1.000001 1E-06 1E-06 -0.5832526 1E-06 -0.8122891 627.0835 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush010_1-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_1-weights">
+                    <float_array id="bush010_1-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush010_1-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush010_1-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush010_1-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush010_1-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush010_1-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="bush010_2-controller" name="bush010_2">
+            <skin source="#bush010_2-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="bush010_2-joints">
+                    <Name_array id="bush010_2-joints-array" count="1">bush010</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush010_2-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_2-matrices">
+                    <float_array id="bush010_2-matrices-array" count="16">-0.8122891 1E-06 0.5832546 -24.24722 1E-06 1.000001 1E-06 1E-06 -0.5832526 1E-06 -0.8122891 627.0835 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush010_2-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="bush010_2-weights">
+                    <float_array id="bush010_2-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#bush010_2-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#bush010_2-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#bush010_2-matrices" />
+                </joints>
+                <vertex_weights count="12">
+                    <input semantic="JOINT" source="#bush010_2-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#bush010_2-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+        <controller id="kasu2_0-controller" name="kasu2_0">
+            <skin source="#kasu2_0-geometry">
+                <bind_shape_matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+                <source id="kasu2_0-joints">
+                    <Name_array id="kasu2_0-joints-array" count="1">kasu2</Name_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#kasu2_0-joints-array" stride="1">
+                            <param name="JOINT" type="Name" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="kasu2_0-matrices">
+                    <float_array id="kasu2_0-matrices-array" count="16">1.000001 1E-06 1E-06 1E-06 1E-06 1.000001 1E-06 169.9205 1E-06 1E-06 1.000001 1596.874 1E-06 1E-06 1E-06 1.000001</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#kasu2_0-matrices-array" stride="16">
+                            <param name="TRANSFORM" type="float4x4" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <source id="kasu2_0-weights">
+                    <float_array id="kasu2_0-weights-array" count="1">1</float_array>
+                    <technique_common>
+                        <accessor count="1" offset="0" source="#kasu2_0-weights-array" stride="1">
+                            <param name="WEIGHT" type="float" />
+                        </accessor>
+                    </technique_common>
+                </source>
+                <joints>
+                    <input semantic="JOINT" source="#kasu2_0-joints" />
+                    <input semantic="INV_BIND_MATRIX" source="#kasu2_0-matrices" />
+                </joints>
+                <vertex_weights count="6">
+                    <input semantic="JOINT" source="#kasu2_0-joints" offset="0" set="0" />
+                    <input semantic="WEIGHT" source="#kasu2_0-weights" offset="1" set="0" />
+                    <vcount>1 1 1 1 1 1</vcount>
+                    <v>0 0 0 0 0 0 0 0 0 0 0 0</v>
+                </vertex_weights>
+            </skin>
+        </controller>
+    </library_controllers>
+    <library_visual_scenes>
+        <visual_scene id="Scene" name="Scene">
+            <node id="gBUSH2" sid="gBUSH2" name="gBUSH2" type="JOINT">
+                <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+                <node id="bush03" sid="bush03" name="bush03" type="JOINT">
+                    <matrix sid="transform">1 0 0 -465.6502 0 1 0 0 0 0 1 146.2119 0 0 0 1</matrix>
+                </node>
+                <node id="bush01" sid="bush01" name="bush01" type="JOINT">
+                    <matrix sid="transform">1 0 0 -440.2251 0 1 0 0 0 0 1 459.853 0 0 0 1</matrix>
+                </node>
+                <node id="bush011" sid="bush011" name="bush011" type="JOINT">
+                    <matrix sid="transform">-0.9130974 -4.995441E-17 -0.4077417 44.36576 -4.194184E-25 1 -1.225148E-16 0 0.4077417 -1.11868E-16 -0.9130974 441.3479 0 0 0 1</matrix>
+                </node>
+                <node id="bush010" sid="bush010" name="bush010" type="JOINT">
+                    <matrix sid="transform">-0.8122901 -7.145723E-17 -0.5832536 346.0529 -1.050291E-24 1 -1.225148E-16 -2.273737E-13 0.5832536 -9.95176E-17 -0.8122901 523.516 0 0 0 1</matrix>
+                </node>
+                <node id="kasu2" sid="kasu2" name="kasu2" type="JOINT">
+                    <matrix sid="transform">1 0 0 0 0 1 0 -169.9205 0 0 1 -1596.874 0 0 0 1</matrix>
+                </node>
+            </node>
+            <node id="bush03_0" sid="bush03_0" name="bush03_0">
+                <instance_controller url="#bush03_0-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#lambert_bush011" symbol="lambert_bush011" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush03_1" sid="bush03_1" name="bush03_1">
+                <instance_controller url="#bush03_1-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#bush_b_m1" symbol="bush_b_m1" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush03_2" sid="bush03_2" name="bush03_2">
+                <instance_controller url="#bush03_2-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#bush_c_m1" symbol="bush_c_m1" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush01_0" sid="bush01_0" name="bush01_0">
+                <instance_controller url="#bush01_0-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#lambert_bush011" symbol="lambert_bush011" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush01_1" sid="bush01_1" name="bush01_1">
+                <instance_controller url="#bush01_1-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#bush_b_m1" symbol="bush_b_m1" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush01_2" sid="bush01_2" name="bush01_2">
+                <instance_controller url="#bush01_2-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#bush_c_m1" symbol="bush_c_m1" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush011_0" sid="bush011_0" name="bush011_0">
+                <instance_controller url="#bush011_0-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#lambert_bush011" symbol="lambert_bush011" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush011_1" sid="bush011_1" name="bush011_1">
+                <instance_controller url="#bush011_1-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#bush_b_m1" symbol="bush_b_m1" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush011_2" sid="bush011_2" name="bush011_2">
+                <instance_controller url="#bush011_2-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#bush_c_m1" symbol="bush_c_m1" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush010_0" sid="bush010_0" name="bush010_0">
+                <instance_controller url="#bush010_0-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#lambert_bush011" symbol="lambert_bush011" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush010_1" sid="bush010_1" name="bush010_1">
+                <instance_controller url="#bush010_1-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#bush_b_m1" symbol="bush_b_m1" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="bush010_2" sid="bush010_2" name="bush010_2">
+                <instance_controller url="#bush010_2-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#bush_c_m1" symbol="bush_c_m1" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+            <node id="kasu2_0" sid="kasu2_0" name="kasu2_0">
+                <instance_controller url="#kasu2_0-controller">
+                    <skeleton>#gBUSH2</skeleton>
+                    <bind_material>
+                        <technique_common>
+                            <instance_material target="#lambert_bush011" symbol="lambert_bush011" />
+                        </technique_common>
+                    </bind_material>
+                </instance_controller>
+            </node>
+        </visual_scene>
+    </library_visual_scenes>
+    <scene>
+        <instance_visual_scene url="#Scene" />
+    </scene>
+</COLLADA>

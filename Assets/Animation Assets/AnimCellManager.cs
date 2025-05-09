@@ -12,7 +12,7 @@ using System.Reflection;
 
 public class AnimCellManager : MonoBehaviour
 {
-    public AnimationClip animClip;
+    //public AnimationClip animClip;
 
     public AnimationSceneCell referenceCell;
 
@@ -28,9 +28,11 @@ public class AnimCellManager : MonoBehaviour
 
     public Vector2 animationCellsXY = new Vector2(4, 3);
 
-    public float animationTimeOffset = 1;
+    public float animationFrameOffset = 1;
 
     public float secondsOfAnimation = 1;
+
+    public float totalAnimationDurationAcrossAllPages = 8;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -66,7 +68,7 @@ public class AnimCellManager : MonoBehaviour
 
             foreach(GameObject go in AllChilds(newCell))
             {
-                go.name += " " + k;
+                //go.name += " " + k;
             }
 
             AnimationSceneCell thisASC = newCell.GetComponent<AnimationSceneCell>();
@@ -175,9 +177,32 @@ public class AnimCellManager : MonoBehaviour
         propertyCurves = new List<AnimationCurve>();
 
 
+
         for (int k = 0; k < animCells.Count; k++)
         {
-            foreach(Animation animator in referenceCell.transform.GetComponentsInChildren<Animation>())
+            foreach (Animator animator in animCells[k].transform.GetComponentsInChildren<Animator>())
+            {
+                float animTime = (((k + animationFrameOffset) / (float)frameCount) * (secondsOfAnimation / totalAnimationDurationAcrossAllPages)) + 0.00001f;
+
+                if (animator != null && animator != null)
+                {
+                    Debug.Log(k + " " + animTime + " " + animator.name);
+
+                    animator.Play("Base Layer.Bake", 0, animTime);
+                    animator.speed = 0;
+                }
+            }
+        }
+
+
+        for (int k = 0; k < animCells.Count; k++)
+        {
+           
+
+
+
+
+                foreach (Animator animator in referenceCell.transform.GetComponentsInChildren<Animator>())
             {
                 //InitializeCurveData(animator.clip);
 
@@ -190,204 +215,206 @@ public class AnimCellManager : MonoBehaviour
 
 
 
-                foreach (string s in GetPropertyNames(animator.clip))
-                {
 
-                    // Split the property name into components (e.g., "m_LocalPosition.x")
-                    string[] parts = s.Split('.');
-                    if (parts.Length != 3)
-                    {
-                        Debug.LogWarning($"Unsupported property format: {s}");
-                        continue;
-                    }
 
-                    string objName = parts[0]; // e.g., "m_LocalPosition"
-                    string fieldName = parts[1]; // e.g., "x"
-                    string subProperty = parts[2]; // e.g., "x"
+                //foreach (string s in GetPropertyNames(animator.clip))
+                //{
 
+                //    // Split the property name into components (e.g., "m_LocalPosition.x")
+                //    string[] parts = s.Split('.');
+                //    if (parts.Length != 3)
+                //    {
+                //        Debug.LogWarning($"Unsupported property format: {s}");
+                //        continue;
+                //    }
 
+                //    string objName = parts[0]; // e.g., "m_LocalPosition"
+                //    string fieldName = parts[1]; // e.g., "x"
+                //    string subProperty = parts[2]; // e.g., "x"
 
-                    //propertyCurves.Add();
 
 
-                    GameObject animParent = GameObject.Find(animator.name + $" {k}");
+                //    //propertyCurves.Add();
 
-                    Debug.Log(animParent.name);
 
+                //    GameObject animParent = GameObject.Find(animator.name + $" {k}");
 
-                    GameObject thisObj = animParent;
+                //    Debug.Log(animParent.name);
 
 
-                    if (animator.name + $" {k}" != animParent.name)
-                    {
-                        thisObj = FindDeepChild(animParent.transform, objName + $" {k}").gameObject;
-                    }
+                //    GameObject thisObj = animParent;
 
 
-                    if (FindDeepChild(animParent.transform, objName + $" {k}") != null)
-                    {
-                        thisObj = FindDeepChild(animParent.transform, objName + $" {k}").gameObject;
-                    }
+                //    if (animator.name + $" {k}" != animParent.name)
+                //    {
+                //        thisObj = FindDeepChild(animParent.transform, objName + $" {k}").gameObject;
+                //    }
 
 
+                //    if (FindDeepChild(animParent.transform, objName + $" {k}") != null)
+                //    {
+                //        thisObj = FindDeepChild(animParent.transform, objName + $" {k}").gameObject;
+                //    }
 
-                    //GameObject thisObj = animCells[k].gameObject;
 
-                    float curveValue = ExtractCurve(fieldName + "." + subProperty, animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
 
+                //    //GameObject thisObj = animCells[k].gameObject;
 
+                //    float curveValue = ExtractCurve(fieldName + "." + subProperty, animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
 
 
-                    if (fieldName == "m_LocalRotation")
-                    {
-                        propertyCurves.Add(ExtractCurve(fieldName + "." + subProperty, animator.clip));
 
-                    }
 
+                //    if (fieldName == "m_LocalRotation")
+                //    {
+                //        propertyCurves.Add(ExtractCurve(fieldName + "." + subProperty, animator.clip));
 
+                //    }
 
-                    //Debug.Log(((k / ((float)frameCount / (float)secondsOfAnimation))) + (animationTimeOffset)  + " FUCK " + animator.clip.length);
 
 
-                    //Debug.Log(ExtractCurve(fieldName + "." + subProperty, clipInfo[0].clip).Evaluate((k / (float)frameCount) * (clipInfo[0].clip.length * clipInfo[0].clip.frameRate)));
+                //    //Debug.Log(((k / ((float)frameCount / (float)secondsOfAnimation))) + (animationTimeOffset)  + " FUCK " + animator.clip.length);
 
 
-                    if (thisObj != null && parts.Length == 3)
-                    {
-                        //Debug.Log(thisObj.name + " " + curveValue);
-                        //Debug.Log(fieldName + "." + subProperty);
+                //    //Debug.Log(ExtractCurve(fieldName + "." + subProperty, clipInfo[0].clip).Evaluate((k / (float)frameCount) * (clipInfo[0].clip.length * clipInfo[0].clip.frameRate)));
 
-                        if (fieldName == "localEulerAnglesRaw")
-                        {
-                            Debug.Log(fieldName + subProperty + " " + curveValue + " At " + ((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset) + " In " + animator.clip.name);
 
-                            if (subProperty == "x")
-                            {
-                                thisObj.transform.localRotation = Quaternion.Euler(new Vector3(curveValue, thisObj.transform.localEulerAngles.y, thisObj.transform.localEulerAngles.z));
-                            }
-                            if (subProperty == "y")
-                            {
-                                thisObj.transform.localRotation = Quaternion.Euler(new Vector3(thisObj.transform.localEulerAngles.x, curveValue, thisObj.transform.localEulerAngles.z));
-                            }
-                            if (subProperty == "z")
-                            {
-                                thisObj.transform.localRotation = Quaternion.Euler(new Vector3(thisObj.transform.localEulerAngles.x, thisObj.transform.localEulerAngles.y, curveValue));
-                            }
-                        }
+                //    if (thisObj != null && parts.Length == 3)
+                //    {
+                //        //Debug.Log(thisObj.name + " " + curveValue);
+                //        //Debug.Log(fieldName + "." + subProperty);
 
+                //        if (fieldName == "localEulerAnglesRaw")
+                //        {
+                //            Debug.Log(fieldName + subProperty + " " + curveValue + " At " + ((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset) + " In " + animator.clip.name);
 
+                //            if (subProperty == "x")
+                //            {
+                //                thisObj.transform.localRotation = Quaternion.Euler(new Vector3(curveValue, thisObj.transform.localEulerAngles.y, thisObj.transform.localEulerAngles.z));
+                //            }
+                //            if (subProperty == "y")
+                //            {
+                //                thisObj.transform.localRotation = Quaternion.Euler(new Vector3(thisObj.transform.localEulerAngles.x, curveValue, thisObj.transform.localEulerAngles.z));
+                //            }
+                //            if (subProperty == "z")
+                //            {
+                //                thisObj.transform.localRotation = Quaternion.Euler(new Vector3(thisObj.transform.localEulerAngles.x, thisObj.transform.localEulerAngles.y, curveValue));
+                //            }
+                //        }
 
 
-                        if (fieldName == "m_LocalRotation")
-                        {
-                            //float curveValueQX = ExtractCurve(fieldName + ".x", animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
-                            //float curveValueQY = ExtractCurve(fieldName + ".y", animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
-                            //float curveValueQZ = ExtractCurve(fieldName + ".z", animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
-                            //float curveValueQW = ExtractCurve(fieldName + ".w", animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
 
 
-                            //Quaternion newRotation = new Quaternion(curveValueQX, curveValueQY, curveValueQZ, curveValueQW);
+                //        if (fieldName == "m_LocalRotation")
+                //        {
+                //            //float curveValueQX = ExtractCurve(fieldName + ".x", animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
+                //            //float curveValueQY = ExtractCurve(fieldName + ".y", animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
+                //            //float curveValueQZ = ExtractCurve(fieldName + ".z", animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
+                //            //float curveValueQW = ExtractCurve(fieldName + ".w", animator.clip).Evaluate(((k / ((float)(frameCount) / (float)secondsOfAnimation))) + (animationTimeOffset));
 
-                            //newRotation.Normalize();
 
-                            //Vector3 rotEuler = newRotation.eulerAngles;
+                //            //Quaternion newRotation = new Quaternion(curveValueQX, curveValueQY, curveValueQZ, curveValueQW);
 
-                            ////newRotation = newRotation * Quaternion.Euler(0, 180, 0);
+                //            //newRotation.Normalize();
 
+                //            //Vector3 rotEuler = newRotation.eulerAngles;
 
+                //            ////newRotation = newRotation * Quaternion.Euler(0, 180, 0);
 
-                            //thisObj.transform.localRotation = newRotation;
 
 
-                            //if (subProperty == "x")
-                            //{
-                            //    thisObj.transform.localRotation = new Quaternion(curveValue, thisObj.transform.localRotation.y, thisObj.transform.localRotation.z, thisObj.transform.localRotation.w);
-                            //}
-                            //if (subProperty == "y")
-                            //{
-                            //    thisObj.transform.localRotation = new Quaternion(thisObj.transform.localRotation.x, curveValue, thisObj.transform.localRotation.z, thisObj.transform.localRotation.w);
-                            //}
-                            //if (subProperty == "z")
-                            //{
-                            //    thisObj.transform.localRotation = new Quaternion(thisObj.transform.localRotation.x, thisObj.transform.localRotation.y, curveValue, thisObj.transform.localRotation.w);
-                            //}
-                            //if (subProperty == "w")
-                            //{
-                            //    thisObj.transform.localRotation = new Quaternion(thisObj.transform.localRotation.x, thisObj.transform.localRotation.y, thisObj.transform.localRotation.z, curveValue);
-                            //}
-                        }
+                //            //thisObj.transform.localRotation = newRotation;
 
 
+                //            //if (subProperty == "x")
+                //            //{
+                //            //    thisObj.transform.localRotation = new Quaternion(curveValue, thisObj.transform.localRotation.y, thisObj.transform.localRotation.z, thisObj.transform.localRotation.w);
+                //            //}
+                //            //if (subProperty == "y")
+                //            //{
+                //            //    thisObj.transform.localRotation = new Quaternion(thisObj.transform.localRotation.x, curveValue, thisObj.transform.localRotation.z, thisObj.transform.localRotation.w);
+                //            //}
+                //            //if (subProperty == "z")
+                //            //{
+                //            //    thisObj.transform.localRotation = new Quaternion(thisObj.transform.localRotation.x, thisObj.transform.localRotation.y, curveValue, thisObj.transform.localRotation.w);
+                //            //}
+                //            //if (subProperty == "w")
+                //            //{
+                //            //    thisObj.transform.localRotation = new Quaternion(thisObj.transform.localRotation.x, thisObj.transform.localRotation.y, thisObj.transform.localRotation.z, curveValue);
+                //            //}
+                //        }
 
 
-                        else if (fieldName == "m_LocalPosition")
-                        {
-                            if (subProperty == "x")
-                            {
-                                thisObj.transform.localPosition = new Vector3(curveValue, thisObj.transform.localPosition.y, thisObj.transform.localPosition.z);
-                            }
-                            if (subProperty == "y")
-                            {
-                                thisObj.transform.localPosition = new Vector3(thisObj.transform.localPosition.x, curveValue, thisObj.transform.localPosition.z);
-                            }
-                            if (subProperty == "z")
-                            {
-                                thisObj.transform.localPosition = new Vector3(thisObj.transform.localPosition.x, thisObj.transform.localPosition.y, curveValue);
-                            }
-                        }
 
-                        else if (fieldName == "m_LocalScale")
-                        {
-                            if (subProperty == "x")
-                            {
-                                thisObj.transform.localScale = new Vector3(curveValue, thisObj.transform.localScale.y, thisObj.transform.localScale.z);
-                            }
-                            if (subProperty == "y")
-                            {
-                                thisObj.transform.localScale = new Vector3(thisObj.transform.localScale.x, curveValue, thisObj.transform.localScale.z);
-                            }
-                            if (subProperty == "z")
-                            {
-                                thisObj.transform.localScale = new Vector3(thisObj.transform.localScale.x, thisObj.transform.localScale.y, curveValue);
-                            }
-                        }
-                        else if (fieldName == "material")
-                        {
-                            Renderer thisRend = thisObj.GetComponent<MeshRenderer>();
 
-                            Material refMat = thisRend.material;
+                //        else if (fieldName == "m_LocalPosition")
+                //        {
+                //            if (subProperty == "x")
+                //            {
+                //                thisObj.transform.localPosition = new Vector3(curveValue, thisObj.transform.localPosition.y, thisObj.transform.localPosition.z);
+                //            }
+                //            if (subProperty == "y")
+                //            {
+                //                thisObj.transform.localPosition = new Vector3(thisObj.transform.localPosition.x, curveValue, thisObj.transform.localPosition.z);
+                //            }
+                //            if (subProperty == "z")
+                //            {
+                //                thisObj.transform.localPosition = new Vector3(thisObj.transform.localPosition.x, thisObj.transform.localPosition.y, curveValue);
+                //            }
+                //        }
 
-                            Material newMat = new Material(refMat);
+                //        else if (fieldName == "m_LocalScale")
+                //        {
+                //            if (subProperty == "x")
+                //            {
+                //                thisObj.transform.localScale = new Vector3(curveValue, thisObj.transform.localScale.y, thisObj.transform.localScale.z);
+                //            }
+                //            if (subProperty == "y")
+                //            {
+                //                thisObj.transform.localScale = new Vector3(thisObj.transform.localScale.x, curveValue, thisObj.transform.localScale.z);
+                //            }
+                //            if (subProperty == "z")
+                //            {
+                //                thisObj.transform.localScale = new Vector3(thisObj.transform.localScale.x, thisObj.transform.localScale.y, curveValue);
+                //            }
+                //        }
+                //        else if (fieldName == "material")
+                //        {
+                //            Renderer thisRend = thisObj.GetComponent<MeshRenderer>();
 
-                            newMat.SetFloat(subProperty, curveValue);
+                //            Material refMat = thisRend.material;
 
-                            newMat.name = k.ToString();
+                //            Material newMat = new Material(refMat);
 
-                            thisRend.material = newMat;
+                //            newMat.SetFloat(subProperty, curveValue);
 
+                //            newMat.name = k.ToString();
 
+                //            thisRend.material = newMat;
 
-                            Debug.Log("This property not used " + thisRend.name + " " + subProperty + " " + curveValue);
 
 
-                        }
-                        else
-                        {
-                            Debug.Log("This property not used " + fieldName);
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log(objName);
-                    }
+                //            Debug.Log("This property not used " + thisRend.name + " " + subProperty + " " + curveValue);
 
 
+                //        }
+                //        else
+                //        {
+                //            Debug.Log("This property not used " + fieldName);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        Debug.Log(objName);
+                //    }
 
-                    //cellGameObjects.Add(animCells[k].gameObject);
-                    //sampleTimes.Add(k / frameCount);
 
-                    //SampleInEditMode(animClip, animCells[k].gameObject, k / frameCount);
-                }
+
+                //    //cellGameObjects.Add(animCells[k].gameObject);
+                //    //sampleTimes.Add(k / frameCount);
+
+                //    //SampleInEditMode(animClip, animCells[k].gameObject, k / frameCount);
+                //}
 
 
 

@@ -1,0 +1,54 @@
+newmtl lambert_tower05
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_13_CMP.png
+newmtl phong_tower01
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_14_CMP.png
+newmtl lamber_tower2
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_17_CMP.png
+newmtl lamber_tower4
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_18_CMP.png
+newmtl lambert_tower3
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_19_CMP.png
+newmtl lambert_tree04
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_20_CMP.png

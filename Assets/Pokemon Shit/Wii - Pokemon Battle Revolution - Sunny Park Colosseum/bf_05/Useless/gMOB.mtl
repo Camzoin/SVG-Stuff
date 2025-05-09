@@ -1,0 +1,270 @@
+newmtl Audience_b1_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_24_CMP.png
+newmtl Audience_a1_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_25_CMP.png
+newmtl Audience_a2_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_26_CMP.png
+newmtl Audience_a3_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_27_CMP.png
+newmtl Audience_b2_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_28_CMP.png
+newmtl Audience_b1_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_24_CMP.png
+newmtl Audience_a1_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_25_CMP.png
+newmtl Audience_a2_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_26_CMP.png
+newmtl Audience_a3_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_27_CMP.png
+newmtl Audience_b2_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_28_CMP.png
+newmtl Audience_b2_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_28_CMP.png
+newmtl Audience_a1_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_25_CMP.png
+newmtl Audience_a2_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_26_CMP.png
+newmtl Audience_a3_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_27_CMP.png
+newmtl Audience_b1_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_24_CMP.png
+newmtl tree1:Audience_a3_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_27_CMP.png
+newmtl tree1:Audience_b1_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_24_CMP.png
+newmtl tree1:Audience_b2_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_28_CMP.png
+newmtl tree1:Audience_a2_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_26_CMP.png
+newmtl tree1:Audience_a3_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_27_CMP.png
+newmtl tree1:Audience_b1_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_24_CMP.png
+newmtl tree1:Audience_b2_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_28_CMP.png
+newmtl tree1:Audience_a2_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_26_CMP.png
+newmtl tree1:Audience_a1_lambert2
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_25_CMP.png
+newmtl tree1:Audience_b1_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_24_CMP.png
+newmtl tree1:Audience_b2_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_28_CMP.png
+newmtl tree1:Audience_a2_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_26_CMP.png
+newmtl tree1:Audience_a1_lambert20
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_25_CMP.png
+newmtl tree1:Audience_a3_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_27_CMP.png
+newmtl tree1:Audience_a1_lambert21
+ illum 2
+ Ka 1 1 1
+ Kd 0 0 0
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_25_CMP.png

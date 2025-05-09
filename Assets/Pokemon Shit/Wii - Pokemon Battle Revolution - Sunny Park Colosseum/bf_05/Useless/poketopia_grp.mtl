@@ -1,0 +1,357 @@
+newmtl wheel_base_m
+ illum 2
+ Ka 0.2078431 0.2784314 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_36_CMP.png
+newmtl wheel_center_m
+ illum 2
+ Ka 0.4823529 0.5294118 0.5294118
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_37_CMP.png
+newmtl wheel_outside_m
+ illum 2
+ Ka 0.4 0.4 0.4
+ Kd 0.2901961 0.5019608 0.5960785
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+newmtl wheel_pole_m
+ illum 2
+ Ka 0 0 0
+ Kd 0.6941177 0.6941177 0.6941177
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+newmtl gondola_w_m
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+newmtl gondola_r_m
+ illum 2
+ Ka 0 0 0
+ Kd 0.6392157 0.05098039 0.254902
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+newmtl pink_light_m
+ illum 2
+ Ka 0 0 0
+ Kd 0 0 0
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 50
+ d 1
+ Tr 0
+newmtl gondola_w_m0
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+newmtl gondola_r_m0
+ illum 2
+ Ka 0 0 0
+ Kd 0.6392157 0.05098039 0.254902
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+newmtl gondola_w_m1
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+newmtl gondola_r_m1
+ illum 2
+ Ka 0 0 0
+ Kd 0.6392157 0.05098039 0.254902
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+newmtl luna_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_38_CMP.png
+newmtl buil13_m
+ illum 2
+ Ka 0.1607843 0.1607843 0.2
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_40_CMP.png
+newmtl buil13_top_m
+ illum 2
+ Ka 0.1607843 0.1607843 0.2
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_41_CMP.png
+newmtl pochama_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_42_CMP.png
+newmtl berobelt_m
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 30
+ d 1
+ Tr 0
+ map_Kd Texture_43_CMP.png
+newmtl buil12_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 40
+ d 1
+ Tr 0
+ map_Kd Texture_44_CMP.png
+newmtl buil12_top_m
+ illum 2
+ Ka 0.5019608 0.5019608 0.5019608
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_45_CMP.png
+newmtl hikozaru_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_46_CMP.png
+newmtl builpiram_m
+ illum 2
+ Ka 0.4 0.4 0.4
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_47_CMP.png
+newmtl naetol_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_49_CMP.png
+newmtl buil7_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_50_CMP.png
+newmtl buil7_top_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_51_CMP.png
+newmtl buil7_2_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_52_CMP.png
+newmtl bero_back_m
+ illum 2
+ Ka 0.3019608 0.2196078 0.2313726
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_53_CMP.png
+newmtl buil3_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_54_CMP.png
+newmtl p_ball_m
+ illum 2
+ Ka 0.8588235 0.8588235 0.8588235
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 61.842
+ d 1
+ Tr 0
+ map_Kd Texture_56_CMP.png
+newmtl p_ball02_m
+ illum 2
+ Ka 0.5764706 0.6117647 0.6117647
+ Kd 0.5294118 0.5294118 0.4823529
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+newmtl pika_ring_in_m
+ illum 2
+ Ka 0.8196079 0.2745098 0.5490196
+ Kd 0.3882353 0.2156863 0.3803922
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+newmtl pika_ring_out_m
+ illum 2
+ Ka 0 0 0
+ Kd 0 0 0
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 50
+ d 1
+ Tr 0
+newmtl buil1_m
+ illum 2
+ Ka 0.2 0.2 0.2
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 80
+ d 1
+ Tr 0
+ map_Kd Texture_57_CMP.png
+newmtl buil1_ent
+ illum 2
+ Ka 0.427451 0.3372549 0.4039216
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 100
+ d 1
+ Tr 0
+ map_Kd Texture_58_CMP.png
+newmtl buil1_top_m
+ illum 2
+ Ka 0.2 0.2 0.2
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 80
+ d 1
+ Tr 0
+ map_Kd Texture_59_CMP.png
+newmtl buil0_m
+ illum 2
+ Ka 0.4 0.4 0.4
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 60
+ d 1
+ Tr 0
+ map_Kd Texture_60_CMP.png
+newmtl buil0_top_m
+ illum 2
+ Ka 0.4 0.4 0.4
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 60
+ d 1
+ Tr 0
+ map_Kd Texture_61_CMP.png
+newmtl buil0_2_m
+ illum 2
+ Ka 0.4 0.4 0.4
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 60
+ d 1
+ Tr 0
+ map_Kd Texture_62_CMP.png
+newmtl pika_head_m
+ illum 2
+ Ka 0.3019608 0.2431373 0.06666667
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_63_CMP.png
+newmtl pika_tail_light_m
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.227451 0.5137255 0.07058824
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_64_CMP.png
+newmtl buil_pika_w0_m
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_65_CMP.png
+newmtl buil_pika_top_m
+ illum 2
+ Ka 0.3019608 0.3019608 0.3019608
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 40
+ d 1
+ Tr 0
+ map_Kd Texture_66_CMP.png
+newmtl buil_pika_tail_m
+ illum 2
+ Ka 0.5019608 0.5019608 0.5019608
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_64_CMP.png

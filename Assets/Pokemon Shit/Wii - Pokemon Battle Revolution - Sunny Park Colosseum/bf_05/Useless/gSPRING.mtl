@@ -1,0 +1,72 @@
+newmtl lambert_spring
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_21_CMP.png
+newmtl lambert_forest
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_22_CMP.png
+newmtl tree04_m
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_20_CMP.png
+newmtl tree04_m0
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_20_CMP.png
+newmtl tree04_m1
+ illum 2
+ Ka 0 0 0
+ Kd 0.8 0.8 0.8
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 50
+ d 1
+ Tr 0
+ map_Kd Texture_20_CMP.png
+newmtl phong_water
+ illum 2
+ Ka 0 0 0
+ Kd 0.4117647 0.4431373 0.454902
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_23_RGB5A3.png
+newmtl phong_water0
+ illum 2
+ Ka 0 0 0
+ Kd 0.4117647 0.4431373 0.454902
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_23_RGB5A3.png
+newmtl phong_water1
+ illum 2
+ Ka 0 0 0
+ Kd 0.4117647 0.4431373 0.454902
+ Ks 0.2352941 0.4588235 0.7607843
+ Ns 20
+ d 1
+ Tr 0
+ map_Kd Texture_23_RGB5A3.png

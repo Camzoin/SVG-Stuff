@@ -187,6 +187,21 @@ public class svgVisual : MonoBehaviour
 
     public int squiggleLineFillCount = 500;
 
+    public bool useValueAsSquiggleProb = false;
+
+    public bool drawColorBoundsOutlines = false;
+
+    public float combineLineDist = 3f;
+
+    public int characterFillLetterCount = 2000;
+
+    public float valueTextScale = 1;
+
+    public bool useValueToScaleChars = true;
+
+    public bool useValueAsChanceforChars = true;
+
+    public float minCharScale = 0.05f;
 
     [ContextMenu("SetRenderValues")]
     public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, Color colorToSet, bool resetLinePositions = false, bool resetMyAss = true)
@@ -593,11 +608,15 @@ public class svgVisual : MonoBehaviour
 
                 sortedSplitList.Add(tempPointList);
 
-
-                foreach (List<Vector2> lv2 in sortedSplitList)
+                if (drawColorBoundsOutlines == true)
                 {
-                    outlinesToAddSplitUpColorAndOutlineFix.Add(lv2);
+                    foreach (List<Vector2> lv2 in sortedSplitList)
+                    {
+                        outlinesToAddSplitUpColorAndOutlineFix.Add(lv2);
+                    }
                 }
+
+
             }
 
 
@@ -666,45 +685,141 @@ public class svgVisual : MonoBehaviour
                     }
                 }
 
+                float h = 0;
 
-                Vector2 curLineWritingPos = lineStartPos;
+                float s = 0;
 
-                //Advance based on normal map colors, if that point is a different color in the color map, end this line
-                for (int q = 0; q < lineSegmentMaxCount; q++)
+                float v = 0;
+
+                Color.RGBToHSV(wholeRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y), out h, out s, out v);
+
+                bool cancelThis = false;
+
+                if (v >= UnityEngine.Random.Range(0f, 1f) && useValueAsSquiggleProb == true)
                 {
-                    startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y);
+                    cancelThis = true;
+                }
 
+                if (cancelThis == false)
+                {
+                    Vector2 curLineWritingPos = lineStartPos;
 
-                    //If this pixel is the same color
-                    if (wholeRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y) != startingColor || startingNormalColor.maxColorComponent < 0.01f || curLineWritingPos.x > wholeNormalRenderTexHolder.width || curLineWritingPos.y > wholeNormalRenderTexHolder.height || curLineWritingPos.x < 0 || curLineWritingPos.y < 0)
+                    //Advance based on normal map colors, if that point is a different color in the color map, end this line
+                    for (int q = 0; q < lineSegmentMaxCount; q++)
                     {
-                        if (q == 0)
+                        startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y);
+
+
+                        //If this pixel is the same color
+                        if (wholeRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y) != startingColor || startingNormalColor.maxColorComponent < 0.01f || curLineWritingPos.x > wholeNormalRenderTexHolder.width || curLineWritingPos.y > wholeNormalRenderTexHolder.height || curLineWritingPos.x < 0 || curLineWritingPos.y < 0)
                         {
-                            i--;
+                            if (q == 0)
+                            {
+                                i--;
+                            }
+
+
+                            q = lineSegmentMaxCount;
+                        }
+                        else
+                        {
+                            thisFillLine.Add(curLineWritingPos);
+
+                            curLineWritingPos += (new Vector2(startingNormalColor.r - 0.5f, startingNormalColor.g - 0.5f) + additionalOffset).normalized * 3f * (renderScale / 2f) * UnityEngine.Random.Range(0.5f, 1.5f);
                         }
 
 
-                        q = lineSegmentMaxCount;
                     }
-                    else
+
+                    if (thisFillLine.Count > 1)
                     {
-                        thisFillLine.Add(curLineWritingPos);
-
-                        curLineWritingPos += (new Vector2(startingNormalColor.r - 0.5f, startingNormalColor.g - 0.5f) + additionalOffset).normalized * 3f * (renderScale / 2f) * UnityEngine.Random.Range(0.5f, 1.5f);
+                        fillLineList.Add(thisFillLine);
                     }
 
-
                 }
-
-                if (thisFillLine.Count > 1)
-                {
-                    fillLineList.Add(thisFillLine);
-                }
-
             }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //I want to spawn letters to fill in an image
+            int fillLineLetterCount = characterFillLetterCount;
+
+            for (int i = 0; i < fillLineLetterCount; i++)
+            {
+                //Get a random position
+                Vector2 lineStartPos = new Vector2(UnityEngine.Random.Range(0, wholeRenderTexHolder.width), UnityEngine.Random.Range(0, wholeRenderTexHolder.height));
+
+                Color startingColor = wholeRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
+
+                float randomVal = UnityEngine.Random.Range(0f, 1f);
+
+                if (startingColor.grayscale > randomVal && useValueAsChanceforChars == true)
+                {
+                    i--;
+                }
+                else
+                {
+                    textImporter.DisplayAlphabet();
+
+                    List<List<Vector2>> letterLineList = textImporter.cachedAlphabet[UnityEngine.Random.Range(0, textImporter.cachedAlphabet.Count)];
+
+                    float valDiff = randomVal - startingColor.grayscale;
+
+                    float angle = UnityEngine.Random.Range(0f, 360f);
+
+
+
+                    if (useValueToScaleChars == false)
+                    {
+                        valDiff = randomVal;
+                    }
+
+
+                    foreach (List<Vector2> lines in letterLineList)
+                    {
+                        List<Vector2> fakeLine = lines;
+
+                        for (int q = 0; q < fakeLine.Count; q++)
+                        {
+                            fakeLine[q] -= new Vector2(0, 7f);
+                      
+                            fakeLine[q] = new Vector2(fakeLine[q].x * Mathf.Cos(angle) - fakeLine[q].y * Mathf.Sin(angle), fakeLine[q].x * Mathf.Sin(angle) + fakeLine[q] .y * Mathf.Cos(angle));
+
+
+                            //    x' = x * cos ? - y * sin ?
+                            //    y' = x * sin ? + y * cos ?
+
+
+
+                            fakeLine[q] *= Mathf.Clamp(valDiff, minCharScale, 1f);
+                            
+                            fakeLine[q] *= valueTextScale;
+
+                            fakeLine[q] += lineStartPos;
+                        }
+
+
+                        fillLineList.Add(fakeLine);
+                    }
+                }
+            }
 
 
 
@@ -1021,68 +1136,174 @@ public class svgVisual : MonoBehaviour
 
 
 
-            //Shit way to reduce lines
+            var finalCompleteLineListByColorCopy = finalCompleteLineListByColor;
+
+            List<List<List<Vector2>>> realFinalLineList = new List<List<List<Vector2>>>();
 
 
-            //for (int q = 0; q < finalLineListByColor.Count; q++)
-            //{
-            //    float closeLineSearchRangeE = 8;
-
-            //    List<List<Vector2>> reallySmushedOutlineListE = new List<List<Vector2>>();
-
-            //    List<List<Vector2>> finalLineListByColorHolder = finalLineListByColor[q];
+            bool giveUp = false;
 
 
+            //Better way to reduce lines
+            for (int i = 0; i < finalCompleteLineListByColorCopy.Count; i++)
+            {
+                realFinalLineList.Add(new List<List<Vector2>>());
 
-            //    while (finalLineListByColorHolder.Count > 0)
-            //    {
+                if (finalCompleteLineListByColorCopy[i].Count > 0)
+                {
+                    int linesAdded = 1;
+
+                    List<Vector2> curCombineLine = finalCompleteLineListByColorCopy[i][0];
+
+                    finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][0]);
+
+                    List<int> usedLineIndecies = new List<int>();
+
+                    usedLineIndecies.Add(0);
+
+                    //While I have not added all line content to combined line list
+                    while (finalCompleteLineListByColorCopy[i].Count > 0)
+                    {
+                        bool lineCanCombine = false;
+
+                        for (int q = 0; q < finalCompleteLineListByColorCopy[i].Count; q++)
+                        {
+                            if (curCombineLine.Count > 0 && finalCompleteLineListByColorCopy[i][q].Count > 0)
+                            {
+                                if (Vector2.Distance(finalCompleteLineListByColorCopy[i][q][0], curCombineLine.Last()) < combineLineDist)
+                                {
+                                    lineCanCombine = true;
+
+                                    usedLineIndecies.Add(q);
+
+                                    curCombineLine.AddRange(finalCompleteLineListByColorCopy[i][q]);
+
+                                    finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][q]);
+
+                                    linesAdded++;
+                                }
+                            }
+                            //else if (finalCompleteLineListByColorCopy[i][q].Count <= 0)
+                            //{
+                            //    lineCanCombine = true;
+
+                            //    usedLineIndecies.Add(q);
+
+                            //    curCombineLine.AddRange(finalCompleteLineListByColorCopy[i][q]);
+
+                            //    finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][q]);
+
+                            //    linesAdded++;
+                            //}
 
 
-            //        if (finalLineListByColorHolder.Count > 1)
-            //        {
-            //            if (Vector3.Distance(finalLineListByColorHolder[0].Last(), finalLineListByColorHolder[1][0]) < closeLineSearchRangeE)
-            //            {
-            //                finalLineListByColorHolder[0].AddRange(finalLineListByColorHolder[0 + 1]);
-
-            //                Debug.Log("Merged outlines at distisnace of ");
-
-            //                finalLineListByColorHolder.RemoveAt(1);
-            //            }
-            //            else
-            //            {
+                        }
 
 
+                        if (lineCanCombine == false)
+                        {
+                            realFinalLineList[i].Add(curCombineLine);
 
-            //                reallySmushedOutlineListE.Add(finalLineListByColorHolder[0]);
+                            curCombineLine = finalCompleteLineListByColorCopy[i][0];
 
-            //                finalLineListByColorHolder.RemoveAt(0);
-            //            }
-            //        }
-            //        else
-            //        {
-
-
-            //            reallySmushedOutlineListE.Add(finalLineListByColorHolder[0]);
-
-            //            finalLineListByColorHolder.RemoveAt(0);
-            //        }
-            //    }
+                            finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][0]);
+                        }
 
 
-            //    Debug.Log("Merged outlines  " + finalLineListByColor[q].Count + " " + reallySmushedOutlineListE.Count);
+                        stopwatch.Stop();
+                        if (stopwatch.Elapsed.TotalMinutes > 5)
+                        {
+                            giveUp = true;
+                        }
+                        stopwatch.Start();
 
-            //    finalLineListByColor[q] = reallySmushedOutlineListE;
 
-            //}
+                        if (giveUp == true)
+                        {
+                            break;
+                        }
+                    }
+
+                    realFinalLineList[i].Add(curCombineLine);
+                }
 
 
 
 
 
+            }
+
+            finalCompleteLineListByColor = realFinalLineList;
 
 
 
-       
+
+           
+
+
+
+
+                //Split lines if they have too many points. I think if they are too long they just don't load :(
+            List<List<List<Vector2>>> splitLines = new List<List<List<Vector2>>>();
+
+
+            foreach (List<List<Vector2>> listOfLines in finalCompleteLineListByColor)
+            {
+                splitLines.Add(new List<List<Vector2>>());
+
+                foreach (List<Vector2> listOfPoints in listOfLines)
+                {
+                    if (listOfPoints.Count > 500)
+                    {
+                        Debug.Log("Long boy" + listOfPoints.Count);
+
+                        List<List<Vector2>> splitLongBoy = new List<List<Vector2>>();
+
+                        List<Vector2> runningSplitList = new List<Vector2>();
+
+                        for (int j = 0; j < listOfPoints.Count; j++)
+                        {
+                            if (j % 100 == 0)
+                            {
+                                if (runningSplitList != new List<Vector2>())
+                                {
+                                    splitLongBoy.Add(runningSplitList);
+                                }
+
+
+                                runningSplitList = new List<Vector2>();
+                            }
+
+                            runningSplitList.Add(listOfPoints[j]);
+                        }
+
+
+                        splitLongBoy.Add(runningSplitList);
+
+
+                        foreach (List<Vector2> listOfPointsSPLIT in splitLongBoy)
+                        {
+                            splitLines.Last().Add(SimplifyPath(listOfPointsSPLIT));
+                        }
+                    }
+                    else
+                    {
+                        splitLines.Last().Add(SimplifyPath(listOfPoints));
+                    }
+                }
+            }
+
+
+
+
+
+            finalCompleteLineListByColor = splitLines;
+
+
+
+
+
+
 
 
 
@@ -1099,17 +1320,17 @@ public class svgVisual : MonoBehaviour
 
             int lineCountCount = 0;
 
-            for (int q = 0; q < finalLineListByColor.Count; q++)
+            for (int q = 0; q < finalCompleteLineListByColor.Count; q++)
             {
-                for (int k = 0; k < finalLineListByColor[q].Count; k++)
+                for (int k = 0; k < finalCompleteLineListByColor[q].Count; k++)
                 {
                     if (pensToUse.Count == 0)
                     {
-                        PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, diffColors[q]);
+                        PlacePath(lineWidth, finalCompleteLineListByColor[q][k], lineCountCount, transform, diffColors[q]);
                     }
                     else
                     {
-                        PlacePath(lineWidth, finalLineListByColor[q][k], lineCountCount, transform, pensToUse[q]);
+                        PlacePath(lineWidth, finalCompleteLineListByColor[q][k], lineCountCount, transform, pensToUse[q]);
                     }
 
 
@@ -1125,61 +1346,11 @@ public class svgVisual : MonoBehaviour
                 Debug.Log("Start SVG Saving! TIME = " + stopwatch.Elapsed);
                 stopwatch.Start();
             }
-
-
-
-
-
-
-
-
-
-
-
         }
 
 
 
-        float closeLineSearchRange = 3;
-
-        List<List<Vector2>> reallySmushedOutlineList = new List<List<Vector2>>();
-
-        List<List<Vector2>> outlineListHolder = outlineList;
-
-        while (outlineListHolder.Count > 0)
-        {
-
-
-            if (outlineListHolder[0].Count > 2 && outlineListHolder.Count > 1)
-            {
-                if (Vector3.Distance(outlineListHolder[0].Last(), outlineListHolder[1][0]) < closeLineSearchRange)
-                {
-                    outlineListHolder[0].AddRange(outlineListHolder[1]);
-
-                    Debug.Log("Merged outlines at distisnace of ");
-
-                    outlineListHolder.RemoveAt(1);
-                }
-                else
-                {
-
-
-                    reallySmushedOutlineList.Add(outlineListHolder[0]);
-
-
-                    outlineListHolder.RemoveAt(0);
-                }
-            }
-            else
-            {
-                reallySmushedOutlineList.Add(outlineListHolder[0]);
-
-                outlineListHolder.RemoveAt(0);
-            }
-        }
-
-
-        outlineList = reallySmushedOutlineList;
+       
 
 
 
@@ -1197,8 +1368,12 @@ public class svgVisual : MonoBehaviour
 
         if (pensToUse.Count > 0)
         {
+            //Debug.Log("shit " + finalCompleteLineListByColor.Count + " " + pensToUse.Count + " " + q);
+
             for (int q = 0; q < pensToUse.Count; q++)
             {
+                Debug.Log("shit " + finalCompleteLineListByColor.Count + " " + pensToUse.Count + " " + q);
+
                 GenerateSVG(finalCompleteLineListByColor[q], false, false, q, pensToUse[q], svgSize);
             }
         }
@@ -2998,10 +3173,11 @@ public class svgVisual : MonoBehaviour
         desktopPath += "\\";
 
         string filePath = "";
+        string filePathTXT = "";
 
         if (!saveDisplayCopy)
         {
-            filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".txt");
+            filePathTXT = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".txt");
             filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".svg");
         }
         else
@@ -3018,7 +3194,7 @@ public class svgVisual : MonoBehaviour
 
         // Write the SVG content to a file
         File.WriteAllText(filePath, svgContent.ToString());
-
+        File.WriteAllText(filePathTXT, svgContent.ToString());
         //Debug.Log("Done");
     }
 

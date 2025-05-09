@@ -16,7 +16,7 @@ public class SVGTextImporter : MonoBehaviour
 
     public float curWritingXPos = 0;
 
-    public List<List<List<Vector3>>> cachedAlphabet = new List<List<List<Vector3>>>();
+    public List<List<List<Vector2>>> cachedAlphabet = new List<List<List<Vector2>>>();
 
     public List<Vector2> letterSizes = new List<Vector2>();
 
@@ -265,7 +265,7 @@ public class SVGTextImporter : MonoBehaviour
 
 
 
-    public List<List<List<Vector3>>> TurnTextToLines(string textToLine, float thisAlphabetsScale, bool isAlphabet)
+    public List<List<List<Vector2>>> TurnTextToLines(string textToLine, float thisAlphabetsScale, bool isAlphabet)
     {
         spaceOffset = thisAlphabetsScale * 300;
 
@@ -275,10 +275,10 @@ public class SVGTextImporter : MonoBehaviour
 
         if (isAlphabet)
         {
-            cachedAlphabet = new List<List<List<Vector3>>>();
+            cachedAlphabet = new List<List<List<Vector2>>>();
         }
 
-        List<List<List<Vector3>>> letterList = new List<List<List<Vector3>>>();
+        List<List<List<Vector2>>> letterList = new List<List<List<Vector2>>>();
 
 
         char[] escapeChars = new char[2];
@@ -297,7 +297,7 @@ public class SVGTextImporter : MonoBehaviour
 
             //Debug.Log(cleanedString);
 
-            List<List<Vector3>> listOfPathsThisLetter = new List<List<Vector3>>();
+            List<List<Vector2>> listOfPathsThisLetter = new List<List<Vector2>>();
 
             Vector2 lastPosition = Vector2.zero;
 
@@ -361,7 +361,7 @@ public class SVGTextImporter : MonoBehaviour
 
 
 
-                listOfPathsThisLetter.Add(new List<Vector3>());
+                listOfPathsThisLetter.Add(new List<Vector2>());
 
 
 
@@ -385,7 +385,7 @@ public class SVGTextImporter : MonoBehaviour
                                 {
                                     currentStrokeThisPath++;
 
-                                    listOfPathsThisLetter.Add(new List<Vector3>());
+                                    listOfPathsThisLetter.Add(new List<Vector2>());
 
                                     currentDrawCommandIndex = 1;
                                 }
@@ -394,7 +394,7 @@ public class SVGTextImporter : MonoBehaviour
                                 {
                                     currentStrokeThisPath++;
 
-                                    listOfPathsThisLetter.Add(new List<Vector3>());
+                                    listOfPathsThisLetter.Add(new List<Vector2>());
 
                                     currentDrawCommandIndex = 4;
                                 }
@@ -505,9 +505,9 @@ public class SVGTextImporter : MonoBehaviour
 
                 Vector2 offset = Vector2.zero;
 
-                foreach (List<Vector3> linesToRenderThisLetter in listOfPathsThisLetter)
+                foreach (List<Vector2> linesToRenderThisLetter in listOfPathsThisLetter)
                 {
-                    foreach (Vector3 v in linesToRenderThisLetter)
+                    foreach (Vector2 v in linesToRenderThisLetter)
                     {
                         if (offset.x < v.x)
                         {
@@ -553,6 +553,19 @@ public class SVGTextImporter : MonoBehaviour
         {
             cachedAlphabet = letterList;
         }
+
+
+
+
+
+
+
+
+
+       
+
+
+
 
         return letterList;
 
@@ -706,7 +719,16 @@ public class SVGTextImporter : MonoBehaviour
 
                     pastWrittenLinePositionLists.Add(vec2Positions);
 
-                    lineRenderer.SetPositions(cachedAlphabet[letterIndexesToWrite[i]][j].ToArray());
+
+
+                    List<Vector3> positions = new List<Vector3>();
+
+                    foreach(Vector2 v2 in cachedAlphabet[letterIndexesToWrite[i]][j].ToArray())
+                    {
+                        positions.Add(v2);
+                    }
+
+                    lineRenderer.SetPositions(positions.ToArray());
 
                     pastWrittenLineRendererList.Add(lineRenderer);
 

@@ -101,45 +101,56 @@ public class PlotCombiner : MonoBehaviour
     [ContextMenu("SaveSVG")]
     public void SaveSVG()
     {
-        List<List<Vector2>> bothFilesPaths = new List<List<Vector2>>();
 
-        if (FileToLineList(targetSVGName, 0) != new List<List<Vector2>>())
+
+
+
+
+
+        //bothFilesPaths = new List<List<Vector2>>();
+
+        //if (FileToLineList(targetSVGName, 1) != new List<List<Vector2>>())
+        //{
+        //    bothFilesPaths.AddRange(RotatePathList(ScalePathList(FileToLineList(targetSVGName, 1), 0.666666f)));
+
+        //    bothFilesPaths.AddRange(TranslatePathList(RotatePathList(ScalePathList(FileToLineList(secondSVGName, 1), 0.666666f)), new Vector2(0, 96 * 6)));
+
+        //    SaveCombinedFile(bothFilesPaths, 1, outputSize, $"{targetSVGName}{secondSVGName}");
+        //}
+
+
+        //bothFilesPaths = new List<List<Vector2>>();
+
+        //if (FileToLineList(targetSVGName, 2) != new List<List<Vector2>>())
+        //{
+        //    bothFilesPaths.AddRange(RotatePathList(ScalePathList(FileToLineList(targetSVGName, 2), 0.666666f)));
+
+        //    bothFilesPaths.AddRange(TranslatePathList(RotatePathList(ScalePathList(FileToLineList(secondSVGName, 2), 0.666666f)), new Vector2(0, 96 * 6)));
+
+        //    SaveCombinedFile(bothFilesPaths, 2, outputSize, $"{targetSVGName}{secondSVGName}");
+        //}
+
+
+
+
+
+        for (int i = 0; i < 20; i++)
         {
-            bothFilesPaths.AddRange(RotatePathList(ScalePathList(FileToLineList(targetSVGName, 0), 0.666666f)));
+            List<List<Vector2>> bothFilesPaths = new List<List<Vector2>>();
 
-            bothFilesPaths.AddRange(TranslatePathList(RotatePathList(ScalePathList(FileToLineList(secondSVGName, 0), 0.666666f)), new Vector2(0, 96 * 6)));
+            if (FileToLineList(targetSVGName, i) != new List<List<Vector2>>())
+            {
 
-            SaveCombinedFile(bothFilesPaths, 0, outputSize, $"{targetSVGName}{secondSVGName}");
+
+                //bothFilesPaths.AddRange(FileToLineList(targetSVGName, i));
+
+                bothFilesPaths.AddRange(RotatePathList(ScalePathList(FileToLineList(targetSVGName, i), 0.666666f)));
+
+                bothFilesPaths.AddRange(TranslatePathList(RotatePathList(ScalePathList(FileToLineList(secondSVGName, i), 0.666666f)), new Vector2(0, 96 * 6)));
+
+                SaveCombinedFile(bothFilesPaths, i, outputSize, $"{targetSVGName}{secondSVGName}");
+            }
         }
-
-
-
-
-
-        bothFilesPaths = new List<List<Vector2>>();
-
-        if (FileToLineList(targetSVGName, 1) != new List<List<Vector2>>())
-        {
-            bothFilesPaths.AddRange(RotatePathList(ScalePathList(FileToLineList(targetSVGName, 1), 0.666666f)));
-
-            bothFilesPaths.AddRange(TranslatePathList(RotatePathList(ScalePathList(FileToLineList(secondSVGName, 1), 0.666666f)), new Vector2(0, 96 * 6)));
-
-            SaveCombinedFile(bothFilesPaths, 1, outputSize, $"{targetSVGName}{secondSVGName}");
-        }
-
-
-        bothFilesPaths = new List<List<Vector2>>();
-
-        if (FileToLineList(targetSVGName, 2) != new List<List<Vector2>>())
-        {
-            bothFilesPaths.AddRange(RotatePathList(ScalePathList(FileToLineList(targetSVGName, 2), 0.666666f)));
-
-            bothFilesPaths.AddRange(TranslatePathList(RotatePathList(ScalePathList(FileToLineList(secondSVGName, 2), 0.666666f)), new Vector2(0, 96 * 6)));
-
-            SaveCombinedFile(bothFilesPaths, 2, outputSize, $"{targetSVGName}{secondSVGName}");
-        }
-
-
     }
 
     public void SaveCombinedFile(List<List<Vector2>> allPaths, int colorIndex, Vector2 fileSize, string saveName)
@@ -161,6 +172,11 @@ public class PlotCombiner : MonoBehaviour
         svgContent.AppendLine("");
 
         Color drawLineColor = Color.black;
+
+        if (svgVis.pensToUse.Count > colorIndex)
+        {
+            drawLineColor = svgVis.pensToUse[colorIndex];
+        }
 
 
         for (int i = 0; i < allPaths.Count; i++)
@@ -205,7 +221,7 @@ public class PlotCombiner : MonoBehaviour
         string filePath = "";
 
 
-        filePath = Path.Combine(desktopPath, $"{saveName}" + ".svg");
+        filePath = Path.Combine(desktopPath, $"{saveName}{colorIndex}" + ".svg");
         //filePath = Path.Combine(desktopPath, $"{targetSVGName}{secondSVGName}{colorIndex}" + ".svg");
 
 
@@ -244,7 +260,7 @@ public class PlotCombiner : MonoBehaviour
 
         var textFile = new TextAsset();
 
-        if (colorInt > 10)
+        if (colorInt > 20)
         {
             Debug.Log($"{fileName}/{fileName}Info");
             textFile = Resources.Load<TextAsset>($"{fileName}/{fileName}Info");
@@ -252,8 +268,8 @@ public class PlotCombiner : MonoBehaviour
         }
         else
         {
-            Debug.Log(textFile.name + "Fuck");
             textFile = Resources.Load<TextAsset>($"{fileName}/{fileName}{colorInt}");
+            //Debug.Log(textFile.name + "Fuck");
         }
 
         if (textFile != null)
@@ -262,13 +278,13 @@ public class PlotCombiner : MonoBehaviour
 
             svgFileContent = textFile.text;
 
-            List<List<List<Vector3>>> svgFileLines = this.gameObject.GetComponent<SVGTextImporter>().TurnTextToLines(svgFileContent, 1, false);
+            List<List<List<Vector2>>> svgFileLines = this.gameObject.GetComponent<SVGTextImporter>().TurnTextToLines(svgFileContent, 1, false);
 
             gameObject.GetComponent<svgVisual>().ResetLineObjects();
 
-            foreach (List<List<Vector3>> sg in svgFileLines)
+            foreach (List<List<Vector2>> sg in svgFileLines)
             {
-                foreach (List<Vector3> l in sg)
+                foreach (List<Vector2> l in sg)
                 {
                     List<Vector2> linePoints = new List<Vector2>();
 
