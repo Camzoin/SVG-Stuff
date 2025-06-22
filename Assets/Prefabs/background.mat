@@ -63,11 +63,11 @@ Material:
     - _Float_1: 0.2
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Rotation: 94.26617
+    - _Rotation: -2.9934082
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 0}
     - _Color_1: {r: 1, g: 1, b: 1, a: 0}
-    - _GenOffset: {r: 138.1012, g: 44.605164, b: 0, a: 0}
+    - _GenOffset: {r: -56.152557, g: -45.542557, b: 0, a: 0}
     - _Vector2: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

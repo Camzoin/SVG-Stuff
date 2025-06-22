@@ -52,9 +52,9 @@ Material:
     - _QueueOffset: 0
     - _Value_Add: 0
     m_Colors:
-    - _Color: {r: 0.012515448, g: 0.3207547, b: 0, a: 1}
-    - _Color_1: {r: 0.011764706, g: 0.32156864, b: 0, a: 1}
-    - _Color_2: {r: 0, g: 1, b: 0.0455873, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_1: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_2: {r: 0, g: 0, b: 0, a: 0}
     - _GenOffset: {r: 0, g: 0, b: 0, a: 0}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

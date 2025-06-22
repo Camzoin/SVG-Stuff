@@ -237,7 +237,7 @@ public class SVGTextImporter : MonoBehaviour
 
         lastTextHolder.transform.position = Vector3.up * svgVis.svgSize.y * 4.25f + (Vector3.left * svgVis.svgSize.x / 2.5f);
 
-        svgVis.GenerateSVG(pastWrittenLinePositionLists, false, true, 0, Color.black, new Vector2(4 * 96, 3 * 96));
+        svgVis.GenerateSVG(pastWrittenLinePositionLists, false, true, 0, Color.black, new Vector2(4 * 96, 3 * 96), svgVis.yourFileName);
 
         StartCoroutine(waiter());
     }
@@ -794,7 +794,7 @@ public class SVGTextImporter : MonoBehaviour
     }
 
 
-    private static int GetIndexInAlphabet(char value)
+    public int GetIndexInAlphabet(char value)
     {
         int uppserOffset = 0;
 

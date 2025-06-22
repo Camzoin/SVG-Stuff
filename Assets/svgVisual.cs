@@ -166,6 +166,8 @@ public class svgVisual : MonoBehaviour
 
     public Burster burster;
 
+    public int simpleVerticleFillModMod = 1;
+
     public int simpleVerticleFillMod = 4;
 
     public bool useAnimationSVGOffset = false;
@@ -187,6 +189,14 @@ public class svgVisual : MonoBehaviour
 
     public int squiggleLineFillCount = 500;
 
+    public bool squiggleUseRandomDir = true;
+
+    public Vector2 squiggleLineDir = new Vector2(1, 1);
+
+    public Vector2 squiggleSinDir = new Vector2(0, 1);
+
+    public bool squiggleLinesUseSine = false;
+
     public bool useValueAsSquiggleProb = false;
 
     public bool drawColorBoundsOutlines = false;
@@ -198,6 +208,8 @@ public class svgVisual : MonoBehaviour
     public float valueTextScale = 1;
 
     public bool useValueToScaleChars = true;
+
+    public bool charsUsePsudoRandomScale = false;
 
     public bool useValueAsChanceforChars = true;
 
@@ -298,6 +310,8 @@ public class svgVisual : MonoBehaviour
 
         SetRenderValues(lineObjects, unlitMat, Color.black, true);
     }
+
+
 
 
     [ContextMenu("GenerateRTWork")]
@@ -565,59 +579,64 @@ public class svgVisual : MonoBehaviour
 
             List<List<Vector2>> fillLineList = new List<List<Vector2>>();
 
-            for (int i = 0; i < outlinesToAddSplitUpColor.Count; i++)
+
+
+            if (drawColorBoundsOutlines == true)
             {
-                outlinesToAddSplitUpColor[i] = SortClockwise(outlinesToAddSplitUpColor[i]);
 
-
-                List<Vector2> sortedList = SortPoints(outlinesToAddSplitUpColor[i]);
-
-
-                List<List<Vector2>> sortedSplitList = new List<List<Vector2>>();
-
-
-                List<Vector2> tempPointList = new List<Vector2>();
-
-
-                for (int v = 0; v < sortedList.Count - 1; v++)
+                for (int i = 0; i < outlinesToAddSplitUpColor.Count; i++)
                 {
-                    tempPointList.Add(sortedList[v]);
+                    outlinesToAddSplitUpColor[i] = SortClockwise(outlinesToAddSplitUpColor[i]);
 
-                    //If this one and the next one are far apart split that boy
-                    if (Vector2.Distance(sortedList[v], sortedList[v + 1]) > 2)
+
+                    List<Vector2> sortedList = SortPoints(outlinesToAddSplitUpColor[i]);
+
+
+                    List<List<Vector2>> sortedSplitList = new List<List<Vector2>>();
+
+
+                    List<Vector2> tempPointList = new List<Vector2>();
+
+
+                    for (int v = 0; v < sortedList.Count - 1; v++)
+                    {
+                        tempPointList.Add(sortedList[v]);
+
+                        //If this one and the next one are far apart split that boy
+                        if (Vector2.Distance(sortedList[v], sortedList[v + 1]) > 2)
+                        {
+                            if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
+                            {
+                                tempPointList.Add(tempPointList[0]);
+                            }
+
+
+                            sortedSplitList.Add(tempPointList);
+
+                            tempPointList = new List<Vector2>();
+                        }
+                    }
+
+                    if (tempPointList.Count > 1)
                     {
                         if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
                         {
                             tempPointList.Add(tempPointList[0]);
                         }
-
-
-                        sortedSplitList.Add(tempPointList);
-
-                        tempPointList = new List<Vector2>();
                     }
-                }
 
-                if (tempPointList.Count > 1)
-                {
-                    if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
-                    {
-                        tempPointList.Add(tempPointList[0]);
-                    }
-                }
+                    sortedSplitList.Add(tempPointList);
 
-                sortedSplitList.Add(tempPointList);
-
-                if (drawColorBoundsOutlines == true)
-                {
                     foreach (List<Vector2> lv2 in sortedSplitList)
                     {
                         outlinesToAddSplitUpColorAndOutlineFix.Add(lv2);
                     }
                 }
-
-
             }
+            
+
+
+
 
 
 
@@ -662,6 +681,11 @@ public class svgVisual : MonoBehaviour
 
 
                 Vector2 additionalOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)).normalized * 0.4f;
+
+                if (squiggleUseRandomDir == false)
+                {
+                    additionalOffset = squiggleLineDir.normalized * 0.4f;
+}
 
 
                 //Get a random position, if that position has no color on normal map find a different one
@@ -708,6 +732,12 @@ public class svgVisual : MonoBehaviour
                     for (int q = 0; q < lineSegmentMaxCount; q++)
                     {
                         startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y);
+
+                        if (squiggleLinesUseSine == true)
+                        {
+                            additionalOffset += new Vector2(Mathf.Sin(q / (3f * squiggleSinDir.x)) / 5f, Mathf.Sin(q / (3f * squiggleSinDir.y)) / 5f);
+
+                        }
 
 
                         //If this pixel is the same color
@@ -768,9 +798,16 @@ public class svgVisual : MonoBehaviour
 
                 Color startingColor = wholeRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
 
+                float scH = 0;
+                float scS = 0;
+                float scV = 0;
+
+                Color.RGBToHSV(startingColor, out scH, out scS, out scV);
+
+
                 float randomVal = UnityEngine.Random.Range(0f, 1f);
 
-                if (startingColor.grayscale > randomVal && useValueAsChanceforChars == true)
+                if (scV < randomVal && useValueAsChanceforChars == true)
                 {
                     i--;
                 }
@@ -778,9 +815,12 @@ public class svgVisual : MonoBehaviour
                 {
                     textImporter.DisplayAlphabet();
 
-                    List<List<Vector2>> letterLineList = textImporter.cachedAlphabet[UnityEngine.Random.Range(0, textImporter.cachedAlphabet.Count)];
+                    //-23 to remove special chars and numbers
+                    //-10 for most of them
+                    //Do this better
+                    List<List<Vector2>> letterLineList = textImporter.cachedAlphabet[UnityEngine.Random.Range(0, textImporter.cachedAlphabet.Count - 23)];
 
-                    float valDiff = randomVal - startingColor.grayscale;
+                    float valDiff = randomVal - scV;
 
                     float angle = UnityEngine.Random.Range(0f, 360f);
 
@@ -788,7 +828,12 @@ public class svgVisual : MonoBehaviour
 
                     if (useValueToScaleChars == false)
                     {
-                        valDiff = randomVal;
+                        valDiff = UnityEngine.Random.Range(minCharScale, 1f);
+                    }
+
+                    if(charsUsePsudoRandomScale == false)
+                    {
+                        valDiff = 1;
                     }
 
 
@@ -806,11 +851,12 @@ public class svgVisual : MonoBehaviour
                             //    x' = x * cos ? - y * sin ?
                             //    y' = x * sin ? + y * cos ?
 
+                            fakeLine[q] *= valueTextScale;
 
 
                             fakeLine[q] *= Mathf.Clamp(valDiff, minCharScale, 1f);
                             
-                            fakeLine[q] *= valueTextScale;
+
 
                             fakeLine[q] += lineStartPos;
                         }
@@ -877,7 +923,8 @@ public class svgVisual : MonoBehaviour
 
                                 if (lineDist > 3)
                                 {
-                                    outlineList.Add(SimplifyPath(scaledPath));
+                                    //outlineList.Add(SimplifyPath(scaledPath));
+                                    outlineList.Add(scaledPath);
                                 }
 
 
@@ -893,7 +940,7 @@ public class svgVisual : MonoBehaviour
 
 
 
-            fillLineList = PathCrossingRemover.RemoveCrossingPaths(fillLineList, 5);
+            //fillLineList = PathCrossingRemover.RemoveCrossingPaths(fillLineList, 5);
 
 
             outlinesToAddSplitUpColorAndOutlineFix.AddRange(fillLineList);
@@ -920,7 +967,14 @@ public class svgVisual : MonoBehaviour
 
                     List<List<Vector2>> FUICK = GroupVerticalNeighbors(claimedPixels[q]);
 
-                    simpleVertFillLinesByColor.AddRange(FUICK);
+                    List<List<Vector2>> FUICKCleaned = new List<List<Vector2>>();
+
+                    foreach (List<Vector2> lv2 in FUICK)
+                    {
+                        FUICKCleaned.Add(SimplifyPath(lv2));
+                    }
+
+                    simpleVertFillLinesByColor.AddRange(FUICKCleaned);
                 }
 
 
@@ -932,7 +986,8 @@ public class svgVisual : MonoBehaviour
 
             for (int q = 0; q < outlinesToAddSplitUpColorAndOutlineFix.Count; q++)
             {
-                outlinesToAddSplitUpColorAndOutlineFix[q] = SimplifyPath(outlinesToAddSplitUpColorAndOutlineFix[q]);
+                //outlinesToAddSplitUpColorAndOutlineFix[q] = SimplifyPath(outlinesToAddSplitUpColorAndOutlineFix[q]);
+                outlinesToAddSplitUpColorAndOutlineFix[q] = outlinesToAddSplitUpColorAndOutlineFix[q];
             }
 
 
@@ -1060,31 +1115,38 @@ public class svgVisual : MonoBehaviour
 
 
 
-            //place boarder
-            List<Vector2> boarderPoints = new List<Vector2>();
-
-            //bottom
-            boarderPoints.Add(new Vector3(0, 0, 0));
-            boarderPoints.Add(new Vector3(wholeRenderTexHolder.width * (1f / renderScale), 0, 0));
-            boarderPoints.Add(new Vector3(wholeRenderTexHolder.width * (1f / renderScale), wholeRenderTexHolder.height * (1f / renderScale), 0));
-            boarderPoints.Add(new Vector3(0, wholeRenderTexHolder.height * (1f / renderScale), 0));
-            boarderPoints.Add(new Vector3(0, 0, 0));
 
 
-            PlacePath(lineWidth, boarderPoints, 0, transform, new Color(10, 10, 10));
-
-
-            SetRenderValues(lineObjects, unlitMat, Color.white, false, false);
-
-            GameObject holder = Instantiate(new GameObject(), transform);
-
-            foreach (LineRenderer lr in lineObjects)
+            if (drawBounds == true)
             {
-                lr.transform.SetParent(holder.transform);
+                //place boarder
+                List<Vector2> boarderPoints = new List<Vector2>();
+
+                //bottom
+                boarderPoints.Add(new Vector3(0, 0, 0));
+                boarderPoints.Add(new Vector3(wholeRenderTexHolder.width * (1f / renderScale), 0, 0));
+                boarderPoints.Add(new Vector3(wholeRenderTexHolder.width * (1f / renderScale), wholeRenderTexHolder.height * (1f / renderScale), 0));
+                boarderPoints.Add(new Vector3(0, wholeRenderTexHolder.height * (1f / renderScale), 0));
+                boarderPoints.Add(new Vector3(0, 0, 0));
+
+                PlacePath(lineWidth, boarderPoints, 0, transform, new Color(10, 10, 10), true);
+
+                SetRenderValues(lineObjects, unlitMat, Color.white, false, false);
+
+                GameObject holder = Instantiate(new GameObject(), transform);
+
+                foreach (LineRenderer lr in lineObjects)
+                {
+                    lr.transform.SetParent(holder.transform);
+                }
+
+
+                finalLineListByColor[0].Add(boarderPoints);
             }
 
 
-            finalLineListByColor[0].Add(boarderPoints);
+
+
 
 
 
@@ -1133,171 +1195,253 @@ public class svgVisual : MonoBehaviour
 
 
 
-
-
-
-            var finalCompleteLineListByColorCopy = finalCompleteLineListByColor;
-
-            List<List<List<Vector2>>> realFinalLineList = new List<List<List<Vector2>>>();
-
-
-            bool giveUp = false;
-
-
-            //Better way to reduce lines
-            for (int i = 0; i < finalCompleteLineListByColorCopy.Count; i++)
+            if (combineLineDist > 0)
             {
-                realFinalLineList.Add(new List<List<Vector2>>());
+                var finalCompleteLineListByColorCopy = finalCompleteLineListByColor;
 
-                if (finalCompleteLineListByColorCopy[i].Count > 0)
+                List<List<List<Vector2>>> realFinalLineList = new List<List<List<Vector2>>>();
+
+
+                bool giveUp = false;
+
+
+                //Better way to reduce lines
+                for (int i = 0; i < finalCompleteLineListByColorCopy.Count; i++)
                 {
-                    int linesAdded = 1;
+                    realFinalLineList.Add(new List<List<Vector2>>());
 
-                    List<Vector2> curCombineLine = finalCompleteLineListByColorCopy[i][0];
-
-                    finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][0]);
-
-                    List<int> usedLineIndecies = new List<int>();
-
-                    usedLineIndecies.Add(0);
-
-                    //While I have not added all line content to combined line list
-                    while (finalCompleteLineListByColorCopy[i].Count > 0)
+                    if (finalCompleteLineListByColorCopy[i].Count > 0)
                     {
-                        bool lineCanCombine = false;
+                        int linesAdded = 1;
 
-                        for (int q = 0; q < finalCompleteLineListByColorCopy[i].Count; q++)
+                        List<Vector2> curCombineLine = finalCompleteLineListByColorCopy[i][0];
+
+                        finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][0]);
+
+                        List<int> usedLineIndecies = new List<int>();
+
+                        usedLineIndecies.Add(0);
+
+                        //While I have not added all line content to combined line list
+                        while (finalCompleteLineListByColorCopy[i].Count > 0)
                         {
-                            if (curCombineLine.Count > 0 && finalCompleteLineListByColorCopy[i][q].Count > 0)
+                            bool lineCanCombine = false;
+
+                            List<Vector2> curClosestList = finalCompleteLineListByColorCopy[i][0];
+
+                            float distToNextLineSeg = Vector2.Distance(curCombineLine.Last(), curClosestList[0]);
+
+                            int lineCombIndex = 0;
+
+                            bool addLineReversed = false;
+
+                            for (int q = 0; q < finalCompleteLineListByColorCopy[i].Count; q++)
                             {
-                                if (Vector2.Distance(finalCompleteLineListByColorCopy[i][q][0], curCombineLine.Last()) < combineLineDist)
+                                float thisSegDistToCurLine = Vector2.Distance(curCombineLine.Last(), finalCompleteLineListByColorCopy[i][q][0]);
+
+                                if (thisSegDistToCurLine < distToNextLineSeg)
                                 {
-                                    lineCanCombine = true;
+                                    curClosestList = finalCompleteLineListByColorCopy[i][q];
 
-                                    usedLineIndecies.Add(q);
+                                    lineCombIndex = q;
 
-                                    curCombineLine.AddRange(finalCompleteLineListByColorCopy[i][q]);
+                                    distToNextLineSeg = thisSegDistToCurLine;
 
-                                    finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][q]);
-
-                                    linesAdded++;
+                                    addLineReversed = false;
                                 }
                             }
-                            //else if (finalCompleteLineListByColorCopy[i][q].Count <= 0)
-                            //{
-                            //    lineCanCombine = true;
-
-                            //    usedLineIndecies.Add(q);
-
-                            //    curCombineLine.AddRange(finalCompleteLineListByColorCopy[i][q]);
-
-                            //    finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][q]);
-
-                            //    linesAdded++;
-                            //}
 
 
-                        }
-
-
-                        if (lineCanCombine == false)
-                        {
-                            realFinalLineList[i].Add(curCombineLine);
-
-                            curCombineLine = finalCompleteLineListByColorCopy[i][0];
-
-                            finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][0]);
-                        }
-
-
-                        stopwatch.Stop();
-                        if (stopwatch.Elapsed.TotalMinutes > 5)
-                        {
-                            giveUp = true;
-                        }
-                        stopwatch.Start();
-
-
-                        if (giveUp == true)
-                        {
-                            break;
-                        }
-                    }
-
-                    realFinalLineList[i].Add(curCombineLine);
-                }
-
-
-
-
-
-            }
-
-            finalCompleteLineListByColor = realFinalLineList;
-
-
-
-
-           
-
-
-
-
-                //Split lines if they have too many points. I think if they are too long they just don't load :(
-            List<List<List<Vector2>>> splitLines = new List<List<List<Vector2>>>();
-
-
-            foreach (List<List<Vector2>> listOfLines in finalCompleteLineListByColor)
-            {
-                splitLines.Add(new List<List<Vector2>>());
-
-                foreach (List<Vector2> listOfPoints in listOfLines)
-                {
-                    if (listOfPoints.Count > 500)
-                    {
-                        Debug.Log("Long boy" + listOfPoints.Count);
-
-                        List<List<Vector2>> splitLongBoy = new List<List<Vector2>>();
-
-                        List<Vector2> runningSplitList = new List<Vector2>();
-
-                        for (int j = 0; j < listOfPoints.Count; j++)
-                        {
-                            if (j % 100 == 0)
+                            for (int q = 0; q < finalCompleteLineListByColorCopy[i].Count; q++)
                             {
-                                if (runningSplitList != new List<Vector2>())
+                                float thisSegDistToCurLine = Vector2.Distance(curCombineLine[0], finalCompleteLineListByColorCopy[i][q].Last());
+
+                                if (thisSegDistToCurLine < distToNextLineSeg)
                                 {
-                                    splitLongBoy.Add(runningSplitList);
+                                    curClosestList = finalCompleteLineListByColorCopy[i][q];
+
+                                    //curClosestList.Reverse();
+
+                                    lineCombIndex = q;
+
+                                    distToNextLineSeg = thisSegDistToCurLine;
+
+                                    addLineReversed = true;
                                 }
-
-
-                                runningSplitList = new List<Vector2>();
                             }
 
-                            runningSplitList.Add(listOfPoints[j]);
+
+
+
+
+                            if (curCombineLine.Count > 0 && curClosestList.Count > 0)
+                            {
+
+                                if (distToNextLineSeg < combineLineDist)
+                                {
+                                    if (addLineReversed == false)
+                                    {
+                                        lineCanCombine = true;
+
+                                        usedLineIndecies.Add(lineCombIndex);
+
+                                        curCombineLine.AddRange(curClosestList);
+
+                                        finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][lineCombIndex]);
+
+                                        linesAdded++;
+                                    }
+                                    else
+                                    {
+                                        lineCanCombine = true;
+
+                                        usedLineIndecies.Add(lineCombIndex);
+
+                                        curCombineLine.InsertRange(0, curClosestList);
+
+                                        finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][lineCombIndex]);
+
+                                        linesAdded++;
+                                    }
+
+
+
+                                }
+                            }
+
+
+
+
+
+                            if (lineCanCombine == false)
+                            {
+                                realFinalLineList[i].Add(curCombineLine);
+
+                                curCombineLine = finalCompleteLineListByColorCopy[i][0];
+
+                                finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][0]);
+                            }
+
+
+                            stopwatch.Stop();
+                            if (stopwatch.Elapsed.TotalMinutes > 5)
+                            {
+                                giveUp = true;
+                            }
+                            stopwatch.Start();
+
+
+                            if (giveUp == true)
+                            {
+                                break;
+                            }
                         }
 
-
-                        splitLongBoy.Add(runningSplitList);
-
-
-                        foreach (List<Vector2> listOfPointsSPLIT in splitLongBoy)
-                        {
-                            splitLines.Last().Add(SimplifyPath(listOfPointsSPLIT));
-                        }
+                        realFinalLineList[i].Add(curCombineLine);
                     }
-                    else
-                    {
-                        splitLines.Last().Add(SimplifyPath(listOfPoints));
-                    }
+
+
+
+
+
                 }
+
+                finalCompleteLineListByColor = realFinalLineList;
             }
 
 
 
 
 
-            finalCompleteLineListByColor = splitLines;
+
+
+
+
+
+
+
+            if (finalCompleteLineListByColor.Count > 15000)
+            {
+                Debug.LogError("This is a lot of lines");
+            }
+
+            if (finalCompleteLineListByColor.Count > 10000 && combineLineDist == 0)
+            {
+                Debug.LogError("This is a lot of lines, and you are not even trying to merge them dummy!");
+            }
+
+            if ( combineLineDist == 0)
+            {
+                Debug.LogError("You probably meant to merge lines dummy");
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            //Split lines if they have too many points. I think if they are too long they just don't load :(
+            //But maybe I was wrong? Removed for now
+            //List<List<List<Vector2>>> splitLines = new List<List<List<Vector2>>>();
+
+
+            //foreach (List<List<Vector2>> listOfLines in finalCompleteLineListByColor)
+            //{
+            //    splitLines.Add(new List<List<Vector2>>());
+
+            //    foreach (List<Vector2> listOfPoints in listOfLines)
+            //    {
+            //        if (listOfPoints.Count > 500)
+            //        {
+            //            Debug.Log("Long boy" + listOfPoints.Count);
+
+            //            List<List<Vector2>> splitLongBoy = new List<List<Vector2>>();
+
+            //            List<Vector2> runningSplitList = new List<Vector2>();
+
+            //            for (int j = 0; j < listOfPoints.Count; j++)
+            //            {
+            //                if (j % 100 == 0)
+            //                {
+            //                    if (runningSplitList != new List<Vector2>())
+            //                    {
+            //                        splitLongBoy.Add(runningSplitList);
+            //                    }
+
+
+            //                    runningSplitList = new List<Vector2>();
+            //                }
+
+            //                runningSplitList.Add(listOfPoints[j]);
+            //            }
+
+
+            //            splitLongBoy.Add(runningSplitList);
+
+
+            //            foreach (List<Vector2> listOfPointsSPLIT in splitLongBoy)
+            //            {
+            //                splitLines.Last().Add(SimplifyPath(listOfPointsSPLIT));
+            //            }
+            //        }
+            //        else
+            //        {
+            //            splitLines.Last().Add(SimplifyPath(listOfPoints));
+            //        }
+            //    }
+            //}
+
+
+
+
+
+            //finalCompleteLineListByColor = splitLines;
 
 
 
@@ -1326,11 +1470,11 @@ public class svgVisual : MonoBehaviour
                 {
                     if (pensToUse.Count == 0)
                     {
-                        PlacePath(lineWidth, finalCompleteLineListByColor[q][k], lineCountCount, transform, diffColors[q]);
+                        PlacePath(lineWidth, finalCompleteLineListByColor[q][k], lineCountCount, transform, diffColors[q], false);
                     }
                     else
                     {
-                        PlacePath(lineWidth, finalCompleteLineListByColor[q][k], lineCountCount, transform, pensToUse[q]);
+                        PlacePath(lineWidth, finalCompleteLineListByColor[q][k], lineCountCount, transform, pensToUse[q], false);
                     }
 
 
@@ -1359,7 +1503,7 @@ public class svgVisual : MonoBehaviour
 
         if (pensToUse.Count > 0)
         {
-            GenerateSVG(outlineList, false, false,1000, Color.black, svgSize);
+            GenerateSVG(outlineList, false, false,1000, Color.black, svgSize, yourFileName);
         }
 
 
@@ -1374,7 +1518,8 @@ public class svgVisual : MonoBehaviour
             {
                 Debug.Log("shit " + finalCompleteLineListByColor.Count + " " + pensToUse.Count + " " + q);
 
-                GenerateSVG(finalCompleteLineListByColor[q], false, false, q, pensToUse[q], svgSize);
+                //GenerateSVG(finalCompleteLineListByColor[q], false, false, q, pensToUse[q], svgSize);
+                GenerateSVG(finalCompleteLineListByColor[q], false, false, q, Color.black, svgSize, yourFileName);
             }
         }
         else
@@ -1411,432 +1556,13 @@ public class svgVisual : MonoBehaviour
 
 
 
-
-
-    //New AI SHIT
-
-
-
-
-
-
-
-    public List<List<Vector2>> FindPaths(List<Vector2> points, float fixedDistance)
-    {
-        List<List<Vector2>> allPaths = new List<List<Vector2>>();
-        if (points == null || points.Count == 0) return allPaths;
-
-        // Create adjacency list
-        List<List<int>> adjacencyList = CreateAdjacencyList(points, fixedDistance);
-
-        // Find connected components
-        List<List<int>> connectedComponents = FindConnectedComponents(points, adjacencyList);
-
-        // Generate paths for each component
-        foreach (List<int> component in connectedComponents)
-        {
-            HashSet<int> remainingNodes = new HashSet<int>(component);
-
-            while (remainingNodes.Count > 0)
-            {
-                List<int> pathIndices = BuildGreedyPath(remainingNodes, adjacencyList);
-                allPaths.Add(ConvertIndicesToPoints(pathIndices, points));
-            }
-        }
-
-        return allPaths;
-    }
-
-    private List<List<int>> CreateAdjacencyList(List<Vector2> points, float fixedDistance)
-    {
-        List<List<int>> adjacencyList = new List<List<int>>();
-
-        for (int i = 0; i < points.Count; i++)
-        {
-            List<int> neighbors = new List<int>();
-            for (int j = 0; j < points.Count; j++)
-            {
-                if (i != j && Vector2.Distance(points[i], points[j]) == fixedDistance)
-                {
-                    neighbors.Add(j);
-                }
-            }
-            adjacencyList.Add(neighbors);
-        }
-        return adjacencyList;
-    }
-
-    private List<List<int>> FindConnectedComponents(List<Vector2> points, List<List<int>> adjacencyList)
-    {
-        List<List<int>> components = new List<List<int>>();
-        bool[] visited = new bool[points.Count];
-
-        for (int i = 0; i < points.Count; i++)
-        {
-            if (!visited[i])
-            {
-                components.Add(BFS(i, visited, adjacencyList));
-            }
-        }
-        return components;
-    }
-
-    private List<int> BFS(int start, bool[] visited, List<List<int>> adjacencyList)
-    {
-        List<int> component = new List<int>();
-        Queue<int> queue = new Queue<int>();
-        queue.Enqueue(start);
-        visited[start] = true;
-
-        while (queue.Count > 0)
-        {
-            int current = queue.Dequeue();
-            component.Add(current);
-
-            foreach (int neighbor in adjacencyList[current])
-            {
-                if (!visited[neighbor])
-                {
-                    visited[neighbor] = true;
-                    queue.Enqueue(neighbor);
-                }
-            }
-        }
-        return component;
-    }
-
-    private List<int> BuildGreedyPath(HashSet<int> remainingNodes, List<List<int>> adjacencyList)
-    {
-        // Find starting node with least connections
-        int startNode = -1;
-        int minCount = int.MaxValue;
-
-        foreach (int node in remainingNodes)
-        {
-            int validNeighbors = CountValidNeighbors(node, remainingNodes, adjacencyList);
-            if (validNeighbors < minCount)
-            {
-                minCount = validNeighbors;
-                startNode = node;
-            }
-        }
-
-        // Build path
-        List<int> path = new List<int>();
-        int currentNode = startNode;
-
-        while (true)
-        {
-            path.Add(currentNode);
-            remainingNodes.Remove(currentNode);
-
-            // Get valid next nodes
-            List<int> nextNodes = new List<int>();
-            foreach (int neighbor in adjacencyList[currentNode])
-            {
-                if (remainingNodes.Contains(neighbor))
-                {
-                    nextNodes.Add(neighbor);
-                }
-            }
-
-            if (nextNodes.Count == 0) break;
-
-            // Select next node with least connections
-            currentNode = SelectNextNode(nextNodes, remainingNodes, adjacencyList);
-        }
-
-        return path;
-    }
-
-    private int CountValidNeighbors(int node, HashSet<int> remainingNodes, List<List<int>> adjacencyList)
-    {
-        int count = 0;
-        foreach (int neighbor in adjacencyList[node])
-        {
-            if (remainingNodes.Contains(neighbor)) count++;
-        }
-        return count;
-    }
-
-    private int SelectNextNode(List<int> candidates, HashSet<int> remainingNodes, List<List<int>> adjacencyList)
-    {
-        int selected = candidates[0];
-        int minNeighbors = int.MaxValue;
-
-        foreach (int node in candidates)
-        {
-            int count = CountValidNeighbors(node, remainingNodes, adjacencyList);
-            if (count < minNeighbors)
-            {
-                minNeighbors = count;
-                selected = node;
-            }
-        }
-        return selected;
-    }
-
-    private List<Vector2> ConvertIndicesToPoints(List<int> indices, List<Vector2> points)
-    {
-        List<Vector2> path = new List<Vector2>();
-        foreach (int index in indices)
-        {
-            path.Add(points[index]);
-        }
-        return path;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public List<List<Vector2>> OrderAndSplit(List<Vector2> positions, float adjacencyDistance)
-    {
-        List<List<Vector2>> result = new List<List<Vector2>>();
-        List<Vector2> unprocessed = new List<Vector2>(positions);
-        float adjacencySqr = adjacencyDistance * adjacencyDistance; // Precompute squared distance
-
-        while (unprocessed.Count > 0)
-        {
-            // Start a new path with the first unprocessed point
-            Vector2 startPoint = unprocessed[0];
-            unprocessed[0] = unprocessed[unprocessed.Count - 1]; // Swap with last for O(1) removal
-            unprocessed.RemoveAt(unprocessed.Count - 1);
-
-            List<Vector2> currentPath = new List<Vector2> { startPoint };
-            Vector2 currentPoint = startPoint;
-
-            bool foundNext;
-            do
-            {
-                foundNext = false;
-                float minSqrDistance = Mathf.Infinity;
-                int nearestIndex = -1;
-
-                // Find the nearest unprocessed point using squared distance
-                for (int i = 0; i < unprocessed.Count; i++)
-                {
-                    Vector2 offset = currentPoint - unprocessed[i];
-                    float sqrDistance = offset.sqrMagnitude;
-
-                    if (sqrDistance < minSqrDistance)
-                    {
-                        minSqrDistance = sqrDistance;
-                        nearestIndex = i;
-
-                        // Early exit if exact match found
-                        if (sqrDistance <= Mathf.Epsilon)
-                            break;
-                    }
-                }
-
-                // Check adjacency using squared distance
-                if (nearestIndex != -1 && minSqrDistance <= adjacencySqr)
-                {
-                    // Swap nearest element with last to remove efficiently
-                    Vector2 nearestPoint = unprocessed[nearestIndex];
-                    unprocessed[nearestIndex] = unprocessed[unprocessed.Count - 1];
-                    unprocessed.RemoveAt(unprocessed.Count - 1);
-
-                    currentPath.Add(nearestPoint);
-                    currentPoint = nearestPoint;
-                    foundNext = true;
-                }
-            } while (foundNext);
-
-            result.Add(currentPath);
-        }
-
-        return result;
-    }
-
-
-
-
-
-    public List<List<Vector2>> ConnectRegions(List<Vector2> points)
-    {
-        List<HashSet<Vector2>> regions = FindConnectedRegions(points);
-        List<List<Vector2>> result = new List<List<Vector2>>();
-
-        foreach (var regionSet in regions)
-        {
-            List<Vector2> regionPoints = new List<Vector2>(regionSet);
-            List<Vector2> orderedPath = ConnectWithMinimumLines(regionPoints);
-            result.Add(orderedPath);
-        }
-
-        return result;
-    }
-
-    private List<HashSet<Vector2>> FindConnectedRegions(List<Vector2> points)
-    {
-        HashSet<Vector2> allPoints = new HashSet<Vector2>(points);
-        HashSet<Vector2> visited = new HashSet<Vector2>();
-        List<HashSet<Vector2>> regions = new List<HashSet<Vector2>>();
-
-        Vector2[] dirs = {
-            new Vector2(1, 0), new Vector2(-1, 0),
-            new Vector2(0, 1), new Vector2(0, -1)
-        };
-
-        foreach (Vector2 point in allPoints)
-        {
-            if (!visited.Contains(point))
-            {
-                Queue<Vector2> queue = new Queue<Vector2>();
-                HashSet<Vector2> region = new HashSet<Vector2>();
-                queue.Enqueue(point);
-                visited.Add(point);
-                region.Add(point);
-
-                while (queue.Count > 0)
-                {
-                    Vector2 current = queue.Dequeue();
-                    foreach (Vector2 dir in dirs)
-                    {
-                        Vector2 neighbor = current + dir;
-                        if (allPoints.Contains(neighbor) && !visited.Contains(neighbor))
-                        {
-                            visited.Add(neighbor);
-                            region.Add(neighbor);
-                            queue.Enqueue(neighbor);
-                        }
-                    }
-                }
-                regions.Add(region);
-            }
-        }
-        return regions;
-    }
-
-    private List<Vector2> ConnectWithMinimumLines(List<Vector2> regionPoints)
-    {
-        if (regionPoints.Count == 0)
-            return new List<Vector2>();
-
-        HashSet<Vector2> remaining = new HashSet<Vector2>(regionPoints);
-        List<Vector2> orderedPath = new List<Vector2>();
-
-        Vector2 current = GetTopLeftMost(remaining);
-        orderedPath.Add(current);
-        remaining.Remove(current);
-
-        Vector2 currentDirection = Vector2.right;
-
-        Vector2[] directions = {
-            Vector2.right, Vector2.up, Vector2.left, Vector2.down
-        };
-
-        int directionIndexOffset = 0;
-
-        int lastDirectionIndexOffset = 0;
-
-        while (remaining.Count > 0)
-        {
-            Vector2 next = current + directions[lastDirectionIndexOffset % 4];
-            if (remaining.Contains(next))
-            {
-                current = next;
-                orderedPath.Add(current);
-                remaining.Remove(current);
-                continue;
-            }
-
-            bool foundNext = false;
-
-            directionIndexOffset = lastDirectionIndexOffset;
-
-            foreach (Vector2 dir in directions)
-            {
-                Vector2 realDir = directions[directionIndexOffset % 4];
-
-                next = current + dir;
-                if (remaining.Contains(next))
-                {
-                    currentDirection = dir;
-                    current = next;
-                    orderedPath.Add(current);
-                    remaining.Remove(current);
-                    foundNext = true;
-
-                    lastDirectionIndexOffset = directionIndexOffset;
-                    break;
-                }
-
-                directionIndexOffset++;
-            }
-
-
-            if (!foundNext)
-            {
-                foreach (Vector2 pathPoint in orderedPath)
-                {
-                    foreach (Vector2 dir in directions)
-                    {
-                        next = pathPoint + dir;
-                        if (remaining.Contains(next))
-                        {
-                            current = next;
-                            orderedPath.Add(current);
-                            remaining.Remove(current);
-                            currentDirection = dir;
-                            foundNext = true;
-                            break;
-                        }
-                    }
-                    if (foundNext) break;
-                }
-            }
-
-            if (!foundNext)
-                break;
-        }
-
-        return orderedPath;
-    }
-
-    private Vector2 GetTopLeftMost(HashSet<Vector2> points)
-    {
-        Vector2 topLeft = new Vector2(float.MaxValue, float.MinValue);
-        foreach (Vector2 p in points)
-        {
-            if (p.x < topLeft.x || (p.x == topLeft.x && p.y > topLeft.y))
-                topLeft = p;
-        }
-        return topLeft;
-    }
-
     private List<Vector2> SimplifyPath(List<Vector2> path)
     {
         if (path.Count < 3)
-            return new List<Vector2>(path);
+        {
+            return path;
+        }
+
 
         List<Vector2> simplified = new List<Vector2> { path[0] };
         Vector2 a = path[0];
@@ -1853,8 +1579,10 @@ public class svgVisual : MonoBehaviour
             b = c;
         }
 
+
         simplified.Add(b);
         return simplified;
+        //return path;
     }
 
     private bool AreCollinear(Vector2 a, Vector2 b, Vector2 c)
@@ -1862,11 +1590,6 @@ public class svgVisual : MonoBehaviour
         float area = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
         return Mathf.Abs(area) < 0.001f;
     }
-
-
-
-
-
 
 
 
@@ -1937,6 +1660,8 @@ public class svgVisual : MonoBehaviour
                     }
                 }
             }
+
+            simpleVerticleFillMod = (int)renderScale * simpleVerticleFillModMod;
 
             // Add the last sub-line
             if (currentSubLine.Count > 0)
@@ -2044,7 +1769,7 @@ public class svgVisual : MonoBehaviour
 
     public List<List<Vector2>> GroupVerticalNeighbors(List<Vector2> points)
     {
-        simpleVerticleFillMod = (int)renderScale;
+        simpleVerticleFillMod = (int)renderScale * simpleVerticleFillModMod;
 
         List<Vector2> pointsModded = new List<Vector2>();
 
@@ -2086,6 +1811,9 @@ public class svgVisual : MonoBehaviour
             yMap[y].Add(data);
         }
 
+
+
+
         // 3. Union-Find to connect vertical neighbors
         UnionFind uf = new UnionFind(segments.Count);
 
@@ -2102,7 +1830,7 @@ public class svgVisual : MonoBehaviour
                         // Check X overlap
                         if (current.MaxX >= neighbor.MinX && current.MinX <= neighbor.MaxX && Mathf.Abs(current.MinX - neighbor.MinX) < 2.1f * renderScale && Mathf.Abs(current.MaxX - neighbor.MaxX) < 2.1f * renderScale)
                         {
-                            uf.Union(current.Index, neighbor.Index);
+                            //uf.Union(current.Index, neighbor.Index);
                         }
                     }
                 }
@@ -2131,6 +1859,9 @@ public class svgVisual : MonoBehaviour
 
             reverseAdd = !reverseAdd;
         }
+
+
+
 
         // 5. Sort points in final groups (top-to-bottom, left-to-right)
         List<List<Vector2>> result = new List<List<Vector2>>();
@@ -2180,26 +1911,6 @@ public class svgVisual : MonoBehaviour
             if (rootX != rootY) parent[rootY] = rootX;
         }
     }
-
-
-
-
-
-
-
-    private List<Vector2> FindMatch(Vector2 point, Dictionary<Vector2, List<Vector2>> endpointMap, float thresholdSquared)
-    {
-        foreach (var kvp in endpointMap)
-        {
-            if ((kvp.Key - point).sqrMagnitude <= thresholdSquared)
-            {
-                return kvp.Value;
-            }
-        }
-        return null;
-    }
-
-
 
 
 
@@ -2293,115 +2004,6 @@ public class svgVisual : MonoBehaviour
         return concentrations;
     }
 
-
-
-    public List<List<Vector2>> FindConcentrations(List<Vector2> pointsToAnalyze, float radius)
-    {
-        List<List<Vector2>> concentrations = new List<List<Vector2>>();
-        List<Vector2> remainingPoints = new List<Vector2>(pointsToAnalyze); // Copy to avoid modifying original
-
-        while (remainingPoints.Count > 0)
-        {
-            Vector2 seedPoint = remainingPoints[0]; // Start with the first remaining point
-            List<Vector2> currentConcentration = new List<Vector2>();
-            currentConcentration.Add(seedPoint);
-            remainingPoints.RemoveAt(0);
-
-            List<Vector2> pointsToAdd = new List<Vector2>(); // Points found in the current cluster
-            pointsToAdd.Add(seedPoint);
-
-            while (pointsToAdd.Count > 0)
-            {
-                Vector2 currentPoint = pointsToAdd[0];
-                pointsToAdd.RemoveAt(0);
-
-                for (int i = remainingPoints.Count - 1; i >= 0; i--) // Iterate backwards for safe removal
-                {
-                    if (Vector2.Distance(currentPoint, remainingPoints[i]) <= radius)
-                    {
-                        currentConcentration.Add(remainingPoints[i]);
-                        pointsToAdd.Add(remainingPoints[i]);
-                        remainingPoints.RemoveAt(i);
-                    }
-                }
-            }
-            concentrations.Add(currentConcentration);
-        }
-
-        return concentrations;
-    }
-
-    public List<List<Vector2>> SplitPointLists(List<Vector2> points, float threshold)
-    {
-        List<List<Vector2>> splitLists = new List<List<Vector2>>();
-
-        List<Vector2> curAddList = new List<Vector2>();
-
-        curAddList.Add(points[0]);
-
-        for (int i = 1; i < points.Count; i++)
-        {
-            if (Vector2.Distance(points[i], points [i - 1]) > renderScale * 2)
-            {
-                splitLists.Add(curAddList);
-
-                curAddList = new List<Vector2>();
-
-                curAddList.Add(points[i]);
-
-                //new line
-            }
-            else
-            {
-                curAddList.Add(points[i]);
-            }
-        }
-
-
-
-        splitLists.Add(curAddList);
-
-
-
-
-
-
-
-        //if (points == null || points.Count == 0)
-        //{
-        //    return splitLists; // Return empty list if input is null or empty
-        //}
-
-        //List<Vector2> currentList = new List<Vector2>();
-        //currentList.Add(points[0]); // Add the first point to the first list
-        //splitLists.Add(currentList);
-
-        //for (int i = 1; i < points.Count; i++)
-        //{
-        //    bool connected = false;
-        //    foreach (Vector2 pointInCurrentList in currentList)
-        //    {
-        //        if (Vector2.Distance(points[i], pointInCurrentList) <= threshold)
-        //        {
-        //            connected = true;
-        //            break;
-        //        }
-        //    }
-
-        //    if (connected)
-        //    {
-        //        currentList.Add(points[i]);
-        //    }
-        //    else
-        //    {
-        //        currentList = new List<Vector2>(); // Start a new list
-        //        currentList.Add(points[i]);
-        //        splitLists.Add(currentList);
-        //    }
-        //}
-
-        return splitLists;
-    }
 
 
 
@@ -2970,17 +2572,17 @@ public class svgVisual : MonoBehaviour
             {
                 curLineCount++;
 
-                PlacePath(lineWidth, paintSpot, i, svgParent, new Color(10, 10, 10));
+                PlacePath(lineWidth, paintSpot, i, svgParent, new Color(10, 10, 10), true);
             }
 
             curLineCount++;
-            PlacePath(lineWidth, pointsThisPath, i, svgParent, new Color(10, 10, 10));
+            PlacePath(lineWidth, pointsThisPath, i, svgParent, new Color(10, 10, 10), true);
         }
 
 
         if (drawSpawnShapes)
         {
-            PlacePath(lineWidth, drawShapeSpawnPoints, pathCount, svgParent, new Color(10, 10, 10));
+            PlacePath(lineWidth, drawShapeSpawnPoints, pathCount, svgParent, new Color(10, 10, 10), true);
         }
 
 
@@ -2998,11 +2600,11 @@ public class svgVisual : MonoBehaviour
 
             if (drawSpawnShapes)
             {
-                PlacePath(lineWidth, boarderPoints, pathCount + 1, svgParent, new Color(10, 10, 10));
+                PlacePath(lineWidth, boarderPoints, pathCount + 1, svgParent, new Color(10, 10, 10), true);
             }
             else
             {
-                PlacePath(lineWidth, boarderPoints, pathCount, svgParent, new Color(10, 10, 10));
+                PlacePath(lineWidth, boarderPoints, pathCount, svgParent, new Color(10, 10, 10), true);
             }
         }
 
@@ -3012,7 +2614,7 @@ public class svgVisual : MonoBehaviour
         listsOfAllPathsByColor[printIndex % potentialColors.Count].AddRange(listOfPaths); // using System.Linq;
 
 
-        GenerateSVG(listsOfAllPathsByColor[printIndex % potentialColors.Count], false, false, plotColors.IndexOf(plotColors[printIndex]), plotColors[printIndex], svgSize);
+        GenerateSVG(listsOfAllPathsByColor[printIndex % potentialColors.Count], false, false, plotColors.IndexOf(plotColors[printIndex]), plotColors[printIndex], svgSize, yourFileName);
     }
 
     [ContextMenu("ResetLineObjects")]
@@ -3027,7 +2629,7 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("PlacePath")]
-    public void PlacePath(float width, List<Vector2> points, int IDnum, Transform placeToPlace, Color col)
+    public void PlacePath(float width, List<Vector2> points, int IDnum, Transform placeToPlace, Color col, bool spawnLineRenderer)
     {
         listOfPaths.Add(points);
 
@@ -3043,44 +2645,54 @@ public class svgVisual : MonoBehaviour
 
         //}
 
-        GameObject newLine = new GameObject("line " + IDnum);
-
-        newLine.transform.SetParent(placeToPlace);
-
-        LineRenderer lineRenderer = newLine.AddComponent<LineRenderer>();
-
-        //new Color(10,10,10) == escape color - do not color lines right now
-        if (col != new Color(10, 10, 10))
+        if (spawnLineRenderer == true)
         {
-            //lineRenderer.material = new Material(unlitMat);
+            GameObject newLine = new GameObject("line " + IDnum);
 
-            //lineRenderer.material.SetColor("_BaseColor", col);
+            newLine.transform.SetParent(placeToPlace);
 
-            lineRenderer.endColor = col;
-            lineRenderer.startColor = col;
+            LineRenderer lineRenderer = newLine.AddComponent<LineRenderer>();
+
+            //new Color(10,10,10) == escape color - do not color lines right now
+            if (col != new Color(10, 10, 10))
+            {
+                //lineRenderer.material = new Material(unlitMat);
+
+                //lineRenderer.material.SetColor("_BaseColor", col);
+
+                lineRenderer.endColor = col;
+                lineRenderer.startColor = col;
+            }
+
+
+
+
+            lineRenderer.widthMultiplier = width;
+
+            lineObjects.Add(lineRenderer);
+
+            //if (lineObjects[IDnum])
+            //{
+            //    lineObjects[lineObjects.Count - 1].positionCount = points.Count;
+            //    lineObjects[lineObjects.Count - 1].SetPositions(realPoints.ToArray());
+            //    lineObjects[lineObjects.Count - 1].useWorldSpace = false;
+            //}
+
+            //lineObjects[lineObjects.Count - 1].positionCount = points.Count;
+            //lineObjects[lineObjects.Count - 1].SetPositions(realPoints.ToArray());
+            //lineObjects[lineObjects.Count - 1].useWorldSpace = false;
+
+
+            lineObjects[lineObjects.Count - 1].positionCount = points.Count;
+            lineObjects[lineObjects.Count - 1].SetPositions(realPoints.ToArray());
+            lineObjects[lineObjects.Count - 1].useWorldSpace = false;
         }
 
-
-
-
-        lineRenderer.widthMultiplier = width;
-
-        lineObjects.Add(lineRenderer);
-
-        //if (lineObjects[IDnum])
-        //{
-        //    lineObjects[lineObjects.Count - 1].positionCount = points.Count;
-        //    lineObjects[lineObjects.Count - 1].SetPositions(realPoints.ToArray());
-        //    lineObjects[lineObjects.Count - 1].useWorldSpace = false;
-        //}
-
-        lineObjects[lineObjects.Count - 1].positionCount = points.Count;
-        lineObjects[lineObjects.Count - 1].SetPositions(realPoints.ToArray());
-        lineObjects[lineObjects.Count - 1].useWorldSpace = false;
+        
     }
 
     [ContextMenu("SaveSVG")]
-    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex, Color drawColor, Vector2 svgFileSize)
+    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex, Color drawColor, Vector2 svgFileSize, string fileNameToUse)
     {
         StringBuilder svgContent = new StringBuilder();
 
@@ -3101,7 +2713,17 @@ public class svgVisual : MonoBehaviour
         if (saveDisplayCopy)
         {
             svgContent.AppendLine("<rect");
-            svgContent.AppendLine($"   style=\"fill:#{ColorUtility.ToHtmlStringRGB(bgColor)};stroke-width:0;stroke-opacity:0\"");
+
+            if (drawColor == Color.white)
+            {
+                svgContent.AppendLine($"   style=\"fill:#{ColorUtility.ToHtmlStringRGB(Color.black)};stroke-width:0;stroke-opacity:0\"");
+            }
+            else
+            {
+                svgContent.AppendLine($"   style=\"fill:#{ColorUtility.ToHtmlStringRGB(bgColor)};stroke-width:0;stroke-opacity:0\"");
+            }
+
+
             svgContent.AppendLine($"   id=\"Background\"");
             svgContent.AppendLine($"   width=\"{svgSize.x}\"");
             svgContent.AppendLine($"   height=\"{svgSize.y}\"");
@@ -3163,13 +2785,13 @@ public class svgVisual : MonoBehaviour
         // Close the SVG
         svgContent.AppendLine("</svg>");
 
-        if (!Directory.Exists($"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{yourFileName}"))
+        if (!Directory.Exists($"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{fileNameToUse}"))
         {
-            AssetDatabase.CreateFolder("Assets/Resources", yourFileName);
+            AssetDatabase.CreateFolder("Assets/Resources", fileNameToUse);
         }
 
 
-        string desktopPath = $"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{yourFileName}";
+        string desktopPath = $"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{fileNameToUse}";
         desktopPath += "\\";
 
         string filePath = "";
@@ -3177,18 +2799,18 @@ public class svgVisual : MonoBehaviour
 
         if (!saveDisplayCopy)
         {
-            filePathTXT = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".txt");
-            filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + ".svg");
+            filePathTXT = Path.Combine(desktopPath, fileNameToUse + printColorIndex.ToString() + ".txt");
+            filePath = Path.Combine(desktopPath, fileNameToUse + printColorIndex.ToString() + ".svg");
         }
         else
         {
-            filePath = Path.Combine(desktopPath, yourFileName + printColorIndex.ToString() + " Display.svg");
-            ScreenCapture.CaptureScreenshot(desktopPath + yourFileName + " Screenshot.png");
+            filePath = Path.Combine(desktopPath, fileNameToUse + printColorIndex.ToString() + " Display.svg");
+            ScreenCapture.CaptureScreenshot(desktopPath + fileNameToUse + " Screenshot.png");
         }
 
         if (isInfoPage)
         {
-            filePath = Path.Combine(desktopPath, yourFileName + "Info.txt");
+            filePath = Path.Combine(desktopPath, fileNameToUse + "Info.txt");
         }
 
 
@@ -3358,5 +2980,57 @@ public class svgVisual : MonoBehaviour
         }
 
         return pointsOnShape;
+    }
+
+
+
+
+
+
+
+
+
+}
+
+
+public static class VectorListExtensions
+{
+    public static List<List<Vector2>> SortByDistanceToPoint(this List<List<Vector2>> listOfVectorLists, Vector2 point)
+    {
+        // Create a copy to avoid modifying the original list
+        List<List<Vector2>> sortedList = listOfVectorLists.ToList();
+
+        // Sort the copy using the custom comparison delegate
+        sortedList.Sort((list1, list2) =>
+        {
+            // Calculate the average position of the first list
+            Vector2 avg1 = Vector2.zero;
+            if (list1.Count > 0)
+            {
+                foreach (Vector2 v in list1)
+                {
+                    avg1 += v;
+                }
+                avg1 /= list1.Count;
+            }
+
+            // Calculate the average position of the second list
+            Vector2 avg2 = Vector2.zero;
+            if (list2.Count > 0)
+            {
+                foreach (Vector2 v in list2)
+                {
+                    avg2 += v;
+                }
+                avg2 /= list2.Count;
+            }
+
+            // Compare the squared magnitudes of the distances from the point to the average positions
+            float dist1 = (avg1 - point).sqrMagnitude;
+            float dist2 = (avg2 - point).sqrMagnitude;
+            return dist1.CompareTo(dist2);
+        });
+
+        return sortedList;
     }
 }

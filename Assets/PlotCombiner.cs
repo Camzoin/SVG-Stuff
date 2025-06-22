@@ -49,6 +49,28 @@ public class PlotCombiner : MonoBehaviour
     }
 
 
+
+    [ContextMenu("ScaleSinglePageTo6x8")]
+    public void ScaleSinglePageTo6x8()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            List<List<Vector2>> bothFilesPaths = new List<List<Vector2>>();
+
+            if (FileToLineList(targetSVGName, i) != new List<List<Vector2>>())
+            {
+
+
+                //bothFilesPaths.AddRange(FileToLineList(targetSVGName, i));
+
+                bothFilesPaths.AddRange(ScalePathList(FileToLineList(targetSVGName, i), 0.666666f));
+
+                SaveCombinedFile(bothFilesPaths, i, new Vector2(96* 6, 96*8), $"{targetSVGName}Scaled");
+            }
+        }
+    }
+
+
     [ContextMenu("Combine3_4x8")]
     public void Combine3_4x8()
     {
@@ -321,7 +343,7 @@ public class PlotCombiner : MonoBehaviour
 
             Debug.Log("Line points" + linePoints.Count);
 
-            gameObject.GetComponent<svgVisual>().PlacePath(1, linePoints, path.IndexOf(sg), copierHolder, new Color(10,10,10));
+            gameObject.GetComponent<svgVisual>().PlacePath(1, linePoints, path.IndexOf(sg), copierHolder, new Color(10,10,10), true);
         }
     }
 

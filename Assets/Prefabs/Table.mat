@@ -130,7 +130,7 @@ Material:
     - _Color_1: {r: 1, g: 1, b: 1, a: 1}
     - _Color_2: {r: 0.0073928833, g: 0, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GenOffset: {r: 141.84444, g: 103.723114, b: 0, a: 0}
+    - _GenOffset: {r: 104.51825, g: -165.34741, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
