@@ -179,6 +179,13 @@ public class PlotCombiner : MonoBehaviour
     {
         svgVisual svgVis = gameObject.GetComponent<svgVisual>();
 
+        Vector2 svgSize = svgVis.docSettings.svgSize;
+        float renderScale = svgVis.docSettings.renderScale;
+        Vector2 clippingSize = svgVis.docSettings.clippingSize;
+        bool useAnimationSVGOffset = svgVis.docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = svgVis.docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = svgVis.docSettings.pensToUse;
+
         StringBuilder svgContent = new StringBuilder();
 
         // SVG header and basic structure
@@ -195,9 +202,9 @@ public class PlotCombiner : MonoBehaviour
 
         Color drawLineColor = Color.black;
 
-        if (svgVis.pensToUse.Count > colorIndex)
+        if (pensToUse.Count > colorIndex)
         {
-            drawLineColor = svgVis.pensToUse[colorIndex];
+            drawLineColor = pensToUse[colorIndex];
         }
 
 

@@ -8,6 +8,9 @@
         },
         {
             "m_Id": "9cdfc5282155d48ea1bae7d4b5f060bf"
+        },
+        {
+            "m_Id": "92c6b85735314b85a9865b8e653fe083"
         }
     ],
     "m_Keywords": [],
@@ -80,6 +83,9 @@
         },
         {
             "m_Id": "04411adb6464f08281ab3ca1593188c5"
+        },
+        {
+            "m_Id": "bad9cfcc5c6448e1af8a0ea6cd3ae94f"
         }
     ],
     "m_GroupDatas": [
@@ -359,6 +365,20 @@
                     "m_Id": "b0c1608acb6ca28fa85729906081ee79"
                 },
                 "m_SlotId": 1
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "bad9cfcc5c6448e1af8a0ea6cd3ae94f"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "1255fdbd4b31b786b6c10cf1c2325ded"
+                },
+                "m_SlotId": 0
             }
         },
         {
@@ -1194,6 +1214,27 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "4c3211ed1b4c48909d51b44590de43be",
+    "m_Id": 0,
+    "m_DisplayName": "Vector2",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "4e01105076496e839b4618e90b99f766",
     "m_Id": 2,
@@ -1745,8 +1786,8 @@
     "m_ObjectId": "7f6b023528204d559b69c4719ad37192",
     "m_Title": "Draw smooth horizontal edges",
     "m_Position": {
-        "x": -252.0000457763672,
-        "y": -49.0
+        "x": -252.00003051757813,
+        "y": -46.000022888183597
     }
 }
 
@@ -1761,6 +1802,9 @@
         },
         {
             "m_Id": "9cdfc5282155d48ea1bae7d4b5f060bf"
+        },
+        {
+            "m_Id": "92c6b85735314b85a9865b8e653fe083"
         }
     ]
 }
@@ -1888,6 +1932,34 @@
         "w": 1.0
     },
     "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector2ShaderProperty",
+    "m_ObjectId": "92c6b85735314b85a9865b8e653fe083",
+    "m_Guid": {
+        "m_GuidSerialized": "cae9ad57-6d02-42b7-b42c-718efe92bb8d"
+    },
+    "m_Name": "Vector2",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Vector2",
+    "m_DefaultReferenceName": "_Vector2",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
         "x": 0.0,
         "y": 0.0,
         "z": 0.0,
@@ -2121,8 +2193,8 @@
     "m_ObjectId": "9ef35fa440cd42619383b8f63bed7155",
     "m_Title": "Draw smooth teeth edges",
     "m_Position": {
-        "x": -354.0,
-        "y": 349.0
+        "x": -354.0000305175781,
+        "y": 351.9999694824219
     }
 }
 
@@ -2415,6 +2487,42 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "bad9cfcc5c6448e1af8a0ea6cd3ae94f",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -1097.0,
+            "y": -267.8989562988281,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "4c3211ed1b4c48909d51b44590de43be"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "92c6b85735314b85a9865b8e653fe083"
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "beb72fa948041b84841d8d909c7b5997",
     "m_Id": 2,
@@ -2656,7 +2764,7 @@
     "m_Title": "Draw smooth vertical edges",
     "m_Position": {
         "x": -299.0000305175781,
-        "y": -446.0000305175781
+        "y": -443.0000305175781
     }
 }
 

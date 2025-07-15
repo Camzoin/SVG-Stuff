@@ -62,6 +62,13 @@ public class SVGTextImporter : MonoBehaviour
     [ContextMenu("CompileInfoPage")]
     public void CompileInfoPage()
     {
+        Vector2 svgSize = svgVis.docSettings.svgSize;
+        float renderScale = svgVis.docSettings.renderScale;
+        Vector2 clippingSize = svgVis.docSettings.clippingSize;
+        bool useAnimationSVGOffset = svgVis.docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = svgVis.docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = svgVis.docSettings.pensToUse;
+
         //Make this bad more 4x3in
 
         if (lastTextHolder)
@@ -131,10 +138,10 @@ public class SVGTextImporter : MonoBehaviour
 
         curInfoSegmentY += 15;
         TurnTextToLines(alphabetAsset.text, textScale * 0.3f, true);
-        WriteText("Size = " + svgVis.svgSize.ToString("F0"), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
+        WriteText("Size = " + svgSize.ToString("F0"), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
 
         //curInfoSegmentY += 25;
-        WriteText("Bounding Box Indent = " + svgVis.clippingSize.ToString("F0"), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
+        WriteText("Bounding Box Indent = " + clippingSize.ToString("F0"), new Vector3(secondParamCollumX, curInfoSegmentY, 0), false, 1.5f);
 
         curInfoSegmentY += 10;
         WriteText("Draw Bounds = " + svgVis.drawBounds.ToString(), new Vector3(0, curInfoSegmentY, 0), false, 1.5f);
@@ -235,7 +242,7 @@ public class SVGTextImporter : MonoBehaviour
 
         svgVis.SetRenderValues(pastWrittenLineRendererList, svgVis.textMat, Color.black);
 
-        lastTextHolder.transform.position = Vector3.up * svgVis.svgSize.y * 4.25f + (Vector3.left * svgVis.svgSize.x / 2.5f);
+        lastTextHolder.transform.position = Vector3.up * svgSize.y * 4.25f + (Vector3.left * svgSize.x / 2.5f);
 
         svgVis.GenerateSVG(pastWrittenLinePositionLists, false, true, 0, Color.black, new Vector2(4 * 96, 3 * 96), svgVis.yourFileName);
 
@@ -244,9 +251,16 @@ public class SVGTextImporter : MonoBehaviour
 
     IEnumerator waiter()
     {
+        Vector2 svgSize = svgVis.docSettings.svgSize;
+        float renderScale = svgVis.docSettings.renderScale;
+        Vector2 clippingSize = svgVis.docSettings.clippingSize;
+        bool useAnimationSVGOffset = svgVis.docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = svgVis.docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = svgVis.docSettings.pensToUse;
+
         yield return new WaitForSeconds(2f);
 
-        Camera.main.transform.position += Vector3.up * svgVis.svgSize.y * 4;
+        Camera.main.transform.position += Vector3.up * svgSize.y * 4;
 
         string desktopPath = $"Z:\\Shit\\SVG Stuff\\SVG-Stuff\\Assets\\Resources\\{svgVis.yourFileName}";
         desktopPath += "\\";
@@ -260,7 +274,7 @@ public class SVGTextImporter : MonoBehaviour
 
         svgVis.bgRenderer.material.SetColor("_BaseColor", svgVis.bgColor);
 
-        Camera.main.transform.position -= Vector3.up * svgVis.svgSize.y * 4;
+        Camera.main.transform.position -= Vector3.up * svgSize.y * 4;
     }
 
 

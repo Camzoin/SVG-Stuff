@@ -9,7 +9,17 @@ using System.Linq;
 
 public class svgVisual : MonoBehaviour
 {
+    public FillLineSettings fillSettings;
 
+    public TextFillSettings textFillSettings;
+
+    public OutlineAndLineSettings lineSettings;
+
+    public DocAndColorSettings docSettings;
+
+    public SquiggleLineSettings squiggleLineSettings;
+
+    public SimpleShapeSpamSettings shapeSpamSettings;
 
     public List<List<Vector2>> listOfPaths = new List<List<Vector2>>();
 
@@ -87,7 +97,7 @@ public class svgVisual : MonoBehaviour
 
     public float lineWidth = 0.5f;
 
-    public bool generateArtWithNewSeed = false;
+
 
     public bool redoFlowFieldForNewColors = true;
 
@@ -111,9 +121,7 @@ public class svgVisual : MonoBehaviour
 
     public int paperIndex;
 
-    public Vector2 svgSize = new Vector2(816, 1056);
 
-    public Vector2 clippingSize = new Vector2(0, 0);
 
     public float chosenSize;
 
@@ -162,24 +170,22 @@ public class svgVisual : MonoBehaviour
 
     public Camera renderCam;
 
-    public float renderScale = 4;
+
 
     public Burster burster;
 
-    public int simpleVerticleFillModMod = 1;
 
-    public int simpleVerticleFillMod = 4;
 
-    public bool useAnimationSVGOffset = false;
+    private int simpleVerticleFillMod = 4;
 
-    public bool useSimpleFillForRender = false;
 
-    public bool fillBGColor = false;
+
+
 
     List<Color> plottedColors = new List<Color>();
 
 
-    public List<Color> pensToUse = new List<Color>();
+
 
     public PlotCombiner pc;
 
@@ -187,37 +193,19 @@ public class svgVisual : MonoBehaviour
 
     public AnimCellManager animManager;
 
-    public int squiggleLineFillCount = 500;
 
-    public bool squiggleUseRandomDir = true;
 
-    public Vector2 squiggleLineDir = new Vector2(1, 1);
 
-    public Vector2 squiggleSinDir = new Vector2(0, 1);
 
-    public bool squiggleLinesUseSine = false;
 
-    public bool useValueAsSquiggleProb = false;
 
-    public bool drawColorBoundsOutlines = false;
 
-    public float combineLineDist = 3f;
-
-    public int characterFillLetterCount = 2000;
-
-    public float valueTextScale = 1;
-
-    public bool useValueToScaleChars = true;
-
-    public bool charsUsePsudoRandomScale = false;
-
-    public bool useValueAsChanceforChars = true;
-
-    public float minCharScale = 0.05f;
 
     [ContextMenu("SetRenderValues")]
     public void SetRenderValues(List<LineRenderer> lineRenderersToSet, Material matToCopy, Color colorToSet, bool resetLinePositions = false, bool resetMyAss = true)
     {
+        Vector2 svgSize = docSettings.svgSize;
+
         svgParent.position = new Vector3(-(svgSize.x / 2f), -(svgSize.y / 2f), 0);
 
         Camera.main.orthographicSize = svgSize.y / 2f;
@@ -254,6 +242,14 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("DoRenderTextureShit")]
     public void DoRenderTextureShit()
     {
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
+
+
         listOfAllPathsThisRun = new List<List<List<Vector2>>>();
 
         if (generateArtWithNewSeed)
@@ -317,6 +313,13 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("GenerateRTWork")]
     public void GenerateRTWork()
     {
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
+
         float startTime = Time.time;
 
         DateTime before = DateTime.Now;
@@ -581,7 +584,7 @@ public class svgVisual : MonoBehaviour
 
 
 
-            if (drawColorBoundsOutlines == true)
+            if (lineSettings.drawColorBoundsOutlines == true)
             {
 
                 for (int i = 0; i < outlinesToAddSplitUpColor.Count; i++)
@@ -669,22 +672,22 @@ public class svgVisual : MonoBehaviour
 
             //Here we spawn in fill lines
 
-            int fillLineCount = squiggleLineFillCount;
+            int fillLineCount = squiggleLineSettings.squiggleLineFillCount;
 
             int colorAttempts = 0;
 
             for (int i = 0; i < fillLineCount; i++)
             {
-                int lineSegmentMaxCount = 35;
+                int lineSegmentMaxCount = (int)UnityEngine.Random.Range(squiggleLineSettings.lineSegCountMinMax.x, squiggleLineSettings.lineSegCountMinMax.y);
 
                 List<Vector2> thisFillLine = new List<Vector2>();
 
 
                 Vector2 additionalOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)).normalized * 0.4f;
 
-                if (squiggleUseRandomDir == false)
+                if (squiggleLineSettings.squiggleUseRandomDir == false)
                 {
-                    additionalOffset = squiggleLineDir.normalized * 0.4f;
+                    additionalOffset = squiggleLineSettings.squiggleLineDir.normalized * 0.4f;
 }
 
 
@@ -719,7 +722,7 @@ public class svgVisual : MonoBehaviour
 
                 bool cancelThis = false;
 
-                if (v >= UnityEngine.Random.Range(0f, 1f) && useValueAsSquiggleProb == true)
+                if (v >= UnityEngine.Random.Range(0f, 1f) && squiggleLineSettings.useValueAsSquiggleProb == true)
                 {
                     cancelThis = true;
                 }
@@ -733,9 +736,9 @@ public class svgVisual : MonoBehaviour
                     {
                         startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y);
 
-                        if (squiggleLinesUseSine == true)
+                        if (squiggleLineSettings.squiggleLinesUseSine == true)
                         {
-                            additionalOffset += new Vector2(Mathf.Sin(q / (3f * squiggleSinDir.x)) / 5f, Mathf.Sin(q / (3f * squiggleSinDir.y)) / 5f);
+                            additionalOffset += new Vector2(Mathf.Sin(q / (3f * squiggleLineSettings.squiggleSinDir.x)) / 5f, Mathf.Sin(q / (3f * squiggleLineSettings.squiggleSinDir.y)) / 5f);
 
                         }
 
@@ -780,16 +783,26 @@ public class svgVisual : MonoBehaviour
 
 
 
+            
 
 
 
+             int characterFillLetterCount = textFillSettings.characterFillLetterCount;
+
+          float valueTextScale = textFillSettings.valueTextScale;
+
+           bool useValueToScaleChars = textFillSettings.useValueToScaleChars;
+
+           bool charsUsePsudoRandomScale = textFillSettings.charsUsePsudoRandomScale;
+
+           bool useValueAsChanceforChars = textFillSettings.useValueAsChanceforChars;
+
+          float minCharScale = textFillSettings.minCharScale;
 
 
 
-
-
-            //I want to spawn letters to fill in an image
-            int fillLineLetterCount = characterFillLetterCount;
+           //I want to spawn letters to fill in an image
+           int fillLineLetterCount = characterFillLetterCount;
 
             for (int i = 0; i < fillLineLetterCount; i++)
             {
@@ -877,6 +890,107 @@ public class svgVisual : MonoBehaviour
 
 
 
+            
+
+
+            //If I want to spam in simple Shapes
+
+
+
+
+
+            for (int i = 0; i < shapeSpamSettings.totalShapeCount; i++)
+            {
+                //Get a random position
+                Vector2 lineStartPos = new Vector2(UnityEngine.Random.Range(0, wholeRenderTexHolder.width), UnityEngine.Random.Range(0, wholeRenderTexHolder.height));
+
+                Color startingColor = wholeRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
+
+                float scH = 0;
+                float scS = 0;
+                float scV = 0;
+
+                Color.RGBToHSV(startingColor, out scH, out scS, out scV);
+
+
+                float randomVal = UnityEngine.Random.Range(0f, 1f);
+
+                if (scV < randomVal && shapeSpamSettings.useValueAsChanceforShapes == true)
+                {
+                    i--;
+                }
+                else
+                {
+                    float valDiff = randomVal - scV;
+
+                    float angle = 0;
+
+
+                    if(shapeSpamSettings.useRandomRotation == true)
+                    {
+                        angle = UnityEngine.Random.Range(0f, 360f);
+                    }
+
+                    if (shapeSpamSettings.useRotationFromList == true)
+                    {
+                        if (shapeSpamSettings.possibleRotations.Count > 0)
+                        {
+                            angle = shapeSpamSettings.possibleRotations[UnityEngine.Random.Range(0, shapeSpamSettings.possibleRotations.Count)];
+                        }
+                        
+                    }
+
+
+
+
+
+
+
+
+
+
+                    if (shapeSpamSettings.useValueToScaleShapes == false)
+                    {
+                        valDiff = UnityEngine.Random.Range(shapeSpamSettings.minShapeScale, 1f);
+                    }
+
+                    if (shapeSpamSettings.shapesUsePsudoRandomScale == false)
+                    {
+                        valDiff = 1;
+                    }
+
+
+                    int shapeVertCount = shapeSpamSettings.possibleShapeVertCounts[UnityEngine.Random.Range(0, shapeSpamSettings.possibleShapeVertCounts.Count)];
+
+                    List<Vector2> newShapeList = FindPointsOnSimpleShape(shapeVertCount, shapeVertCount, svgSize / 2, valDiff * shapeSpamSettings.shapeScale, angle * Mathf.Deg2Rad);
+
+
+
+                    for (int q = 0; q < newShapeList.Count; q++)
+                    {
+                        newShapeList[q] += lineStartPos - (svgSize / 2);
+                    }
+
+                    newShapeList.Add(newShapeList[0]);
+
+
+                    fillLineList.Add(newShapeList);
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -951,13 +1065,14 @@ public class svgVisual : MonoBehaviour
             bool hasBGFilled = false;
 
 
-            if (useSimpleFillForRender)
+            if (fillSettings.useSimpleFillForRender == true)
             {
 
                 //Starts at 1 to avoid filling in "empty area", make 0 if you want to fill all colors
+                //fill each color
                 for (int q = 1; q < claimedPixels.Count; q++)
                 {
-                    if (fillBGColor && hasBGFilled == false)
+                    if (fillSettings.fillBGColor && hasBGFilled == false)
                     {
                         q = 0;
 
@@ -969,9 +1084,48 @@ public class svgVisual : MonoBehaviour
 
                     List<List<Vector2>> FUICKCleaned = new List<List<Vector2>>();
 
-                    foreach (List<Vector2> lv2 in FUICK)
+                    for (int j = 0; j < FUICK.Count; j++)
                     {
-                        FUICKCleaned.Add(SimplifyPath(lv2));
+                        List<Vector2> tempLineList = new List<Vector2>();
+
+                        if (fillSettings.useSinWiggle == true)
+                        {
+                            List<List<Vector2>> listOfLinesThisLine = new List<List<Vector2>>();
+
+
+                            //Make fill Lines sqiggle
+                            for (int h = 0; h < FUICK[j].Count; h++)
+                            {
+
+
+                                Vector2 newPos = FUICK[j][h] + new Vector2(Mathf.Sin(FUICK[j][h].y / fillSettings.ySinDivider) * fillSettings.ySinXMulti, Mathf.Sin(FUICK[j][h].x / fillSettings.xSinDivider) * fillSettings.xSinYMulti);
+
+                                if (h == 0)
+                                {
+                                    if (lineSettings.ignoreFirstLinePointForWiggle == true)
+                                    {
+                                        newPos = FUICK[j][h];
+                                    }
+                                }
+
+                                //if I go OOOOB
+                                if (newPos.x / wholeRenderTexHolder.width > 1 || newPos.y / wholeRenderTexHolder.height > 1 || newPos.x < 0 || newPos.y < 0)
+                                {
+
+                                }
+
+
+
+                                tempLineList.Add(newPos);
+
+                            }
+                        }
+
+
+
+
+
+                        FUICKCleaned.Add(SimplifyPath(tempLineList));
                     }
 
                     simpleVertFillLinesByColor.AddRange(FUICKCleaned);
@@ -1164,6 +1318,31 @@ public class svgVisual : MonoBehaviour
                 {
                     for (int g = 0; g < finalLineListByColor[i][u].Count; g++)
                     {
+                        if (finalLineListByColor[i][u][g].x > wholeRenderTexHolder.width / renderScale)
+                        {
+                            finalLineListByColor[i][u][g] = new Vector2(wholeRenderTexHolder.width / renderScale, finalLineListByColor[i][u][g].y);
+                        }
+
+                        if (finalLineListByColor[i][u][g].x < 0)
+                        {
+                            finalLineListByColor[i][u][g] = new Vector2(0, finalLineListByColor[i][u][g].y);
+                        }
+
+
+
+                        if (finalLineListByColor[i][u][g].y > wholeRenderTexHolder.height / renderScale)
+                        {
+                            finalLineListByColor[i][u][g] = new Vector2(finalLineListByColor[i][u][g].x, wholeRenderTexHolder.height / renderScale);
+                        }
+
+                        if (finalLineListByColor[i][u][g].y < 0)
+                        {
+                            finalLineListByColor[i][u][g] = new Vector2(finalLineListByColor[i][u][g].x, 0);
+                        }
+
+
+
+
                         finalLineListByColor[i][u][g] = new Vector2(finalLineListByColor[i][u][g].x, (wholeRenderTexHolder.height / renderScale) - finalLineListByColor[i][u][g].y);
 
                         if (useAnimationSVGOffset)
@@ -1195,7 +1374,7 @@ public class svgVisual : MonoBehaviour
 
 
 
-            if (combineLineDist > 0)
+            if (lineSettings.combineLineDist > 0)
             {
                 var finalCompleteLineListByColorCopy = finalCompleteLineListByColor;
 
@@ -1277,7 +1456,7 @@ public class svgVisual : MonoBehaviour
                             if (curCombineLine.Count > 0 && curClosestList.Count > 0)
                             {
 
-                                if (distToNextLineSeg < combineLineDist)
+                                if (distToNextLineSeg < lineSettings.combineLineDist)
                                 {
                                     if (addLineReversed == false)
                                     {
@@ -1365,12 +1544,12 @@ public class svgVisual : MonoBehaviour
                 Debug.LogError("This is a lot of lines");
             }
 
-            if (finalCompleteLineListByColor.Count > 10000 && combineLineDist == 0)
+            if (finalCompleteLineListByColor.Count > 10000 && lineSettings.combineLineDist == 0)
             {
                 Debug.LogError("This is a lot of lines, and you are not even trying to merge them dummy!");
             }
 
-            if ( combineLineDist == 0)
+            if (lineSettings.combineLineDist == 0)
             {
                 Debug.LogError("You probably meant to merge lines dummy");
             }
@@ -1503,7 +1682,7 @@ public class svgVisual : MonoBehaviour
 
         if (pensToUse.Count > 0)
         {
-            GenerateSVG(outlineList, false, false,1000, Color.black, svgSize, yourFileName);
+            //GenerateSVG(outlineList, false, false,1000, Color.black, svgSize, yourFileName);
         }
 
 
@@ -1533,7 +1712,11 @@ public class svgVisual : MonoBehaviour
             //}
         }
 
-        pc.SlamTogether(finalCompleteLineListByColor, yourFileName);
+
+
+
+
+        //pc.SlamTogether(finalCompleteLineListByColor, yourFileName);
 
 
 
@@ -1608,7 +1791,12 @@ public class svgVisual : MonoBehaviour
 
     public List<List<Vector2>> OrganizeIntoScanLinesWithBreaks(List<Vector2> points)
     {
-
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
 
         // First organize into standard scan lines (grouped by Y)
         Dictionary<float, List<Vector2>> scanLineDict = new Dictionary<float, List<Vector2>>();
@@ -1661,7 +1849,7 @@ public class svgVisual : MonoBehaviour
                 }
             }
 
-            simpleVerticleFillMod = (int)renderScale * simpleVerticleFillModMod;
+            simpleVerticleFillMod = (int)renderScale * fillSettings.simpleVerticleFillModMod;
 
             // Add the last sub-line
             if (currentSubLine.Count > 0)
@@ -1769,7 +1957,14 @@ public class svgVisual : MonoBehaviour
 
     public List<List<Vector2>> GroupVerticalNeighbors(List<Vector2> points)
     {
-        simpleVerticleFillMod = (int)renderScale * simpleVerticleFillModMod;
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
+
+        simpleVerticleFillMod = (int)renderScale * fillSettings.simpleVerticleFillModMod;
 
         List<Vector2> pointsModded = new List<Vector2>();
 
@@ -2155,6 +2350,13 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("DoBoth")]
     public void DoBoth()
     {
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
+
         plottedColors = new List<Color>();
 
         List<Color> OGPotColors = potentialColors;
@@ -2337,6 +2539,13 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("GenerateFlowField")]
     public void GenerateFlowField()
     {
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
+
         flowFieldPositions = new List<Vector2>();
 
         flowFieldDirections = new List<Vector2>();
@@ -2377,6 +2586,13 @@ public class svgVisual : MonoBehaviour
     [ContextMenu("GenerateWork")]
     public void GenerateWork(int printIndex)
     {
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
+
         lineObjects = new List<LineRenderer>();
 
         listOfPaths = new List<List<Vector2>>();
@@ -2692,8 +2908,15 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("SaveSVG")]
-    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex, Color drawColor, Vector2 svgFileSize, string fileNameToUse)
+    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex, Color drawColor, Vector2 svgFileSize, string fileNameToUse, string titleExtention = "", bool saveTxtCopy = true)
     {
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
+
         StringBuilder svgContent = new StringBuilder();
 
         // SVG header and basic structure
@@ -2799,12 +3022,13 @@ public class svgVisual : MonoBehaviour
 
         if (!saveDisplayCopy)
         {
-            filePathTXT = Path.Combine(desktopPath, fileNameToUse + printColorIndex.ToString() + ".txt");
-            filePath = Path.Combine(desktopPath, fileNameToUse + printColorIndex.ToString() + ".svg");
+            filePathTXT = Path.Combine(desktopPath, fileNameToUse + titleExtention + printColorIndex.ToString() + ".txt");
+
+            filePath = Path.Combine(desktopPath, fileNameToUse + titleExtention + printColorIndex.ToString() + ".svg");
         }
         else
         {
-            filePath = Path.Combine(desktopPath, fileNameToUse + printColorIndex.ToString() + " Display.svg");
+            filePath = Path.Combine(desktopPath, fileNameToUse + titleExtention + printColorIndex.ToString() + " Display.svg");
             ScreenCapture.CaptureScreenshot(desktopPath + fileNameToUse + " Screenshot.png");
         }
 
@@ -2816,12 +3040,24 @@ public class svgVisual : MonoBehaviour
 
         // Write the SVG content to a file
         File.WriteAllText(filePath, svgContent.ToString());
-        File.WriteAllText(filePathTXT, svgContent.ToString());
+
+        if (saveTxtCopy == true)
+        {
+            File.WriteAllText(filePathTXT, svgContent.ToString());
+        }
+
         //Debug.Log("Done");
     }
 
     public void GenerateDispalySVG(List<List<List<Vector2>>> allPathsToDisplay)
     {
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
+
         StringBuilder svgContent = new StringBuilder();
 
         // SVG header and basic structure
@@ -2931,6 +3167,13 @@ public class svgVisual : MonoBehaviour
 
     public List<Vector2> FindPointsOnSimpleShape(int pointCount, int shapeVertCount, Vector2 position, float radius, float rotation)
     {
+        Vector2 svgSize = docSettings.svgSize;
+        float renderScale = docSettings.renderScale;
+        Vector2 clippingSize = docSettings.clippingSize;
+        bool useAnimationSVGOffset = docSettings.useAnimationSVGOffset;
+        bool generateArtWithNewSeed = docSettings.generateArtWithNewSeed;
+        List<Color> pensToUse = docSettings.pensToUse;
+
         List<Vector2> pointsOnShape = new List<Vector2>();
 
         List<Vector2> shapeVertPoints = CalculateCirclePoints(shapeVertCount, position, radius, rotation);
