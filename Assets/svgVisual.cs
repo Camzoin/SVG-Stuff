@@ -17,9 +17,11 @@ public class svgVisual : MonoBehaviour
 
     public DocAndColorSettings docSettings;
 
-    public SquiggleLineSettings squiggleLineSettings;
+    public FlowFieldLineSettings flowFieldLineSettings;
 
     public SimpleShapeSpamSettings shapeSpamSettings;
+
+    public ShitRunner shitRunner;
 
     public List<List<Vector2>> listOfPaths = new List<List<Vector2>>();
 
@@ -311,7 +313,7 @@ public class svgVisual : MonoBehaviour
 
 
     [ContextMenu("GenerateRTWork")]
-    public void GenerateRTWork()
+    public void GenerateRTWork(int copyID = 0)
     {
         Vector2 svgSize = docSettings.svgSize;
         float renderScale = docSettings.renderScale;
@@ -338,7 +340,10 @@ public class svgVisual : MonoBehaviour
 
         UnityEngine.Random.InitState(seedValue);
 
-        piecename = textImporter.GenerateRandomName();
+        if (copyID == 0)
+        {
+            piecename = textImporter.GenerateRandomName();
+        }
 
         yourFileName = piecename.Replace(" ", "");
 
@@ -670,29 +675,51 @@ public class svgVisual : MonoBehaviour
 
 
 
+
+
+
             //Here we spawn in fill lines
 
-            int fillLineCount = squiggleLineSettings.squiggleLineFillCount;
+            float copyMulti = 1;
+
+            if (shitRunner.rerollCopies == true)
+            {
+
+                if (shitRunner.lerpSpawnMulti == true)
+                {
+                    copyMulti = Mathf.Lerp(shitRunner.copyMinMaxSpawnMulti.x, shitRunner.copyMinMaxSpawnMulti.y, (float)copyID / (float)(shitRunner.copies - 1));
+                }
+                else
+                {
+                    copyMulti = UnityEngine.Random.Range(shitRunner.copyMinMaxSpawnMulti.x, shitRunner.copyMinMaxSpawnMulti.y);
+                }
+            }
+
+            int fillLineCount = (int)(flowFieldLineSettings.flowFieldLineFillCount * copyMulti);
 
             int colorAttempts = 0;
 
-            for (int i = 0; i < fillLineCount; i++)
+            List<Vector2> startingPoints = GeneratePoints(fillLineCount, 20, new Rect(0,0,wholeRenderTexHolder.width, wholeRenderTexHolder.height), 1000);
+
+            for (int i = 0; i < startingPoints.Count; i++)
             {
-                int lineSegmentMaxCount = (int)UnityEngine.Random.Range(squiggleLineSettings.lineSegCountMinMax.x, squiggleLineSettings.lineSegCountMinMax.y);
+                int lineSegmentMaxCount = (int)UnityEngine.Random.Range(flowFieldLineSettings.lineSegCountMinMax.x, flowFieldLineSettings.lineSegCountMinMax.y);
 
                 List<Vector2> thisFillLine = new List<Vector2>();
 
 
                 Vector2 additionalOffset = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)).normalized * 0.4f;
 
-                if (squiggleLineSettings.squiggleUseRandomDir == false)
+                if (flowFieldLineSettings.flowFieldUseRandomDir == false)
                 {
-                    additionalOffset = squiggleLineSettings.squiggleLineDir.normalized * 0.4f;
+                    additionalOffset = flowFieldLineSettings.flowFieldLineDir.normalized * 0.4f;
 }
 
 
                 //Get a random position, if that position has no color on normal map find a different one
-                Vector2 lineStartPos = new Vector2(UnityEngine.Random.Range(0, wholeRenderTexHolder.width), UnityEngine.Random.Range(0, wholeRenderTexHolder.height));
+                //Vector2 lineStartPos = new Vector2(UnityEngine.Random.Range(0, wholeRenderTexHolder.width), UnityEngine.Random.Range(0, wholeRenderTexHolder.height));
+
+                Vector2 lineStartPos = startingPoints[i];
 
                 Color startingColor = wholeRenderTexHolder.GetPixel((int)lineStartPos.x, (int)lineStartPos.y);
 
@@ -722,7 +749,7 @@ public class svgVisual : MonoBehaviour
 
                 bool cancelThis = false;
 
-                if (v >= UnityEngine.Random.Range(0f, 1f) && squiggleLineSettings.useValueAsSquiggleProb == true)
+                if (v >= UnityEngine.Random.Range(0f, 1f) && flowFieldLineSettings.useValueAsFlowFieldProb == true)
                 {
                     cancelThis = true;
                 }
@@ -736,15 +763,25 @@ public class svgVisual : MonoBehaviour
                     {
                         startingNormalColor = wholeNormalRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y);
 
-                        if (squiggleLineSettings.squiggleLinesUseSine == true)
-                        {
-                            additionalOffset += new Vector2(Mathf.Sin(q / (3f * squiggleLineSettings.squiggleSinDir.x)) / 5f, Mathf.Sin(q / (3f * squiggleLineSettings.squiggleSinDir.y)) / 5f);
 
+                        //if I care about the color changing
+                        if (flowFieldLineSettings.endLineAtColorChange == true)
+                        {
+                            //if the color changes
+                            if (wholeRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y) != startingColor)
+                            {
+                                q = lineSegmentMaxCount;
+
+                                if (q > lineSegmentMaxCount)
+                                {
+                                    q = lineSegmentMaxCount;
+                                }
+                            }
                         }
 
 
                         //If this pixel is the same color
-                        if (wholeRenderTexHolder.GetPixel((int)curLineWritingPos.x, (int)curLineWritingPos.y) != startingColor || startingNormalColor.maxColorComponent < 0.01f || curLineWritingPos.x > wholeNormalRenderTexHolder.width || curLineWritingPos.y > wholeNormalRenderTexHolder.height || curLineWritingPos.x < 0 || curLineWritingPos.y < 0)
+                        if (startingNormalColor.maxColorComponent < 0.01f || curLineWritingPos.x > wholeNormalRenderTexHolder.width || curLineWritingPos.y > wholeNormalRenderTexHolder.height || curLineWritingPos.x < 0 || curLineWritingPos.y < 0)
                         {
                             if (q == 0)
                             {
@@ -756,9 +793,28 @@ public class svgVisual : MonoBehaviour
                         }
                         else
                         {
-                            thisFillLine.Add(curLineWritingPos);
+                            Vector2 movement = (new Vector2(startingNormalColor.r - 0.5f, startingNormalColor.g - 0.5f) + additionalOffset).normalized * 3f * (renderScale / 2f);
 
-                            curLineWritingPos += (new Vector2(startingNormalColor.r - 0.5f, startingNormalColor.g - 0.5f) + additionalOffset).normalized * 3f * (renderScale / 2f) * UnityEngine.Random.Range(0.5f, 1.5f);
+                            if (thisFillLine.Count > 5)
+                            {
+                                if (Vector2.Distance(thisFillLine[thisFillLine.Count - 5], curLineWritingPos) > 6f)
+                                {
+                                    thisFillLine.Add(curLineWritingPos);
+                                }
+                                else
+                                {
+                                    q = lineSegmentMaxCount;
+                                    //Debug.Log("FUCK ME IM SMALL " + Vector2.Distance(thisFillLine[thisFillLine.Count - 5], curLineWritingPos));
+                                }
+                            }
+                            else
+                            {
+                                thisFillLine.Add(curLineWritingPos);
+                            }
+
+
+
+                            curLineWritingPos += movement;
                         }
 
 
@@ -766,7 +822,25 @@ public class svgVisual : MonoBehaviour
 
                     if (thisFillLine.Count > 1)
                     {
-                        fillLineList.Add(thisFillLine);
+                        if (flowFieldLineSettings.onlyUseFirstAndLastPoints == true)
+                        {
+                            List<Vector2> firstAndLast = new List<Vector2>();
+
+                            firstAndLast.Add(thisFillLine[0]);
+
+                            firstAndLast.Add(thisFillLine.Last());
+
+                            fillLineList.Add(firstAndLast);
+                        }
+                        else
+                        {
+                            fillLineList.Add(thisFillLine);
+                        }
+
+
+
+
+
                     }
 
                 }
@@ -915,7 +989,7 @@ public class svgVisual : MonoBehaviour
 
                 float randomVal = UnityEngine.Random.Range(0f, 1f);
 
-                if (scV < randomVal && shapeSpamSettings.useValueAsChanceforShapes == true)
+                if (scV > randomVal && shapeSpamSettings.useValueAsChanceforShapes == true)
                 {
                     i--;
                 }
@@ -1305,6 +1379,12 @@ public class svgVisual : MonoBehaviour
 
 
 
+
+
+
+
+
+
             //Offset based on cell 4x 3y  using z - animationCell index
 
 
@@ -1347,7 +1427,7 @@ public class svgVisual : MonoBehaviour
 
                         if (useAnimationSVGOffset)
                         {
-                            finalLineListByColor[i][u][g] -= new Vector2(-(96 / 1.5f) + 5, -5);
+                            finalLineListByColor[i][u][g] -= new Vector2();
                         }
                         else
                         {
@@ -1414,11 +1494,22 @@ public class svgVisual : MonoBehaviour
 
                             bool addLineReversed = false;
 
+
+
                             for (int q = 0; q < finalCompleteLineListByColorCopy[i].Count; q++)
                             {
                                 float thisSegDistToCurLine = Vector2.Distance(curCombineLine.Last(), finalCompleteLineListByColorCopy[i][q][0]);
 
-                                if (thisSegDistToCurLine < distToNextLineSeg)
+
+
+                                Vector2 midPoint = Vector2.Lerp(curCombineLine.Last(), finalCompleteLineListByColorCopy[i][q][0], 0.5f);
+
+                                Color curLineColor = wholeRenderTexHolder.GetPixel((int)curCombineLine.Last().x, (int)curCombineLine.Last().y);
+
+                                Color midLineColor = wholeRenderTexHolder.GetPixel((int)midPoint.x, (int)midPoint.y);
+
+
+                                if (thisSegDistToCurLine < distToNextLineSeg && curLineColor == midLineColor)
                                 {
                                     curClosestList = finalCompleteLineListByColorCopy[i][q];
 
@@ -1435,7 +1526,15 @@ public class svgVisual : MonoBehaviour
                             {
                                 float thisSegDistToCurLine = Vector2.Distance(curCombineLine[0], finalCompleteLineListByColorCopy[i][q].Last());
 
-                                if (thisSegDistToCurLine < distToNextLineSeg)
+
+
+                                Vector2 midPoint = Vector2.Lerp(curCombineLine[0], finalCompleteLineListByColorCopy[i][q].Last(), 0.5f);
+
+                                Color curLineColor = wholeRenderTexHolder.GetPixel((int)curCombineLine[0].x, (int)curCombineLine[0].y);
+
+                                Color midLineColor = wholeRenderTexHolder.GetPixel((int)midPoint.x, (int)midPoint.y);
+
+                                if (thisSegDistToCurLine < distToNextLineSeg && curLineColor == midLineColor)
                                 {
                                     curClosestList = finalCompleteLineListByColorCopy[i][q];
 
@@ -1698,7 +1797,16 @@ public class svgVisual : MonoBehaviour
                 Debug.Log("shit " + finalCompleteLineListByColor.Count + " " + pensToUse.Count + " " + q);
 
                 //GenerateSVG(finalCompleteLineListByColor[q], false, false, q, pensToUse[q], svgSize);
-                GenerateSVG(finalCompleteLineListByColor[q], false, false, q, Color.black, svgSize, yourFileName);
+
+                if (finalCompleteLineListByColor[q].Count> 0)
+                {
+                    GenerateSVG(finalCompleteLineListByColor[q], false, false,"_Col" + q.ToString() + "_Layer" + copyID.ToString(), Color.black, svgSize, yourFileName);
+                }
+                else
+                {
+                    Debug.LogError("Tried to save color that contains ZERO lines");
+                }
+
             }
         }
         else
@@ -2830,7 +2938,7 @@ public class svgVisual : MonoBehaviour
         listsOfAllPathsByColor[printIndex % potentialColors.Count].AddRange(listOfPaths); // using System.Linq;
 
 
-        GenerateSVG(listsOfAllPathsByColor[printIndex % potentialColors.Count], false, false, plotColors.IndexOf(plotColors[printIndex]), plotColors[printIndex], svgSize, yourFileName);
+        GenerateSVG(listsOfAllPathsByColor[printIndex % potentialColors.Count], false, false, plotColors.IndexOf(plotColors[printIndex]).ToString(), plotColors[printIndex], svgSize, yourFileName);
     }
 
     [ContextMenu("ResetLineObjects")]
@@ -2908,7 +3016,7 @@ public class svgVisual : MonoBehaviour
     }
 
     [ContextMenu("SaveSVG")]
-    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, int printColorIndex, Color drawColor, Vector2 svgFileSize, string fileNameToUse, string titleExtention = "", bool saveTxtCopy = true)
+    public void GenerateSVG(List<List<Vector2>> allPaths, bool saveDisplayCopy, bool isInfoPage, string printColorIndex, Color drawColor, Vector2 svgFileSize, string fileNameToUse, string titleExtention = "", bool saveTxtCopy = true)
     {
         Vector2 svgSize = docSettings.svgSize;
         float renderScale = docSettings.renderScale;
@@ -3232,7 +3340,68 @@ public class svgVisual : MonoBehaviour
 
 
 
+    //AI SHIT
+    public static List<Vector2> GeneratePoints(int count, float minDistance, Rect bounds, int maxTriesPerPoint = 100)
+    {
+        int totalTries = 0;
 
+        // A list to hold our successfully placed points.
+        List<Vector2> points = new List<Vector2>();
+
+        // Pre-calculate the squared minimum distance to avoid repeated square root calculations,
+        // which are computationally expensive.
+        float minDistanceSquared = minDistance * minDistance;
+
+        // Loop to attempt to place the requested number of points.
+        for (int i = 0; i < count; i++)
+        {
+            // The number of attempts for the current point.
+            int tries = 0;
+            bool pointPlaced = false;
+
+            // Loop to try and find a valid position for the new point.
+            while (tries < maxTriesPerPoint && !pointPlaced)
+            {
+                // Generate a random position within the specified bounds.
+                float randomX = UnityEngine.Random.Range(bounds.xMin, bounds.xMax);
+                float randomY = UnityEngine.Random.Range(bounds.yMin, bounds.yMax);
+                Vector2 newPoint = new Vector2(randomX, randomY);
+
+                // Assume the new point is valid until proven otherwise.
+                bool isValid = true;
+
+                // Check the distance of the new point against all previously placed points.
+                foreach (Vector2 existingPoint in points)
+                {
+                    // Calculate the squared distance between the new and existing points.
+                    float distanceSquared = (newPoint - existingPoint).sqrMagnitude;
+
+                    // If the distance is less than our minimum required distance, the position is invalid.
+                    if (distanceSquared < minDistanceSquared)
+                    {
+                        isValid = false;
+                        break; // No need to check against other points.
+                    }
+                }
+
+                // If the position is valid, add the point to our list and mark it as placed.
+                if (isValid)
+                {
+                    points.Add(newPoint);
+                    pointPlaced = true;
+                }
+
+                // Increment the number of tries for this point.
+                tries++;
+                totalTries++;
+            }
+        }
+
+        Debug.Log("I replaced this many points " + totalTries);
+
+        // Return the list of points that were successfully placed.
+        return points;
+    }
 }
 
 

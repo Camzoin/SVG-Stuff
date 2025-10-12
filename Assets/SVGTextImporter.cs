@@ -244,7 +244,7 @@ public class SVGTextImporter : MonoBehaviour
 
         lastTextHolder.transform.position = Vector3.up * svgSize.y * 4.25f + (Vector3.left * svgSize.x / 2.5f);
 
-        svgVis.GenerateSVG(pastWrittenLinePositionLists, false, true, 0, Color.black, new Vector2(4 * 96, 3 * 96), svgVis.yourFileName);
+        svgVis.GenerateSVG(pastWrittenLinePositionLists, false, true, "0", Color.black, new Vector2(4 * 96, 3 * 96), svgVis.yourFileName);
 
         StartCoroutine(waiter());
     }

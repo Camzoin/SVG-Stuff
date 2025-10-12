@@ -166,11 +166,6 @@ public class AnimCellManager : MonoBehaviour
     [ContextMenu("BuildAnimationCellsFromAnimation")]
     public void BuildAnimationCellsFromAnimation()
     {
-
-
-
-
-
         List<GameObject> cellGameObjects = new List<GameObject>();
         List<float> sampleTimes = new List<float>();
 
@@ -182,6 +177,8 @@ public class AnimCellManager : MonoBehaviour
         {
             foreach (Animator animator in animCells[k].transform.GetComponentsInChildren<Animator>())
             {
+                animator.enabled = true;
+
                 float animTime = (((k + animationFrameOffset) / (float)frameCount) * (secondsOfAnimation / totalAnimationDurationAcrossAllPages)) + 0.00001f;
 
                 if (animator != null && animator != null)
@@ -197,11 +194,6 @@ public class AnimCellManager : MonoBehaviour
 
         for (int k = 0; k < animCells.Count; k++)
         {
-           
-
-
-
-
                 foreach (Animator animator in referenceCell.transform.GetComponentsInChildren<Animator>())
             {
                 //InitializeCurveData(animator.clip);
