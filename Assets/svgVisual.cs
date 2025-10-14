@@ -1376,6 +1376,205 @@ public class svgVisual : MonoBehaviour
 
 
 
+            //Combine before offsetting per cell
+
+
+
+            if (lineSettings.combineLineDist > 0)
+            {
+                var finalLineListByColorCopy = finalLineListByColor;
+
+                List<List<List<Vector2>>> realFinalLineList = new List<List<List<Vector2>>>();
+
+
+                bool giveUp = false;
+
+
+                //Better way to reduce lines
+                for (int i = 0; i < finalLineListByColorCopy.Count; i++)
+                {
+                    realFinalLineList.Add(new List<List<Vector2>>());
+
+                    if (finalLineListByColorCopy[i].Count > 0)
+                    {
+                        int linesAdded = 1;
+
+                        List<Vector2> curCombineLine = finalLineListByColorCopy[i][0];
+
+                        finalLineListByColorCopy[i].Remove(finalLineListByColorCopy[i][0]);
+
+                        List<int> usedLineIndecies = new List<int>();
+
+                        usedLineIndecies.Add(0);
+
+                        //While I have not added all line content to combined line list
+                        while (finalLineListByColorCopy[i].Count > 0)
+                        {
+                            bool lineCanCombine = false;
+
+                            List<Vector2> curClosestList = finalLineListByColorCopy[i][0];
+
+                            float distToNextLineSeg = Vector2.Distance(curCombineLine.Last(), curClosestList[0]);
+
+                            int lineCombIndex = 0;
+
+                            bool addLineReversed = false;
+
+
+
+                            bool wouldMergeOverAnotherColor = false;
+
+
+
+
+                            for (int q = 0; q < finalLineListByColorCopy[i].Count; q++)
+                            {
+                                float thisSegDistToCurLine = Vector2.Distance(curCombineLine.Last(), finalLineListByColorCopy[i][q][0]);
+
+
+
+                                Vector2 midPoint = Vector2.Lerp(curCombineLine.Last(), finalLineListByColorCopy[i][q][0], 0.25f);
+                                Vector2 midPoint1 = Vector2.Lerp(curCombineLine.Last(), finalLineListByColorCopy[i][q][0], 0.5f);
+                                Vector2 midPoint2 = Vector2.Lerp(curCombineLine.Last(), finalLineListByColorCopy[i][q][0], 0.75f);
+
+                                Color curLineColor = wholeRenderTexHolder.GetPixel((int)curCombineLine.Last().x, (int)curCombineLine.Last().y);
+
+                                Color midLineColor1 = wholeRenderTexHolder.GetPixel((int)midPoint.x, (int)midPoint.y);
+                                Color midLineColor2 = wholeRenderTexHolder.GetPixel((int)midPoint1.x, (int)midPoint1.y);
+                                Color midLineColor3 = wholeRenderTexHolder.GetPixel((int)midPoint2.x, (int)midPoint2.y);
+
+
+                                if (curLineColor != midLineColor1 || curLineColor != midLineColor2 || curLineColor != midLineColor3)
+                                {
+                                    wouldMergeOverAnotherColor = true;
+                                }
+
+
+
+                                if (thisSegDistToCurLine < distToNextLineSeg && wouldMergeOverAnotherColor == false)
+                                {
+                                    curClosestList = finalLineListByColorCopy[i][q];
+
+                                    lineCombIndex = q;
+
+                                    distToNextLineSeg = thisSegDistToCurLine;
+
+                                    addLineReversed = false;
+                                }
+                            }
+
+
+                            for (int q = 0; q < finalLineListByColorCopy[i].Count; q++)
+                            {
+                                float thisSegDistToCurLine = Vector2.Distance(curCombineLine[0], finalLineListByColorCopy[i][q].Last());
+
+
+                                Vector2 midPoint21 = Vector2.Lerp(curCombineLine[0], finalLineListByColorCopy[i][q].Last(), 0.25f);
+                                Vector2 midPoint22 = Vector2.Lerp(curCombineLine[0], finalLineListByColorCopy[i][q].Last(), 0.5f);
+                                Vector2 midPoint23 = Vector2.Lerp(curCombineLine[0], finalLineListByColorCopy[i][q].Last(), 0.75f);
+                                Color curLineColor2 = wholeRenderTexHolder.GetPixel((int)curCombineLine[0].x, (int)curCombineLine[0].y);
+                                Color midLineColor21 = wholeRenderTexHolder.GetPixel((int)midPoint21.x, (int)midPoint21.y);
+                                Color midLineColor22 = wholeRenderTexHolder.GetPixel((int)midPoint22.x, (int)midPoint22.y);
+                                Color midLineColor23 = wholeRenderTexHolder.GetPixel((int)midPoint23.x, (int)midPoint23.y);
+
+
+                                if (curLineColor2 != midLineColor22 || curLineColor2 != midLineColor21 || curLineColor2 != midLineColor23)
+                                {
+                                    wouldMergeOverAnotherColor = true;
+                                }
+
+
+                                if (thisSegDistToCurLine < distToNextLineSeg && wouldMergeOverAnotherColor == false)
+                                {
+                                    curClosestList = finalLineListByColorCopy[i][q];
+
+                                    //curClosestList.Reverse();
+
+                                    lineCombIndex = q;
+
+                                    distToNextLineSeg = thisSegDistToCurLine;
+
+                                    addLineReversed = true;
+                                }
+                            }
+
+
+
+
+
+
+
+
+                            if (curCombineLine.Count > 0 && curClosestList.Count > 0)
+                            {
+                                if (distToNextLineSeg < lineSettings.combineLineDist && wouldMergeOverAnotherColor == false)
+                                {
+                                    if (addLineReversed == false)
+                                    {
+                                        lineCanCombine = true;
+
+                                        usedLineIndecies.Add(lineCombIndex);
+
+                                        curCombineLine.AddRange(curClosestList);
+
+                                        finalLineListByColorCopy[i].Remove(finalLineListByColorCopy[i][lineCombIndex]);
+
+                                        linesAdded++;
+                                    }
+                                    else
+                                    {
+                                        lineCanCombine = true;
+
+                                        usedLineIndecies.Add(lineCombIndex);
+
+                                        curCombineLine.InsertRange(0, curClosestList);
+
+                                        finalLineListByColorCopy[i].Remove(finalLineListByColorCopy[i][lineCombIndex]);
+
+                                        linesAdded++;
+                                    }
+                                }
+                            }
+
+
+
+
+
+                            if (lineCanCombine == false)
+                            {
+                                realFinalLineList[i].Add(curCombineLine);
+
+                                curCombineLine = finalLineListByColorCopy[i][0];
+
+                                finalLineListByColorCopy[i].Remove(finalLineListByColorCopy[i][0]);
+                            }
+
+
+                            stopwatch.Stop();
+                            if (stopwatch.Elapsed.TotalMinutes > 5)
+                            {
+                                giveUp = true;
+                            }
+                            stopwatch.Start();
+
+
+                            if (giveUp == true)
+                            {
+                                break;
+                            }
+                        }
+
+                        realFinalLineList[i].Add(curCombineLine);
+                    }
+
+
+
+
+
+                }
+
+                finalLineListByColor = realFinalLineList;
+            }
 
 
 
@@ -1454,179 +1653,7 @@ public class svgVisual : MonoBehaviour
 
 
 
-            if (lineSettings.combineLineDist > 0)
-            {
-                var finalCompleteLineListByColorCopy = finalCompleteLineListByColor;
-
-                List<List<List<Vector2>>> realFinalLineList = new List<List<List<Vector2>>>();
-
-
-                bool giveUp = false;
-
-
-                //Better way to reduce lines
-                for (int i = 0; i < finalCompleteLineListByColorCopy.Count; i++)
-                {
-                    realFinalLineList.Add(new List<List<Vector2>>());
-
-                    if (finalCompleteLineListByColorCopy[i].Count > 0)
-                    {
-                        int linesAdded = 1;
-
-                        List<Vector2> curCombineLine = finalCompleteLineListByColorCopy[i][0];
-
-                        finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][0]);
-
-                        List<int> usedLineIndecies = new List<int>();
-
-                        usedLineIndecies.Add(0);
-
-                        //While I have not added all line content to combined line list
-                        while (finalCompleteLineListByColorCopy[i].Count > 0)
-                        {
-                            bool lineCanCombine = false;
-
-                            List<Vector2> curClosestList = finalCompleteLineListByColorCopy[i][0];
-
-                            float distToNextLineSeg = Vector2.Distance(curCombineLine.Last(), curClosestList[0]);
-
-                            int lineCombIndex = 0;
-
-                            bool addLineReversed = false;
-
-
-
-                            for (int q = 0; q < finalCompleteLineListByColorCopy[i].Count; q++)
-                            {
-                                float thisSegDistToCurLine = Vector2.Distance(curCombineLine.Last(), finalCompleteLineListByColorCopy[i][q][0]);
-
-
-
-                                Vector2 midPoint = Vector2.Lerp(curCombineLine.Last(), finalCompleteLineListByColorCopy[i][q][0], 0.5f);
-
-                                Color curLineColor = wholeRenderTexHolder.GetPixel((int)curCombineLine.Last().x, (int)curCombineLine.Last().y);
-
-                                Color midLineColor = wholeRenderTexHolder.GetPixel((int)midPoint.x, (int)midPoint.y);
-
-
-                                if (thisSegDistToCurLine < distToNextLineSeg && curLineColor == midLineColor)
-                                {
-                                    curClosestList = finalCompleteLineListByColorCopy[i][q];
-
-                                    lineCombIndex = q;
-
-                                    distToNextLineSeg = thisSegDistToCurLine;
-
-                                    addLineReversed = false;
-                                }
-                            }
-
-
-                            for (int q = 0; q < finalCompleteLineListByColorCopy[i].Count; q++)
-                            {
-                                float thisSegDistToCurLine = Vector2.Distance(curCombineLine[0], finalCompleteLineListByColorCopy[i][q].Last());
-
-
-
-                                Vector2 midPoint = Vector2.Lerp(curCombineLine[0], finalCompleteLineListByColorCopy[i][q].Last(), 0.5f);
-
-                                Color curLineColor = wholeRenderTexHolder.GetPixel((int)curCombineLine[0].x, (int)curCombineLine[0].y);
-
-                                Color midLineColor = wholeRenderTexHolder.GetPixel((int)midPoint.x, (int)midPoint.y);
-
-                                if (thisSegDistToCurLine < distToNextLineSeg && curLineColor == midLineColor)
-                                {
-                                    curClosestList = finalCompleteLineListByColorCopy[i][q];
-
-                                    //curClosestList.Reverse();
-
-                                    lineCombIndex = q;
-
-                                    distToNextLineSeg = thisSegDistToCurLine;
-
-                                    addLineReversed = true;
-                                }
-                            }
-
-
-
-
-
-                            if (curCombineLine.Count > 0 && curClosestList.Count > 0)
-                            {
-
-                                if (distToNextLineSeg < lineSettings.combineLineDist)
-                                {
-                                    if (addLineReversed == false)
-                                    {
-                                        lineCanCombine = true;
-
-                                        usedLineIndecies.Add(lineCombIndex);
-
-                                        curCombineLine.AddRange(curClosestList);
-
-                                        finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][lineCombIndex]);
-
-                                        linesAdded++;
-                                    }
-                                    else
-                                    {
-                                        lineCanCombine = true;
-
-                                        usedLineIndecies.Add(lineCombIndex);
-
-                                        curCombineLine.InsertRange(0, curClosestList);
-
-                                        finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][lineCombIndex]);
-
-                                        linesAdded++;
-                                    }
-
-
-
-                                }
-                            }
-
-
-
-
-
-                            if (lineCanCombine == false)
-                            {
-                                realFinalLineList[i].Add(curCombineLine);
-
-                                curCombineLine = finalCompleteLineListByColorCopy[i][0];
-
-                                finalCompleteLineListByColorCopy[i].Remove(finalCompleteLineListByColorCopy[i][0]);
-                            }
-
-
-                            stopwatch.Stop();
-                            if (stopwatch.Elapsed.TotalMinutes > 5)
-                            {
-                                giveUp = true;
-                            }
-                            stopwatch.Start();
-
-
-                            if (giveUp == true)
-                            {
-                                break;
-                            }
-                        }
-
-                        realFinalLineList[i].Add(curCombineLine);
-                    }
-
-
-
-
-
-                }
-
-                finalCompleteLineListByColor = realFinalLineList;
-            }
-
+           
 
 
 

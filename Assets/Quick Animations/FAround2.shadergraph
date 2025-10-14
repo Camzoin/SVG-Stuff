@@ -64,6 +64,20 @@
             },
             "m_InputSlot": {
                 "m_Node": {
+                    "m_Id": "d8ea8ba299dd4866a958753572981fcf"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "15c91cb476004888b21f61298ab91504"
+                },
+                "m_SlotId": 2
+            },
+            "m_InputSlot": {
+                "m_Node": {
                     "m_Id": "f305667ee4f546bb9a0e996e91e4269a"
                 },
                 "m_SlotId": 0
@@ -151,20 +165,6 @@
                     "m_Id": "3865658522354e21a6fd455d9b085510"
                 },
                 "m_SlotId": 1
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "f305667ee4f546bb9a0e996e91e4269a"
-                },
-                "m_SlotId": 2
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "d8ea8ba299dd4866a958753572981fcf"
-                },
-                "m_SlotId": 0
             }
         }
     ],
@@ -803,8 +803,8 @@
     "m_ShaderOutputName": "In",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 0.5,
-        "y": 0.5,
+        "x": 0.4000000059604645,
+        "y": 0.4000000059604645,
         "z": 0.0,
         "w": 0.0
     },
