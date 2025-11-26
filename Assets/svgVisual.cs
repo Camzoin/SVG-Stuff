@@ -510,15 +510,20 @@ public class svgVisual : MonoBehaviour
 
             //Draw bounds around Colors based on claimed pixels
 
-            List<List<Vector2>> edgePointsPerColor = new List<List<Vector2>>();
+            List<List<List<Vector2>>> edgePointsPerColorPerOnion = new List<List<List<Vector2>>>();
 
 
             List<List<Vector2>> simpleVertFillLinesByColor = new List<List<Vector2>>();
 
 
+            int onionLayers = 1;
+
+            int outlineFillMulti = 5;
+
+
             for (int i = 0; i < claimedPixels.Count; i++)
             {
-                edgePointsPerColor.Add(new List<Vector2>());
+                edgePointsPerColorPerOnion.Add(new List<List<Vector2>>());
 
 
                 if (claimedPixels[i].Count > 0)
@@ -526,26 +531,36 @@ public class svgVisual : MonoBehaviour
                     //Line Segments
                     for (int q = 0; q < claimedPixels[i].Count; q++)
                     {
-                        if (diffColors[i] != pixelArray[((int)claimedPixels[i][q].x + (((int)claimedPixels[i][q].y * wholeRenderTexHolder.width)) + 1) % (pixelArray.Length - 1)])
+                        for (int k = 0; k < onionLayers; k++)
                         {
-                            edgePointsPerColor[i].Add(claimedPixels[i][q]);
+                            edgePointsPerColorPerOnion[i].Add(new List<Vector2>());
 
-                        }
 
-                        else if (diffColors[i] != pixelArray[Mathf.Abs(((int)claimedPixels[i][q].x + (((int)claimedPixels[i][q].y * wholeRenderTexHolder.width)) - 1)) % (pixelArray.Length - 1)])
-                        {
-                            edgePointsPerColor[i].Add(claimedPixels[i][q]);
 
-                        }
 
-                        else if (diffColors[i] != pixelArray[((int)claimedPixels[i][q].x + ((((int)claimedPixels[i][q].y + 1) * wholeRenderTexHolder.width))) % (pixelArray.Length - 1)])
-                        {
-                            edgePointsPerColor[i].Add(claimedPixels[i][q]);
-                        }
+                            if (diffColors[i] != pixelArray[((int)claimedPixels[i][q].x + (((int)claimedPixels[i][q].y * wholeRenderTexHolder.width)) + (k * outlineFillMulti) + 1) % (pixelArray.Length - 1)])
+                            {
+                                edgePointsPerColorPerOnion[i][k].Add(claimedPixels[i][q]);
+                            }
 
-                        else if (diffColors[i] != pixelArray[Mathf.Abs(((int)claimedPixels[i][q].x + ((((int)claimedPixels[i][q].y - 1) * wholeRenderTexHolder.width)))) % (pixelArray.Length - 1)])
-                        {
-                            edgePointsPerColor[i].Add(claimedPixels[i][q]);
+                            else if (diffColors[i] != pixelArray[Mathf.Abs(((int)claimedPixels[i][q].x + (((int)claimedPixels[i][q].y * wholeRenderTexHolder.width)) - (k * outlineFillMulti) - 1)) % (pixelArray.Length - 1)])
+                            {
+                                edgePointsPerColorPerOnion[i][k].Add(claimedPixels[i][q]);
+
+                            }
+
+                            else if (diffColors[i] != pixelArray[((int)claimedPixels[i][q].x + ((((int)claimedPixels[i][q].y + (k * outlineFillMulti) + 1) * wholeRenderTexHolder.width))) % (pixelArray.Length - 1)])
+                            {
+                                edgePointsPerColorPerOnion[i][k].Add(claimedPixels[i][q]);
+                            }
+
+                            else if (diffColors[i] != pixelArray[Mathf.Abs(((int)claimedPixels[i][q].x + ((((int)claimedPixels[i][q].y - (k * outlineFillMulti) - 1) * wholeRenderTexHolder.width)))) % (pixelArray.Length - 1)])
+                            {
+                                edgePointsPerColorPerOnion[i][k].Add(claimedPixels[i][q]);
+                            }
+
+
+
                         }
                     }
                 }
@@ -565,10 +580,17 @@ public class svgVisual : MonoBehaviour
 
             List<List<Vector2>> outlinesToAddSplitUpColor = new List<List<Vector2>>();
 
-            for (int i = 0; i < edgePointsPerColor.Count; i++)
+            //for each color
+            for (int i = 0; i < edgePointsPerColorPerOnion.Count; i++)
             {
-                outlinesToAddSplitUpColor.AddRange(FindConcentrationsOptimized(edgePointsPerColor[i], 1.9f * renderScale));
+                //outlinesToAddSplitUpColor.AddRange(FindConcentrationsOptimized(edgePointsPerColor[i], 1.9f * renderScale));
 
+                for (int k = 0; k < onionLayers; k++)
+                {
+                    //outlinesToAddSplitUpColor.AddRange(SplitIntoContiguousSegments(edgePointsPerColorPerOnion[i][k]));
+                    
+                    outlinesToAddSplitUpColor.AddRange(FindConcentrationsOptimized(edgePointsPerColorPerOnion[i][k], 1.9f * renderScale * ((k* outlineFillMulti) + 1)));
+                }
             }
 
 
@@ -613,10 +635,11 @@ public class svgVisual : MonoBehaviour
                         //If this one and the next one are far apart split that boy
                         if (Vector2.Distance(sortedList[v], sortedList[v + 1]) > 2)
                         {
-                            if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
+                            if (Vector2.Distance(tempPointList[0], tempPointList.Last()) < 5f)
                             {
                                 tempPointList.Add(tempPointList[0]);
                             }
+                            //tempPointList.Add(tempPointList[0]);
 
 
                             sortedSplitList.Add(tempPointList);
@@ -627,11 +650,15 @@ public class svgVisual : MonoBehaviour
 
                     if (tempPointList.Count > 1)
                     {
-                        if (Vector2.Distance(tempPointList[tempPointList.Count - 1], tempPointList[0]) < 2)
+                        if (Vector2.Distance(tempPointList[0], tempPointList.Last()) < 5f)
                         {
                             tempPointList.Add(tempPointList[0]);
                         }
+
+                        
                     }
+
+
 
                     sortedSplitList.Add(tempPointList);
 
@@ -641,7 +668,278 @@ public class svgVisual : MonoBehaviour
                     }
                 }
             }
-            
+
+
+
+
+
+
+
+
+
+
+
+            var holderHolder = new List<List<Vector2>>();
+
+
+            foreach (List<Vector2> lv2 in outlinesToAddSplitUpColorAndOutlineFix)
+            {
+                holderHolder.Add(SimplifyPath(lv2, 4));
+            }
+
+            outlinesToAddSplitUpColorAndOutlineFix = holderHolder;
+
+
+
+
+
+
+
+
+
+
+
+            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+
+            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+
+            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+
+            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+
+            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+
+            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+
+
+
+            List<Vector2> ReverseLine(List<Vector2> line)
+            {
+                // Create a copy to prevent modifying the original line list in place
+                List<Vector2> reversedLine = new List<Vector2>(line);
+                reversedLine.Reverse();
+                return reversedLine;
+            }
+
+            /// <summary>
+            /// Combines a list of lines (List of List of Vector2) by performing a single,
+            /// non-exhaustive pass. This prioritizes speed over chaining multiple segments (A->B->C).
+            /// </summary>
+            /// <param name="lines">The list of line segments to process.</param>
+            /// <param name="tolerance">The maximum distance between two endpoints to consider them 'nearby'.</param>
+            /// <returns>A new list of merged line segments.</returns>
+            List<List<Vector2>> CombineNearbyLines(List<List<Vector2>> lines, float tolerance)
+            {
+                // Work on a copy of the list
+                var activeLines = new List<List<Vector2>>(lines);
+
+                // Use a HashSet to track indices of lines that have been successfully merged and should be removed.
+                var linesToRemove = new HashSet<int>();
+
+                // Use a List to store the new, merged lines found in this pass.
+                var linesToAdd = new List<List<Vector2>>();
+
+                // Squared tolerance for fast distance checking
+                float sqrTolerance = tolerance * tolerance;
+
+                // Single pass with O(N^2) complexity, but without iterative restarts.
+                for (int i = 0; i < activeLines.Count; i++)
+                {
+                    // Skip lines that have already been marked for merging/removal
+                    if (linesToRemove.Contains(i)) continue;
+
+                    // Compare line 'i' against all subsequent lines 'j'
+                    for (int j = i + 1; j < activeLines.Count; j++)
+                    {
+                        // Skip lines that have already been marked for merging/removal
+                        if (linesToRemove.Contains(j)) continue;
+
+                        // Line A and Line B are the two lines currently being compared
+                        List<Vector2> lineA = activeLines[i];
+                        List<Vector2> lineB = activeLines[j];
+
+                        // Safety check for lines with too few points
+                        if (lineA.Count < 1 || lineB.Count < 1) continue;
+
+                        // A's points (Start and End)
+                        Vector2 aStart = lineA[0];
+                        Vector2 aEnd = lineA[lineA.Count - 1];
+
+                        // B's points (Start and End)
+                        Vector2 bStart = lineB[0];
+                        Vector2 bEnd = lineB[lineB.Count - 1];
+
+                        List<Vector2> mergedLine = null;
+
+                        // --- Check all four possible endpoint combinations ---
+
+                        // 1. A-End to B-Start: (A...X) + (X...B) -> (A...X...B)
+                        if ((aEnd - bStart).sqrMagnitude < sqrTolerance)
+                        {
+                            mergedLine = new List<Vector2>(lineA);
+                            mergedLine.AddRange(lineB.GetRange(1, lineB.Count - 1));
+                        }
+                        // 2. B-End to A-Start: (B...X) + (X...A) -> (B...X...A)
+                        else if ((bEnd - aStart).sqrMagnitude < sqrTolerance)
+                        {
+                            mergedLine = new List<Vector2>(lineB);
+                            mergedLine.AddRange(lineA.GetRange(1, lineA.Count - 1));
+                        }
+                        // 3. A-End to B-End: (A...X) + (B...X) -> Reverse B: (A...X...B-reversed)
+                        else if ((aEnd - bEnd).sqrMagnitude < sqrTolerance)
+                        {
+                            List<Vector2> reversedB = ReverseLine(lineB);
+                            mergedLine = new List<Vector2>(lineA);
+                            mergedLine.AddRange(reversedB.GetRange(1, reversedB.Count - 1));
+                        }
+                        // 4. A-Start to B-Start: (X...A) + (X...B) -> Reverse A: (B...X...A-reversed)
+                        else if ((aStart - bStart).sqrMagnitude < sqrTolerance)
+                        {
+                            List<Vector2> reversedA = ReverseLine(lineA);
+                            mergedLine = new List<Vector2>(lineB);
+                            mergedLine.AddRange(reversedA.GetRange(1, reversedA.Count - 1));
+                        }
+
+                        // If a merge occurred:
+                        if (mergedLine != null)
+                        {
+                            // Mark both indices for removal
+                            linesToRemove.Add(i);
+                            linesToRemove.Add(j);
+
+                            // Add the new line to the staging list
+                            linesToAdd.Add(mergedLine);
+
+                            // Break the inner loop (j) and continue to the next 'i'.
+                            // This is the key change: we do NOT reset 'i' to 0, ensuring a single pass.
+                            break;
+                        }
+                    }
+                }
+
+                // --- Final Assembly ---
+                var resultLines = new List<List<Vector2>>();
+
+                // 1. Add all original lines that were NOT merged
+                for (int i = 0; i < activeLines.Count; i++)
+                {
+                    if (!linesToRemove.Contains(i))
+                    {
+                        resultLines.Add(activeLines[i]);
+                    }
+                }
+
+                // 2. Add all the new, merged lines
+                resultLines.AddRange(linesToAdd);
+
+                return resultLines;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            int curListCount = outlinesToAddSplitUpColorAndOutlineFix.Count;
+
+            int outMultiCount = lineSettings.addedOutlineCount;
+
+            int outDistance = lineSettings.addedOutlineDist;
+
+
+            for (int j = 1; j <= outMultiCount; j++)
+            {
+                for (int q = 0; q < curListCount; q++)
+                {
+                    List<Vector2> holdingList = new List<Vector2>();
+
+                    holdingList.AddRange(outlinesToAddSplitUpColorAndOutlineFix[q]);
+
+
+
+
+                    Vector2 lastDir = new Vector2();
+
+
+
+
+
+                    //Get the tangent of this line segment and advance based on that
+
+
+
+                    for (int g = 0; g < holdingList.Count; g++)
+                    {
+                        Vector2 offsetTan = new Vector2();
+
+                        if (g < holdingList.Count - 3)
+                        {
+                            offsetTan = holdingList[g + 1] - holdingList[g];
+
+                            offsetTan += holdingList[g + 2] - holdingList[g];
+
+                            offsetTan += holdingList[g + 3] - holdingList[g];
+
+                            offsetTan /= 3f;
+
+
+
+                            offsetTan = new Vector2(-offsetTan.y, offsetTan.x);
+
+                            lastDir = offsetTan;
+                        }
+                        else
+                        {
+                            offsetTan = lastDir;
+                        }
+
+
+
+
+                        holdingList[g] -= Vector2.ClampMagnitude(offsetTan.normalized * (outDistance * j), holdingList[g].magnitude);
+                    }
+
+
+
+                    //for (int g = 1; g < holdingList.Count - 1; g++)
+                    //{
+                    //    Vector2 dirToNextPoint = holdingList[g + 1] - holdingList[g];
+
+                    //    Vector2 dirToPrevPoint = holdingList[g - 1] - holdingList[g];
+
+                    //    if (Vector2.Dot(dirToNextPoint.normalized, dirToPrevPoint.normalized) < -0.5f && Vector2.SqrMagnitude(holdingList[g + 1] - holdingList[g]) < 10)
+                    //    {
+                    //        //Remove this point
+                    //        holdingList[g] = holdingList[g + 1];
+                    //    }
+                    //}
+
+
+
+
+                    if (holdingList.Count > 3)
+                    {
+                        outlinesToAddSplitUpColorAndOutlineFix.Add(SimplifyPath(holdingList, 10));
+                    }
+
+
+
+                }
+            }
+
+
 
 
 
@@ -1238,6 +1536,19 @@ public class svgVisual : MonoBehaviour
                 {
                     Color lineColor = wholeRenderTexHolder.GetPixel((int)outlinesToAddSplitUpColorAndOutlineFix[i][0].x, (int)outlinesToAddSplitUpColorAndOutlineFix[i][0].y);
 
+                    List<Color> colOnThisLine = new List<Color>();
+
+                    for (int q = 1; q < 10; q++)
+                    {
+                        //get post in line
+                        int posInLine = (outlinesToAddSplitUpColorAndOutlineFix[i].Count - 1) / q;
+
+                        colOnThisLine.Add(wholeRenderTexHolder.GetPixel((int)outlinesToAddSplitUpColorAndOutlineFix[i][posInLine].x, (int)outlinesToAddSplitUpColorAndOutlineFix[i][posInLine].y));
+                    }
+
+                    lineColor = FindMostCommonColor(colOnThisLine);
+
+
                     for (int q = 0; q < diffColors.Count; q++)
                     {
                         if (diffColors[q] == lineColor)
@@ -1255,7 +1566,16 @@ public class svgVisual : MonoBehaviour
 
 
 
+            Color FindMostCommonColor(List<Color> colors)
+            {
+                var mostCommonColor = colors
+                    .GroupBy(color => color) // Group the colors
+                    .OrderByDescending(group => group.Count()) // Order groups by count in descending order
+                    .Select(group => group.Key) // Select the color (key of the group)
+                    .FirstOrDefault(); // Get the first color (which will be the most common)
 
+                return mostCommonColor;
+            }
 
 
 
@@ -1675,7 +1995,7 @@ public class svgVisual : MonoBehaviour
                 Debug.LogError("This is a lot of lines, and you are not even trying to merge them dummy!");
             }
 
-            if (lineSettings.combineLineDist == 0)
+            if (lineSettings.combineLineDist == 0 && finalCompleteLineListByColor.Count > 3000)
             {
                 Debug.LogError("You probably meant to merge lines dummy");
             }
@@ -1874,7 +2194,7 @@ public class svgVisual : MonoBehaviour
 
 
 
-    private List<Vector2> SimplifyPath(List<Vector2> path)
+    private List<Vector2> SimplifyPath(List<Vector2> path, float howSimple = 0.001f)
     {
         if (path.Count < 3)
         {
@@ -1889,7 +2209,7 @@ public class svgVisual : MonoBehaviour
         for (int i = 2; i < path.Count; i++)
         {
             Vector2 c = path[i];
-            if (!AreCollinear(a, b, c))
+            if (!AreCollinear(a, b, c, howSimple))
             {
                 simplified.Add(b);
                 a = b;
@@ -1903,10 +2223,11 @@ public class svgVisual : MonoBehaviour
         //return path;
     }
 
-    private bool AreCollinear(Vector2 a, Vector2 b, Vector2 c)
+    private bool AreCollinear(Vector2 a, Vector2 b, Vector2 c, float howSimple = 0.001f)
     {
         float area = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
-        return Mathf.Abs(area) < 0.001f;
+        //return Mathf.Abs(area) < 1f;
+        return Mathf.Abs(area) < howSimple;
     }
 
 
@@ -2241,6 +2562,94 @@ public class svgVisual : MonoBehaviour
             if (rootX != rootY) parent[rootY] = rootX;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static List<List<Vector2>> SplitIntoContiguousSegments(
+            List<Vector2> points)
+    {
+        List<List<Vector2>> segments = new List<List<Vector2>>();
+        if (points == null || points.Count == 0)
+        {
+            return segments;
+        }
+
+        // Initialize the first segment
+        List<Vector2> currentSegment = new List<Vector2> { points[0] };
+
+        for (int i = 1; i < points.Count; i++)
+        {
+            Vector2 currentPoint = points[i];
+            Vector2 previousPoint = points[i - 1];
+
+
+
+            bool split = true;
+
+            //If I am to the right or left
+            if (Mathf.Abs(currentPoint.x - previousPoint.x) == 1 && Mathf.Abs(currentPoint.y - previousPoint.y) <= 1)
+            {
+                split = false;
+            }
+
+            if (Mathf.Abs(currentPoint.y - previousPoint.y) == 1 && Mathf.Abs(currentPoint.x - previousPoint.x) <= 1)
+            {
+                split = false;
+            }
+
+
+            // Use squared magnitude for performance
+            if (split == true)
+            {
+                // Distance exceeded threshold: Break the segment.
+
+                // 1. Finalize the current segment and add it to the list of segments.
+                segments.Add(currentSegment);
+
+                // 2. Start a new segment with the current point.
+                currentSegment = new List<Vector2> { currentPoint };
+            }
+            else
+            {
+                // Within threshold: Continue the current segment.
+                currentSegment.Add(currentPoint);
+            }
+        }
+
+        // Add the last (or only) segment if it contains points
+        if (currentSegment.Count > 0)
+        {
+            segments.Add(currentSegment);
+        }
+
+        return segments;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3428,6 +3837,188 @@ public class svgVisual : MonoBehaviour
 
         // Return the list of points that were successfully placed.
         return points;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public List<List<Vector2>> CombineLines(
+            List<List<Vector2>> lineList,
+            float combineLineDist,
+            Texture2D wholeRenderTexHolder)
+    {
+        // 1. Early exit
+        if (combineLineDist <= 0 || lineList == null || lineList.Count == 0)
+        {
+            return lineList;
+        }
+
+        // 2. Create a shallow copy of the list so we can Remove items without breaking the input list reference
+        List<List<Vector2>> linesCopy = new List<List<Vector2>>(lineList);
+        List<List<Vector2>> realFinalLineList = new List<List<Vector2>>();
+
+        System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+        stopwatch.Start();
+
+        bool giveUp = false;
+
+        // 3. Logic (Outer loop removed, we just process 'linesCopy' directly)
+        if (linesCopy.Count > 0)
+        {
+            List<Vector2> curCombineLine = linesCopy[0];
+            linesCopy.RemoveAt(0);
+
+            List<int> usedLineIndecies = new List<int>();
+            usedLineIndecies.Add(0);
+
+            // While there are still lines left to check against
+            while (linesCopy.Count > 0)
+            {
+                bool lineCanCombine = false;
+
+                // Default assignment to avoid null errors, though logic usually overrides this
+                List<Vector2> curClosestList = linesCopy[0];
+
+                // Safety: ensure line has points
+                if (curCombineLine.Count == 0) break;
+
+                // Safety: ensure line has points
+                if (curClosestList.Count == 0) break;
+
+                float distToNextLineSeg = Vector2.Distance(curCombineLine.Last(), curClosestList[0]);
+                int lineCombIndex = 0;
+                bool addLineReversed = false;
+                bool wouldMergeOverAnotherColor = false;
+
+                // --- Check End of Current -> Start of Others ---
+                for (int q = 0; q < linesCopy.Count; q++)
+                {
+                    if (linesCopy[q].Count == 0) continue;
+
+                    float thisSegDistToCurLine = Vector2.Distance(curCombineLine.Last(), linesCopy[q][0]);
+
+                    // Color Checks
+                    Vector2 midPoint = Vector2.Lerp(curCombineLine.Last(), linesCopy[q][0], 0.25f);
+                    Vector2 midPoint1 = Vector2.Lerp(curCombineLine.Last(), linesCopy[q][0], 0.5f);
+                    Vector2 midPoint2 = Vector2.Lerp(curCombineLine.Last(), linesCopy[q][0], 0.75f);
+
+                    Color curLineColor = wholeRenderTexHolder.GetPixel((int)curCombineLine.Last().x, (int)curCombineLine.Last().y);
+                    Color midLineColor1 = wholeRenderTexHolder.GetPixel((int)midPoint.x, (int)midPoint.y);
+                    Color midLineColor2 = wholeRenderTexHolder.GetPixel((int)midPoint1.x, (int)midPoint1.y);
+                    Color midLineColor3 = wholeRenderTexHolder.GetPixel((int)midPoint2.x, (int)midPoint2.y);
+
+                    if (curLineColor != midLineColor1 || curLineColor != midLineColor2 || curLineColor != midLineColor3)
+                    {
+                        wouldMergeOverAnotherColor = true;
+                    }
+
+                    if (thisSegDistToCurLine < distToNextLineSeg && wouldMergeOverAnotherColor == false)
+                    {
+                        curClosestList = linesCopy[q];
+                        lineCombIndex = q;
+                        distToNextLineSeg = thisSegDistToCurLine;
+                        addLineReversed = false;
+                    }
+                }
+
+                // --- Check Start of Current -> End of Others ---
+                for (int q = 0; q < linesCopy.Count; q++)
+                {
+                    if (linesCopy[q].Count == 0) continue;
+
+                    float thisSegDistToCurLine = Vector2.Distance(curCombineLine[0], linesCopy[q].Last());
+
+                    // Color Checks
+                    Vector2 midPoint21 = Vector2.Lerp(curCombineLine[0], linesCopy[q].Last(), 0.25f);
+                    Vector2 midPoint22 = Vector2.Lerp(curCombineLine[0], linesCopy[q].Last(), 0.5f);
+                    Vector2 midPoint23 = Vector2.Lerp(curCombineLine[0], linesCopy[q].Last(), 0.75f);
+
+                    Color curLineColor2 = wholeRenderTexHolder.GetPixel((int)curCombineLine[0].x, (int)curCombineLine[0].y);
+                    Color midLineColor21 = wholeRenderTexHolder.GetPixel((int)midPoint21.x, (int)midPoint21.y);
+                    Color midLineColor22 = wholeRenderTexHolder.GetPixel((int)midPoint22.x, (int)midPoint22.y);
+                    Color midLineColor23 = wholeRenderTexHolder.GetPixel((int)midPoint23.x, (int)midPoint23.y);
+
+                    if (curLineColor2 != midLineColor22 || curLineColor2 != midLineColor21 || curLineColor2 != midLineColor23)
+                    {
+                        wouldMergeOverAnotherColor = true;
+                    }
+
+                    if (thisSegDistToCurLine < distToNextLineSeg && wouldMergeOverAnotherColor == false)
+                    {
+                        curClosestList = linesCopy[q];
+                        lineCombIndex = q;
+                        distToNextLineSeg = thisSegDistToCurLine;
+                        addLineReversed = true;
+                    }
+                }
+
+                // --- Try Combine ---
+                if (curCombineLine.Count > 0 && curClosestList.Count > 0)
+                {
+                    if (distToNextLineSeg < combineLineDist && wouldMergeOverAnotherColor == false)
+                    {
+                        if (addLineReversed == false)
+                        {
+                            lineCanCombine = true;
+                            usedLineIndecies.Add(lineCombIndex);
+                            curCombineLine.AddRange(curClosestList);
+                            linesCopy.RemoveAt(lineCombIndex);
+                        }
+                        else
+                        {
+                            lineCanCombine = true;
+                            usedLineIndecies.Add(lineCombIndex);
+                            curCombineLine.InsertRange(0, curClosestList);
+                            linesCopy.RemoveAt(lineCombIndex);
+                        }
+                    }
+                }
+
+                // --- If No Combine Possible ---
+                if (lineCanCombine == false)
+                {
+                    // This line is finished, add to final list
+                    realFinalLineList.Add(curCombineLine);
+
+                    // Pick the next line in the list to be the new "Current"
+                    if (linesCopy.Count > 0)
+                    {
+                        curCombineLine = linesCopy[0];
+                        linesCopy.RemoveAt(0);
+                    }
+                }
+
+                stopwatch.Stop();
+                if (stopwatch.Elapsed.TotalMinutes > 5)
+                {
+                    giveUp = true;
+                }
+                stopwatch.Start();
+
+                if (giveUp) break;
+            }
+
+            // Add the very last line processed
+            realFinalLineList.Add(curCombineLine);
+        }
+
+        // If we gave up, ensure we don't lose the remaining unprocessed lines
+        if (giveUp)
+        {
+            realFinalLineList.AddRange(linesCopy);
+        }
+
+        return realFinalLineList;
     }
 }
 

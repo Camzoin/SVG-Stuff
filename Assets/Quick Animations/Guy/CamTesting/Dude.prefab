@@ -161,9 +161,41 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7324981381275297640, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -6640385558756255296, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
+    - target: {fileID: -7324981381275297640, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
+      propertyPath: m_Quality
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7324981381275297640, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
+      propertyPath: m_AABB.m_Center.x
+      value: 0.15093395
+      objectReference: {fileID: 0}
+    - target: {fileID: -7324981381275297640, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
+      propertyPath: m_AABB.m_Center.y
+      value: 0.2059366
+      objectReference: {fileID: 0}
+    - target: {fileID: -7324981381275297640, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: -0.0031131506
+      objectReference: {fileID: 0}
+    - target: {fileID: -7324981381275297640, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
+      propertyPath: m_AABB.m_Extent.x
+      value: 0.22872359
+      objectReference: {fileID: 0}
+    - target: {fileID: -7324981381275297640, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
+      propertyPath: m_AABB.m_Extent.y
+      value: 0.22361292
+      objectReference: {fileID: 0}
+    - target: {fileID: -7324981381275297640, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 0.24217144
+      objectReference: {fileID: 0}
+    - target: {fileID: -7324981381275297640, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 17168b121b9c9a84cadde36777ab1e8b, type: 2}
+      objectReference: {fileID: 2100000, guid: c9efb91b748c90046bca5f0574d1078c, type: 2}
     - target: {fileID: -7316778978998234294, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -470,7 +502,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5009361381221361694, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5278281278582677620, guid: 726500c2a2f9df043b21d6bcb72af95b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
