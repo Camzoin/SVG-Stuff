@@ -12,4 +12,6 @@ public class OutlineAndLineSettings : MonoBehaviour
 
     //This is jank and not needed once I find a better way of assigning lines to colors
     public bool ignoreFirstLinePointForWiggle = true;
+
+    public bool careAboutMergingOverOtherColors = true;
 }

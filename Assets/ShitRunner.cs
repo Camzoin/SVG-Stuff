@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class ShitRunner : MonoBehaviour
 {
@@ -12,6 +15,14 @@ public class ShitRunner : MonoBehaviour
 
     public bool lerpSpawnMulti = false;
 
+    public int frames = 12;
+
+    public int targetFPS = 12;
+
+    public Camera firstCellCam;
+
+    public Animator firstCellAnimator;
+
     [ContextMenu("Reset Render Texture Res")]
     public void DoRenderTextureShit()
     {
@@ -21,25 +32,81 @@ public class ShitRunner : MonoBehaviour
     [ContextMenu("Make Lines Based on Image")]
     public void GenerateRTWork()
     {
+        if (firstCellCam == null)
+        {
+            firstCellCam = svgVis.animManager.animCells[0].cellCam;
+        }
+
+        if (firstCellAnimator == null)
+        {
+            firstCellAnimator = svgVis.animManager.animCells[0].cellAnimator;
+        }
+
+
         bool ogSetting = svgVis.docSettings.generateArtWithNewSeed;
 
-        for (int i = 0; i < copies; i++)
+        // 1. Fixed Timestep: Dictates the duration of one 'Step' in seconds.
+        // For 60 FPS, this should be ~0.01666s.
+        Time.fixedDeltaTime = 1f / targetFPS;
+
+        // 2. Maximum Allowed Timestep: Prevents physics "death spirals."
+        // Usually set to 2x or 3x the fixed timestep.
+        Time.maximumDeltaTime = Time.fixedDeltaTime * 2f;
+
+
+        string pieceName = "";
+
+        for (int f = 0; f < frames; f++)
         {
-
-
-            svgVis.GenerateRTWork(i);
-
-            if (rerollCopies == true)
+            for (int i = 0; i < copies; i++)
             {
-                svgVis.docSettings.generateArtWithNewSeed = true;
-            }
-            else
-            {
-                svgVis.docSettings.generateArtWithNewSeed = false;
-            }
+                if (pieceName == "")
+                {
+                    pieceName = svgVis.GenerateRTWork(i, f);
+                }
+                else
+
+                {
+                   svgVis.GenerateRTWork(i, f, pieceName);
+                }
 
 
+                if (rerollCopies == true)
+                {
+                    svgVis.docSettings.generateArtWithNewSeed = true;
+                }
+                else
+                {
+                    svgVis.docSettings.generateArtWithNewSeed = false;
+                }
+
+
+            }
+
+            firstCellAnimator.Update(Time.fixedDeltaTime);
+
+            EditorApplication.Step();
+            SceneView.RepaintAll();
+
+
+
+            var request = new RenderPipeline.StandardRequest();
+
+            // 3. Execute the Request
+            // This is the modern replacement for RenderSingleCamera
+            RenderPipeline.SubmitRenderRequest(firstCellCam, request);
+
+
+
+
+            Camera.main.Render();
+            firstCellCam.Render();
         }
+
+
+
+
+
 
         svgVis.docSettings.generateArtWithNewSeed = ogSetting;
     }

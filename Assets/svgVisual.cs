@@ -313,7 +313,7 @@ public class svgVisual : MonoBehaviour
 
 
     [ContextMenu("GenerateRTWork")]
-    public void GenerateRTWork(int copyID = 0)
+    public string GenerateRTWork(int copyID = 0, int frameID = -1, string nameOverride = "")
     {
         Vector2 svgSize = docSettings.svgSize;
         float renderScale = docSettings.renderScale;
@@ -328,7 +328,6 @@ public class svgVisual : MonoBehaviour
 
         System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
         stopwatch.Start();
-
 
 
         listOfAllPathsThisRun = new List<List<List<Vector2>>>();
@@ -518,7 +517,7 @@ public class svgVisual : MonoBehaviour
 
             int onionLayers = 1;
 
-            int outlineFillMulti = 5;
+            int outlineFillMulti = 0;
 
 
             for (int i = 0; i < claimedPixels.Count; i++)
@@ -679,18 +678,15 @@ public class svgVisual : MonoBehaviour
 
 
 
-            var holderHolder = new List<List<Vector2>>();
+            //var holderHolder = new List<List<Vector2>>();
 
 
-            foreach (List<Vector2> lv2 in outlinesToAddSplitUpColorAndOutlineFix)
-            {
-                holderHolder.Add(SimplifyPath(lv2, 4));
-            }
+            //foreach (List<Vector2> lv2 in outlinesToAddSplitUpColorAndOutlineFix)
+            //{
+            //    holderHolder.Add(SimplifyPath(lv2, 4));
+            //}
 
-            outlinesToAddSplitUpColorAndOutlineFix = holderHolder;
-
-
-
+            //outlinesToAddSplitUpColorAndOutlineFix = holderHolder;
 
 
 
@@ -699,17 +695,20 @@ public class svgVisual : MonoBehaviour
 
 
 
-            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
 
-            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
 
-            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
 
-            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+            //outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
 
-            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+            //outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
 
-            outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+            //outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+
+            //outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+
+            //outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
+
+            //outlinesToAddSplitUpColorAndOutlineFix = CombineNearbyLines(outlinesToAddSplitUpColorAndOutlineFix, 5);
 
 
 
@@ -868,16 +867,10 @@ public class svgVisual : MonoBehaviour
                     holdingList.AddRange(outlinesToAddSplitUpColorAndOutlineFix[q]);
 
 
-
-
                     Vector2 lastDir = new Vector2();
 
 
-
-
-
                     //Get the tangent of this line segment and advance based on that
-
 
 
                     for (int g = 0; g < holdingList.Count; g++)
@@ -906,36 +899,72 @@ public class svgVisual : MonoBehaviour
                         }
 
 
+                        for (int p = 1; p <= j; p++)
+                        {
+                            float distToNextPoint = 0;
+
+                            if (g < holdingList.Count - 1)
+                            {
+                                distToNextPoint = Vector2.Distance(holdingList[g], holdingList[g + 1]);
+                            }
+                            else if (holdingList.Count > 1)
+                            {
+                                distToNextPoint = Vector2.Distance(holdingList[g], holdingList[g - 1]);
+                            }
 
 
-                        holdingList[g] -= Vector2.ClampMagnitude(offsetTan.normalized * (outDistance * j), holdingList[g].magnitude);
+
+                            holdingList[g] += Vector2.ClampMagnitude(offsetTan.normalized * (outDistance), holdingList[g].magnitude);
+
+
+                            float distToNextPointPost = 0;
+
+
+                            Vector2 nextPointMoved= new Vector2();
+
+                            if (g < holdingList.Count - 1)
+                            {
+                                 nextPointMoved = holdingList[g + 1] + (Vector2.ClampMagnitude(offsetTan.normalized * (outDistance), holdingList[g].magnitude));
+
+                                distToNextPointPost = Vector2.Distance(holdingList[g], nextPointMoved);
+                            }
+                            else if (holdingList.Count > 1)
+                            {
+                                 nextPointMoved = holdingList[g - 1] + (Vector2.ClampMagnitude(offsetTan.normalized * (outDistance), holdingList[g].magnitude));
+
+                                distToNextPointPost = Vector2.Distance(holdingList[g], nextPointMoved);
+                            }
+
+
+
+
+                            if (distToNextPointPost > distToNextPoint)
+                            {
+
+                                if (g < holdingList.Count - 1)
+                                {
+
+                                    //holdingList[g] = nextPointMoved;
+                                }
+                                else if (holdingList.Count > 1)
+                                {
+
+                                    //holdingList[g] = nextPointMoved;
+                                }
+                            }
+
+
+
+                        }
                     }
-
-
-
-                    //for (int g = 1; g < holdingList.Count - 1; g++)
-                    //{
-                    //    Vector2 dirToNextPoint = holdingList[g + 1] - holdingList[g];
-
-                    //    Vector2 dirToPrevPoint = holdingList[g - 1] - holdingList[g];
-
-                    //    if (Vector2.Dot(dirToNextPoint.normalized, dirToPrevPoint.normalized) < -0.5f && Vector2.SqrMagnitude(holdingList[g + 1] - holdingList[g]) < 10)
-                    //    {
-                    //        //Remove this point
-                    //        holdingList[g] = holdingList[g + 1];
-                    //    }
-                    //}
 
 
 
 
                     if (holdingList.Count > 3)
                     {
-                        outlinesToAddSplitUpColorAndOutlineFix.Add(SimplifyPath(holdingList, 10));
+                        outlinesToAddSplitUpColorAndOutlineFix.Add(holdingList);
                     }
-
-
-
                 }
             }
 
@@ -1497,7 +1526,7 @@ public class svgVisual : MonoBehaviour
 
 
 
-                        FUICKCleaned.Add(SimplifyPath(tempLineList));
+                        FUICKCleaned.Add(tempLineList);
                     }
 
                     simpleVertFillLinesByColor.AddRange(FUICKCleaned);
@@ -1759,15 +1788,19 @@ public class svgVisual : MonoBehaviour
 
                                 Color curLineColor = wholeRenderTexHolder.GetPixel((int)curCombineLine.Last().x, (int)curCombineLine.Last().y);
 
+                                Color curLineColor2 = wholeRenderTexHolder.GetPixel((int)finalLineListByColorCopy[i][q][0].x, (int)finalLineListByColorCopy[i][q][0].y);
+
                                 Color midLineColor1 = wholeRenderTexHolder.GetPixel((int)midPoint.x, (int)midPoint.y);
                                 Color midLineColor2 = wholeRenderTexHolder.GetPixel((int)midPoint1.x, (int)midPoint1.y);
                                 Color midLineColor3 = wholeRenderTexHolder.GetPixel((int)midPoint2.x, (int)midPoint2.y);
 
 
-                                if (curLineColor != midLineColor1 || curLineColor != midLineColor2 || curLineColor != midLineColor3)
+                                if (curLineColor != curLineColor2)
                                 {
                                     wouldMergeOverAnotherColor = true;
                                 }
+
+
 
 
 
@@ -1792,16 +1825,23 @@ public class svgVisual : MonoBehaviour
                                 Vector2 midPoint21 = Vector2.Lerp(curCombineLine[0], finalLineListByColorCopy[i][q].Last(), 0.25f);
                                 Vector2 midPoint22 = Vector2.Lerp(curCombineLine[0], finalLineListByColorCopy[i][q].Last(), 0.5f);
                                 Vector2 midPoint23 = Vector2.Lerp(curCombineLine[0], finalLineListByColorCopy[i][q].Last(), 0.75f);
+
+
                                 Color curLineColor2 = wholeRenderTexHolder.GetPixel((int)curCombineLine[0].x, (int)curCombineLine[0].y);
+
+                                Color curLineColor3 = wholeRenderTexHolder.GetPixel((int)finalLineListByColorCopy[i][q].Last().x, (int)finalLineListByColorCopy[i][q].Last().y);
+
                                 Color midLineColor21 = wholeRenderTexHolder.GetPixel((int)midPoint21.x, (int)midPoint21.y);
                                 Color midLineColor22 = wholeRenderTexHolder.GetPixel((int)midPoint22.x, (int)midPoint22.y);
                                 Color midLineColor23 = wholeRenderTexHolder.GetPixel((int)midPoint23.x, (int)midPoint23.y);
 
-
-                                if (curLineColor2 != midLineColor22 || curLineColor2 != midLineColor21 || curLineColor2 != midLineColor23)
+                                if (curLineColor2 != curLineColor3)
                                 {
                                     wouldMergeOverAnotherColor = true;
                                 }
+
+
+
 
 
                                 if (thisSegDistToCurLine < distToNextLineSeg && wouldMergeOverAnotherColor == false)
@@ -2126,6 +2166,7 @@ public class svgVisual : MonoBehaviour
 
 
 
+
         if (pensToUse.Count > 0)
         {
             //GenerateSVG(outlineList, false, false,1000, Color.black, svgSize, yourFileName);
@@ -2147,7 +2188,12 @@ public class svgVisual : MonoBehaviour
 
                 if (finalCompleteLineListByColor[q].Count> 0)
                 {
-                    GenerateSVG(finalCompleteLineListByColor[q], false, false,"_Col" + q.ToString() + "_Layer" + copyID.ToString(), Color.black, svgSize, yourFileName);
+                    if (nameOverride != "")
+                    {
+                        yourFileName = nameOverride;
+                    }
+
+                    GenerateSVG(finalCompleteLineListByColor[q], false, false, "_Frame" + frameID + "_Col" + q.ToString() +  "_Layer" + copyID.ToString(), Color.black, svgSize, yourFileName);
                 }
                 else
                 {
@@ -2181,6 +2227,8 @@ public class svgVisual : MonoBehaviour
 
 
         stopwatch.Reset();
+
+        return yourFileName;
     }
 
 
